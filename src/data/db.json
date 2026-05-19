@@ -1,0 +1,233 @@
+{
+  "candidates": [
+    {
+      "id": "4d48d959-dd58-447c-b9ef-0e8dee7a3147",
+      "name": "John Doe",
+      "userId": "john_doe_84",
+      "passwordHash": "eSA8IHGA",
+      "assignedRepoId": "cpp-array-reversal",
+      "active": false,
+      "createdAt": 1779185259298
+    }
+  ],
+  "sessions": {},
+  "telemetry": [
+    {
+      "id": "0227dc79-4712-44c2-8d46-bc90717c5aa5",
+      "candidateId": "4d48d959-dd58-447c-b9ef-0e8dee7a3147",
+      "candidateName": "John Doe",
+      "repoId": "cpp-array-reversal",
+      "submittedAt": 1779185477004,
+      "sessionStart": 1779185336285,
+      "duration": 140,
+      "stability": 81,
+      "events": [
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "main.cpp",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-05-19T10:09:17.659Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": 1,
+            "total_length": 641
+          },
+          "ts": "2026-05-19T10:09:44.112Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": 1,
+            "total_length": 642
+          },
+          "ts": "2026-05-19T10:09:44.146Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": 1,
+            "total_length": 643
+          },
+          "ts": "2026-05-19T10:09:44.177Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": 1,
+            "total_length": 644
+          },
+          "ts": "2026-05-19T10:09:44.203Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": -1,
+            "total_length": 643
+          },
+          "ts": "2026-05-19T10:09:51.720Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": -1,
+            "total_length": 642
+          },
+          "ts": "2026-05-19T10:09:57.007Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": -1,
+            "total_length": 641
+          },
+          "ts": "2026-05-19T10:10:05.114Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": -1,
+            "total_length": 640
+          },
+          "ts": "2026-05-19T10:10:11.118Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": 1,
+            "total_length": 641
+          },
+          "ts": "2026-05-19T10:10:16.146Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": 1,
+            "total_length": 642
+          },
+          "ts": "2026-05-19T10:10:16.173Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": 1,
+            "total_length": 643
+          },
+          "ts": "2026-05-19T10:10:16.206Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": 1,
+            "total_length": 644
+          },
+          "ts": "2026-05-19T10:10:16.232Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": 1,
+            "total_length": 645
+          },
+          "ts": "2026-05-19T10:10:16.264Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": 1,
+            "total_length": 646
+          },
+          "ts": "2026-05-19T10:10:26.961Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": 1,
+            "total_length": 647
+          },
+          "ts": "2026-05-19T10:10:26.988Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": 1,
+            "total_length": 648
+          },
+          "ts": "2026-05-19T10:10:27.018Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": 1,
+            "total_length": 649
+          },
+          "ts": "2026-05-19T10:10:27.050Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": 1,
+            "total_length": 650
+          },
+          "ts": "2026-05-19T10:10:46.702Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": 1,
+            "total_length": 651
+          },
+          "ts": "2026-05-19T10:10:46.720Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": 1,
+            "total_length": 652
+          },
+          "ts": "2026-05-19T10:10:46.747Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.cpp",
+            "diff": 1,
+            "total_length": 653
+          },
+          "ts": "2026-05-19T10:10:46.777Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": true,
+            "summary": "Perfect! Array reversed correctly."
+          },
+          "ts": "2026-05-19T10:10:54.669Z"
+        }
+      ]
+    }
+  ]
+}

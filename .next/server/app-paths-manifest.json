@@ -1,4 +1,9 @@
 {
-  "/api/execute/route": "app/api/execute/route.js",
-  "/page": "app/page.js"
+  "/api/auth/me/route": "app/api/auth/me/route.js",
+  "/api/auth/logout/route": "app/api/auth/logout/route.js",
+  "/api/auth/login/route": "app/api/auth/login/route.js",
+  "/login/page": "app/login/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/ide/page": "app/ide/page.js",
+  "/admin/telemetry/page": "app/admin/telemetry/page.js"
 }
