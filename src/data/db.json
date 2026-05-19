@@ -8,9 +8,24 @@
       "assignedRepoId": "cpp-array-reversal",
       "active": false,
       "createdAt": 1779185259298
+    },
+    {
+      "id": "c930ef01-847c-451b-bcda-b5483fd868ee",
+      "name": "likhith",
+      "userId": "likhith_93",
+      "passwordHash": "WFiN4Huc",
+      "assignedRepoId": "python-data-analyzer",
+      "active": false,
+      "createdAt": 1779193103561
     }
   ],
-  "sessions": {},
+  "sessions": {
+    "ab97afb1-aacc-4bc1-8b3e-c4d2bf71cd43": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1779279758412
+    }
+  },
   "telemetry": [
     {
       "id": "0227dc79-4712-44c2-8d46-bc90717c5aa5",
@@ -226,6 +241,442 @@
             "summary": "Perfect! Array reversed correctly."
           },
           "ts": "2026-05-19T10:10:54.669Z"
+        }
+      ]
+    },
+    {
+      "id": "fa4ef19d-c8c0-48b1-b408-2465d7acd329",
+      "candidateId": "c930ef01-847c-451b-bcda-b5483fd868ee",
+      "candidateName": "likhith",
+      "repoId": "python-data-analyzer",
+      "submittedAt": 1779193335843,
+      "sessionStart": 1779193151009,
+      "duration": 184,
+      "stability": 66,
+      "events": [
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "main.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-05-19T12:19:17.013Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 615
+          },
+          "ts": "2026-05-19T12:19:21.947Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 616
+          },
+          "ts": "2026-05-19T12:19:22.123Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 614,
+            "total_length": 1230
+          },
+          "ts": "2026-05-19T12:19:22.626Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "file": "README.md",
+            "lines_pasted": 23,
+            "chars_pasted": 614,
+            "words_pasted": 83,
+            "content": "def calculate_average_age(users):\n    total_age = 0\n    count = 0\n    \n    for user in users:\n        # BUG 1: 'age' might be missing from some user dictionaries\n        # BUG 2: 'age' might be a string instead of an integer\n        total_age += user['age']\n        count += 1\n        \n    # BUG 3: Potential ZeroDivisionError if users list is empty\n    return total_age / count\n\n# Test Data\nusers_data = [\n    {\"name\": \"Alice\", \"age\": 25},\n    {\"name\": \"Bob\", \"age\": \"30\"},\n    {\"name\": \"Charlie\"} # Missing age\n]\n\nprint(\"Starting analysis...\")\navg = calculate_average_age(users_data)\nprint(f\"Average Age: {avg}\")",
+            "preview": "def calculate_average_age(users):\n    total_age = 0\n    count = 0\n    \n    for user in users:\n        # BUG 1: 'age' mig…",
+            "range": {
+              "startLine": 25,
+              "endLine": 47,
+              "startCol": 1,
+              "endCol": 29
+            }
+          },
+          "ts": "2026-05-19T12:19:22.626Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": -614,
+            "total_length": 616
+          },
+          "ts": "2026-05-19T12:19:29.130Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 617
+          },
+          "ts": "2026-05-19T12:19:36.731Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 2,
+            "total_length": 619
+          },
+          "ts": "2026-05-19T12:19:37.199Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 620
+          },
+          "ts": "2026-05-19T12:19:37.582Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 621
+          },
+          "ts": "2026-05-19T12:19:37.725Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 622
+          },
+          "ts": "2026-05-19T12:19:37.810Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 0,
+            "total_length": 622
+          },
+          "ts": "2026-05-19T12:19:39.227Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 623
+          },
+          "ts": "2026-05-19T12:19:39.574Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 624
+          },
+          "ts": "2026-05-19T12:19:42.784Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 625
+          },
+          "ts": "2026-05-19T12:19:42.849Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": -1,
+            "total_length": 624
+          },
+          "ts": "2026-05-19T12:19:45.473Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": -1,
+            "total_length": 623
+          },
+          "ts": "2026-05-19T12:19:46.513Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 624
+          },
+          "ts": "2026-05-19T12:20:02.432Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "The calculated average age is incorrect."
+          },
+          "ts": "2026-05-19T12:20:25.350Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 5,
+            "total_length": 629
+          },
+          "ts": "2026-05-19T12:20:52.016Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 630
+          },
+          "ts": "2026-05-19T12:20:52.889Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 631
+          },
+          "ts": "2026-05-19T12:20:53.008Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 632
+          },
+          "ts": "2026-05-19T12:20:53.134Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 633
+          },
+          "ts": "2026-05-19T12:20:58.089Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 634
+          },
+          "ts": "2026-05-19T12:20:58.217Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 635
+          },
+          "ts": "2026-05-19T12:20:58.404Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 636
+          },
+          "ts": "2026-05-19T12:20:58.583Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 637
+          },
+          "ts": "2026-05-19T12:20:58.680Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 638
+          },
+          "ts": "2026-05-19T12:20:59.924Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": -1,
+            "total_length": 637
+          },
+          "ts": "2026-05-19T12:21:04.243Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 1,
+            "total_length": 638
+          },
+          "ts": "2026-05-19T12:21:05.380Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": -1,
+            "total_length": 637
+          },
+          "ts": "2026-05-19T12:21:09.606Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": -1,
+            "total_length": 636
+          },
+          "ts": "2026-05-19T12:21:10.237Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": -1,
+            "total_length": 635
+          },
+          "ts": "2026-05-19T12:21:10.430Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": -1,
+            "total_length": 634
+          },
+          "ts": "2026-05-19T12:21:10.609Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": -1,
+            "total_length": 633
+          },
+          "ts": "2026-05-19T12:21:10.807Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": -1,
+            "total_length": 632
+          },
+          "ts": "2026-05-19T12:21:17.080Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": -1,
+            "total_length": 631
+          },
+          "ts": "2026-05-19T12:21:17.263Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": -1,
+            "total_length": 630
+          },
+          "ts": "2026-05-19T12:21:17.461Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": -1,
+            "total_length": 629
+          },
+          "ts": "2026-05-19T12:21:17.881Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "file": "main.py"
+          },
+          "ts": "2026-05-19T12:21:51.036Z"
+        },
+        {
+          "type": "FOCUS_DURATION",
+          "meta": {
+            "file": "main.py",
+            "duration_ms": 13436
+          },
+          "ts": "2026-05-19T12:22:04.472Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "file": "main.py"
+          },
+          "ts": "2026-05-19T12:22:04.472Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "main.py",
+            "diff": 305,
+            "total_length": 934
+          },
+          "ts": "2026-05-19T12:22:05.498Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "file": "README.md",
+            "lines_pasted": 40,
+            "chars_pasted": 934,
+            "words_pasted": 111,
+            "content": "def calculate_average_age(users):\n    total_age = 0\n    count = 0\n\n    for user in users:\n        # Check if 'age' exists\n        if 'age' not in user:\n            print(f\"Skipping user {user.get('name', 'Unknown')} - age missing\")\n            continue\n\n        age = user['age']\n\n        # Convert string ages to integers if possible\n        try:\n            age = int(age)\n        except ValueError:\n            print(f\"Skipping user {user.get('name', 'Unknown')} - invalid age\")\n            continue\n\n        total_age += age\n        count += 1\n\n    # Avoid division by zero\n    if count == 0:\n        return 0\n\n    return total_age / count\n\n\n# Test Data\nusers_data = [\n    {\"name\": \"Alice\", \"age\": 25},\n    {\"name\": \"Bob\", \"age\": \"30\"},\n    {\"name\": \"Charlie\"},   # Missing age\n    {\"name\": \"David\", \"age\": \"abc\"}  # Invalid age\n]\n\nprint(\"Starting analysis...\")\navg = calculate_average_age(users_data)\nprint(f\"Average Age: {avg}\")",
+            "preview": "def calculate_average_age(users):\n    total_age = 0\n    count = 0\n\n    for user in users:\n        # Check if 'age' exist…",
+            "range": {
+              "startLine": 1,
+              "endLine": 40,
+              "startCol": 1,
+              "endCol": 29
+            }
+          },
+          "ts": "2026-05-19T12:22:05.498Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": true,
+            "summary": "Success! The analyzer is now handling messy data correctly."
+          },
+          "ts": "2026-05-19T12:22:12.858Z"
         }
       ]
     }
