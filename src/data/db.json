@@ -17,13 +17,22 @@
       "assignedRepoId": "python-data-analyzer",
       "active": false,
       "createdAt": 1779193103561
+    },
+    {
+      "id": "79b19124-ad49-44d0-bcd2-7b55b361ebb5",
+      "name": "bbk",
+      "userId": "bbk_52",
+      "passwordHash": "6mrNO1FV",
+      "assignedRepoId": "weather-dash",
+      "active": true,
+      "createdAt": 1779197732886
     }
   ],
   "sessions": {
-    "ab97afb1-aacc-4bc1-8b3e-c4d2bf71cd43": {
+    "ffbe99ce-5a97-4838-8430-6a3f192dae67": {
       "userId": "admin",
       "role": "admin",
-      "expiresAt": 1779279758412
+      "expiresAt": 1779284225537
     }
   },
   "telemetry": [
@@ -677,6 +686,34 @@
             "summary": "Success! The analyzer is now handling messy data correctly."
           },
           "ts": "2026-05-19T12:22:12.858Z"
+        }
+      ]
+    },
+    {
+      "id": "b4205f51-2a31-4880-a319-53c6b2a97284",
+      "candidateId": "79b19124-ad49-44d0-bcd2-7b55b361ebb5",
+      "candidateName": "bbk",
+      "repoId": "weather-dash",
+      "submittedAt": 1779197807294,
+      "sessionStart": 1779197782271,
+      "duration": 24,
+      "stability": 100,
+      "events": [
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "index.html",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-05-19T13:36:27.173Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "script.js",
+            "previous_file": "index.html"
+          },
+          "ts": "2026-05-19T13:36:29.830Z"
         }
       ]
     }

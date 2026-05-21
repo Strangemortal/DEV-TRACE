@@ -29,6 +29,7 @@ function TelemetryDashboardContent() {
   const [loading, setLoading] = useState(true);
   const [authLoading, setAuthLoading] = useState(true);
   const [selectedRecord, setSelectedRecord] = useState<any>(null);
+  const [userRole, setUserRole] = useState<"admin" | "interviewer" | null>(null);
   
   // Filters
   const [searchQuery, setSearchQuery] = useState("");
@@ -40,14 +41,15 @@ function TelemetryDashboardContent() {
       try {
         const res = await fetch("/api/auth/me");
         const data = await res.json();
-        if (!data.user || data.user.role !== "admin") {
-          router.replace("/login");
+        if (!data.user || (data.user.role !== "admin" && data.user.role !== "interviewer")) {
+          router.replace("/login/staff");
         } else {
+          setUserRole(data.user.role);
           setAuthLoading(false);
           fetchTelemetry();
         }
       } catch (err) {
-        router.replace("/login");
+        router.replace("/login/staff");
       }
     }
     checkAuth();
@@ -128,7 +130,7 @@ function TelemetryDashboardContent() {
       {/* HEADER */}
       <header className="h-16 flex items-center gap-4 px-8 bg-[#0d0e11]/80 backdrop-blur-xl border-b border-white/5 flex-shrink-0 z-40 shadow-2xl">
         <button
-          onClick={() => router.push("/admin")}
+          onClick={() => router.push(userRole === "interviewer" ? "/interviewer" : "/admin")}
           className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition-colors mr-2"
         >
           <ArrowLeft size={16} />

@@ -6,12 +6,22 @@ import crypto from "crypto";
 export async function GET(req: NextRequest) {
   try {
     const session = await getSession();
-    if (!session || session.role !== "admin") {
+    if (!session || (session.role !== "admin" && session.role !== "interviewer")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
     const db = await readDb();
-    return NextResponse.json({ telemetry: db.telemetry });
+
+    // Admin sees all telemetry, Interviewer only sees telemetry for candidates they assigned/created
+    let telemetry = db.telemetry;
+    if (session.role === "interviewer") {
+      const myCandidateIds = db.candidates
+        .filter((c) => c.createdBy === session.userId)
+        .map((c) => c.id);
+      telemetry = db.telemetry.filter((t) => myCandidateIds.includes(t.candidateId));
+    }
+
+    return NextResponse.json({ telemetry });
   } catch (error) {
     console.error("Telemetry GET error:", error);
     return NextResponse.json(

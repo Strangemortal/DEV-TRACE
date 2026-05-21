@@ -1,11 +1,4 @@
 {
-  "/api/admin/telemetry/route": "app/api/admin/telemetry/route.js",
   "/api/auth/me/route": "app/api/auth/me/route.js",
-  "/api/auth/login/route": "app/api/auth/login/route.js",
-  "/api/admin/candidates/route": "app/api/admin/candidates/route.js",
-  "/api/admin/candidates/[id]/route": "app/api/admin/candidates/[id]/route.js",
-  "/login/page": "app/login/page.js",
-  "/admin/page": "app/admin/page.js",
-  "/ide/page": "app/ide/page.js",
-  "/admin/telemetry/page": "app/admin/telemetry/page.js"
+  "/login/staff/page": "app/login/staff/page.js"
 }

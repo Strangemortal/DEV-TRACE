@@ -15,7 +15,7 @@ export function generatePassword(): string {
 
 export interface AuthenticatedUser {
   userId: string;
-  role: "admin" | "candidate";
+  role: "admin" | "candidate" | "interviewer";
   candidateId?: string;
   name: string;
   assignedRepoId?: string;
@@ -45,6 +45,18 @@ export async function getSession(): Promise<AuthenticatedUser | null> {
         userId: session.userId,
         role: "admin",
         name: "Administrator",
+      };
+    } else if (session.role === "interviewer") {
+      const interviewer = db.interviewers?.find((i) => i.userId === session.userId);
+      if (!interviewer) {
+        delete db.sessions[token];
+        await writeDb(db);
+        return null;
+      }
+      return {
+        userId: session.userId,
+        role: "interviewer",
+        name: interviewer.name,
       };
     } else {
       // Find the candidate

@@ -11,11 +11,20 @@ export interface Candidate {
   assignedRepoId: string;
   active: boolean;
   createdAt: number;
+  createdBy?: string; // "admin" or interviewer username
+}
+
+export interface Interviewer {
+  id: string;
+  name: string;
+  userId: string;
+  passwordHash: string;
+  createdAt: number;
 }
 
 export interface Session {
   userId: string;
-  role: "admin" | "candidate";
+  role: "admin" | "candidate" | "interviewer";
   candidateId?: string;
   expiresAt: number;
 }
@@ -34,6 +43,7 @@ export interface TelemetryRecord {
 
 export interface DatabaseSchema {
   candidates: Candidate[];
+  interviewers: Interviewer[];
   sessions: Record<string, Session>;
   telemetry: TelemetryRecord[];
 }
@@ -44,6 +54,7 @@ async function ensureDbFile() {
   } catch {
     const initialData: DatabaseSchema = {
       candidates: [],
+      interviewers: [],
       sessions: {},
       telemetry: [],
     };
@@ -55,7 +66,11 @@ async function ensureDbFile() {
 export async function readDb(): Promise<DatabaseSchema> {
   await ensureDbFile();
   const content = await fs.readFile(DB_PATH, "utf-8");
-  return JSON.parse(content);
+  const data = JSON.parse(content);
+  if (!data.interviewers) {
+    data.interviewers = [];
+  }
+  return data;
 }
 
 export async function writeDb(data: DatabaseSchema): Promise<void> {

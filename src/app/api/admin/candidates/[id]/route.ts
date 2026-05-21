@@ -8,7 +8,7 @@ export async function DELETE(
 ) {
   try {
     const session = await getSession();
-    if (!session || session.role !== "admin") {
+    if (!session || (session.role !== "admin" && session.role !== "interviewer")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
@@ -18,6 +18,11 @@ export async function DELETE(
     const candidateIndex = db.candidates.findIndex((c) => c.id === id);
     if (candidateIndex === -1) {
       return NextResponse.json({ error: "Candidate not found" }, { status: 404 });
+    }
+
+    // Interviewer can only delete their own candidates
+    if (session.role === "interviewer" && db.candidates[candidateIndex].createdBy !== session.userId) {
+      return NextResponse.json({ error: "Unauthorized to delete this candidate" }, { status: 403 });
     }
 
     // Set active to false (deactivate candidate)

@@ -20,6 +20,8 @@ export default function LoginPage() {
         if (data.user) {
           if (data.user.role === "admin") {
             router.replace("/admin");
+          } else if (data.user.role === "interviewer") {
+            router.replace("/interviewer");
           } else {
             router.replace("/ide");
           }
@@ -42,7 +44,7 @@ export default function LoginPage() {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, password }),
+        body: JSON.stringify({ userId, password, loginType: "candidate" }),
       });
       const data = await res.json();
 
@@ -52,6 +54,8 @@ export default function LoginPage() {
 
       if (data.role === "admin") {
         router.push("/admin");
+      } else if (data.role === "interviewer") {
+        router.push("/interviewer");
       } else {
         router.push("/ide");
       }
@@ -89,7 +93,7 @@ export default function LoginPage() {
           </div>
           <h1 className="text-2xl font-black tracking-tight text-white uppercase">DevTrace</h1>
           <p className="text-xs text-slate-500 mt-1.5 uppercase tracking-widest font-semibold">
-            Assessment Environment Access
+            Candidate Assessment Portal
           </p>
         </div>
 
@@ -103,7 +107,7 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">
-              User ID / Username
+              Candidate User ID
             </label>
             <div className="relative">
               <Shield size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
@@ -112,7 +116,7 @@ export default function LoginPage() {
                 required
                 value={userId}
                 onChange={(e) => setUserId(e.target.value)}
-                placeholder="Enter your user ID"
+                placeholder="Enter your candidate ID"
                 className="w-full pl-11 pr-4 py-3 bg-white/[0.02] border border-white/5 hover:border-white/10 focus:border-blue-500/50 rounded-xl text-sm text-white placeholder-slate-600 outline-none transition-all focus:bg-white/[0.04]"
               />
             </div>
@@ -120,7 +124,7 @@ export default function LoginPage() {
 
           <div>
             <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">
-              Access Token / Password
+              Candidate Access Token
             </label>
             <div className="relative">
               <Key size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
@@ -129,7 +133,7 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password"
+                placeholder="Enter access token"
                 className="w-full pl-11 pr-4 py-3 bg-white/[0.02] border border-white/5 hover:border-white/10 focus:border-blue-500/50 rounded-xl text-sm text-white placeholder-slate-600 outline-none transition-all focus:bg-white/[0.04]"
               />
             </div>
@@ -140,22 +144,19 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full group flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white font-bold rounded-xl text-xs uppercase tracking-widest transition-all hover:shadow-[0_0_20px_rgba(37,99,235,0.3)] active:scale-[0.98] disabled:opacity-50 disabled:scale-100"
           >
-            {loading ? "Verifying..." : "Authenticate"}
+            {loading ? "Verifying Token..." : "Access IDE"}
             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </button>
         </form>
 
         <div className="mt-8 pt-6 border-t border-white/5">
-          <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
-            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
-              Admin Access Console
-            </span>
-            <p className="text-[10px] text-slate-400 font-mono leading-relaxed">
-              username: <span className="text-blue-400 font-bold">admin</span>
-              <br />
-              password: <span className="text-blue-400 font-bold">password123</span>
-            </p>
-          </div>
+          <button
+            type="button"
+            onClick={() => router.push("/login/staff")}
+            className="w-full py-3 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 text-slate-400 hover:text-white rounded-xl text-xs font-bold transition-all text-center"
+          >
+            Are you an Interviewer or Admin? Access Staff Portal →
+          </button>
         </div>
       </div>
     </div>

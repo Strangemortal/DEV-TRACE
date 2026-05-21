@@ -5,7 +5,7 @@ import crypto from "crypto";
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId, password } = await req.json();
+    const { userId, password, loginType } = await req.json();
 
     if (!userId || !password) {
       return NextResponse.json(
@@ -18,30 +18,54 @@ export async function POST(req: NextRequest) {
     let sessionToken = crypto.randomUUID();
     const expiresAt = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
 
-    let role: "admin" | "candidate" = "candidate";
+    let role: "admin" | "candidate" | "interviewer";
     let name = "";
     let candidateId: string | undefined;
     let assignedRepoId: string | undefined;
 
-    if (userId === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-      role = "admin";
-      name = "Administrator";
-      
-      const newSession: Session = {
-        userId: ADMIN_USERNAME,
-        role: "admin",
-        expiresAt,
-      };
-      db.sessions[sessionToken] = newSession;
+    if (loginType === "staff") {
+      if (userId === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+        role = "admin";
+        name = "Administrator";
+        
+        const newSession: Session = {
+          userId: ADMIN_USERNAME,
+          role: "admin",
+          expiresAt,
+        };
+        db.sessions[sessionToken] = newSession;
+      } else {
+        // Find interviewer
+        const interviewer = db.interviewers?.find(
+          (i) => i.userId.toLowerCase() === userId.toLowerCase() && i.passwordHash === password
+        );
+
+        if (!interviewer) {
+          return NextResponse.json(
+            { error: "Invalid staff username or password." },
+            { status: 401 }
+          );
+        }
+
+        role = "interviewer";
+        name = interviewer.name;
+
+        const newSession: Session = {
+          userId: interviewer.userId,
+          role: "interviewer",
+          expiresAt,
+        };
+        db.sessions[sessionToken] = newSession;
+      }
     } else {
       // Find candidate
       const candidate = db.candidates.find(
-        (c) => c.userId === userId && c.passwordHash === password && c.active
+        (c) => c.userId.toLowerCase() === userId.toLowerCase() && c.passwordHash === password && c.active
       );
 
       if (!candidate) {
         return NextResponse.json(
-          { error: "Invalid username or password, or account deactivated." },
+          { error: "Invalid candidate ID or access token, or account deactivated." },
           { status: 401 }
         );
       }

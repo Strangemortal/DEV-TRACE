@@ -6,12 +6,18 @@ import crypto from "crypto";
 export async function GET(req: NextRequest) {
   try {
     const session = await getSession();
-    if (!session || session.role !== "admin") {
+    if (!session || (session.role !== "admin" && session.role !== "interviewer")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
     const db = await readDb();
-    return NextResponse.json({ candidates: db.candidates });
+    
+    // Admin sees all candidates, Interviewer only sees candidates they created
+    const candidates = session.role === "admin"
+      ? db.candidates
+      : db.candidates.filter((c) => c.createdBy === session.userId);
+
+    return NextResponse.json({ candidates });
   } catch (error) {
     console.error("Candidates GET error:", error);
     return NextResponse.json(
@@ -24,7 +30,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const session = await getSession();
-    if (!session || session.role !== "admin") {
+    if (!session || (session.role !== "admin" && session.role !== "interviewer")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
@@ -60,6 +66,7 @@ export async function POST(req: NextRequest) {
       assignedRepoId,
       active: true,
       createdAt: Date.now(),
+      createdBy: session.role === "admin" ? "admin" : session.userId,
     };
 
     db.candidates.push(newCandidate);
