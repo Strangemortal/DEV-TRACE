@@ -15,11 +15,19 @@ import {
   Users,
   Activity,
   Award,
+  Square,
+  Play,
 } from "lucide-react";
 import { REPOSITORIES } from "@/data/brokenRepo";
+import { useThemeStore } from "@/store/themeStore";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function InterviewerDashboard() {
   const router = useRouter();
+  const { theme } = useThemeStore();
+  const isLight = theme === "light";
+  const isMidnight = theme === "midnight";
+
   const [candidates, setCandidates] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [authLoading, setAuthLoading] = useState(true);
@@ -50,13 +58,17 @@ export default function InterviewerDashboard() {
       try {
         const res = await fetch("/api/auth/me");
         const data = await res.json();
-        if (!data.user || data.user.role !== "interviewer") {
+        if (!data.user) {
           router.replace("/login/staff");
-        } else {
+        } else if (data.user.role === "candidate") {
+          router.replace("/ide");
+        } else if (data.user.role === "admin" || data.user.role === "interviewer") {
           setInterviewerName(data.user.name);
           setAuthLoading(false);
           fetchCandidates();
           fetchTelemetryCount();
+        } else {
+          router.replace("/login/staff");
         }
       } catch (err) {
         router.replace("/login/staff");
@@ -138,6 +150,24 @@ export default function InterviewerDashboard() {
     }
   };
 
+  const handleToggleCandidateStatus = async (candidate: any) => {
+    try {
+      const res = await fetch(`/api/admin/candidates/${candidate.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ active: !candidate.active }),
+      });
+      if (res.ok) {
+        fetchCandidates();
+      } else {
+        const data = await res.json();
+        alert(data.error || "Failed to update candidate test status");
+      }
+    } catch (error) {
+      console.error("Error toggling candidate status:", error);
+    }
+  };
+
   const handleDeleteCandidate = async () => {
     if (!candidateToDelete) return;
     try {
@@ -187,97 +217,111 @@ export default function InterviewerDashboard() {
   const activeCandidates = candidates.filter((c) => c.active);
 
   return (
-    <div className="min-h-screen w-screen bg-[#08090a] text-slate-300 flex flex-col font-sans overflow-x-hidden selection:bg-teal-500/30">
-      {/* Radial glow background */}
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-teal-600/5 rounded-full blur-[100px] pointer-events-none" />
-
+    <div
+      className={`min-h-screen w-screen flex flex-col font-sans overflow-x-hidden transition-colors duration-150 ${
+        isLight
+          ? "bg-slate-50 text-slate-900"
+          : isMidnight
+          ? "bg-[#0b0f19] text-slate-100"
+          : "bg-[#0f1117] text-slate-200"
+      }`}
+    >
       {/* TOP HEADER */}
-      <header className="h-16 flex items-center gap-4 px-8 bg-[#0d0e11]/80 backdrop-blur-xl border-b border-white/5 flex-shrink-0 z-40 shadow-2xl">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-600 to-cyan-600 flex items-center justify-center shadow-lg shadow-teal-500/20">
-            <Zap size={20} className="text-white" fill="white" />
+      <header
+        className={`h-14 flex items-center gap-4 px-6 border-b flex-shrink-0 z-30 transition-colors ${
+          isLight
+            ? "bg-white border-slate-200 shadow-sm"
+            : isMidnight
+            ? "bg-[#111827] border-[#1f293d]"
+            : "bg-[#161b22] border-[#252a36]"
+        }`}
+      >
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-teal-600 flex items-center justify-center shadow-sm">
+            <Zap size={16} className="text-white" />
           </div>
           <div>
-            <h1 className="text-xs font-black tracking-[0.2em] text-white uppercase leading-none mb-1">
+            <h1 className="text-xs font-bold tracking-wider text-inherit uppercase leading-none">
               DevTrace
             </h1>
-            <div className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-teal-500" />
-              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">
-                Interviewer Control Deck
-              </span>
-            </div>
+            <span className="text-[9px] font-medium opacity-60">Interviewer Deck</span>
           </div>
         </div>
 
-        <div className="h-8 w-px bg-white/5 mx-2" />
+        <div className={`h-6 w-px mx-1 ${isLight ? "bg-slate-200" : "bg-white/10"}`} />
 
         <div className="flex items-center">
-          <span className="text-xs text-slate-400 font-medium">
-            Welcome, <span className="text-white font-bold">{interviewerName}</span>
+          <span className="text-xs opacity-70 font-medium">
+            Welcome, <span className="font-bold opacity-100">{interviewerName}</span>
           </span>
         </div>
 
         <div className="flex-1" />
 
+        <ThemeToggle />
+
         <button
           onClick={handleLogout}
-          className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition-colors"
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+            isLight
+              ? "border-slate-300 hover:bg-slate-100 text-slate-700"
+              : "border-white/10 hover:bg-white/10 text-slate-300"
+          }`}
         >
-          <LogOut size={14} />
-          Sign Out
+          <LogOut size={13} />
+          <span>Sign Out</span>
         </button>
       </header>
 
       {/* DASHBOARD BODY */}
-      <main className="flex-1 p-8 max-w-7xl w-full mx-auto space-y-8 z-10">
+      <main className="flex-1 p-8 max-w-7xl w-full mx-auto space-y-6 z-10">
         
         {/* STATS DECK */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl bg-[#0d0e11]/50 border border-white/5 backdrop-blur shadow-xl flex items-center gap-5">
-            <div className="w-12 h-12 rounded-xl bg-teal-600/10 flex items-center justify-center text-teal-500">
-              <Users size={24} />
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className={`p-5 rounded-xl border transition-colors ${isLight ? "bg-white border-slate-200 shadow-sm" : isMidnight ? "bg-[#111827] border-[#1f293d]" : "bg-[#161b22] border-[#252a36]"} flex items-center gap-4`}>
+            <div className="w-10 h-10 rounded-lg bg-teal-500/10 flex items-center justify-center text-teal-500">
+              <Users size={20} />
             </div>
             <div>
-              <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Candidates Assigned</span>
-              <h3 className="text-2xl font-black text-white font-mono mt-1">{candidates.length}</h3>
+              <span className="text-[10px] uppercase tracking-wider font-semibold opacity-60">Candidates Assigned</span>
+              <h3 className="text-xl font-bold font-mono mt-0.5">{candidates.length}</h3>
             </div>
           </div>
 
-          <div className="p-6 rounded-2xl bg-[#0d0e11]/50 border border-white/5 backdrop-blur shadow-xl flex items-center gap-5">
-            <div className="w-12 h-12 rounded-xl bg-emerald-600/10 flex items-center justify-center text-emerald-500">
-              <UserCheck size={24} />
+          <div className={`p-5 rounded-xl border transition-colors ${isLight ? "bg-white border-slate-200 shadow-sm" : isMidnight ? "bg-[#111827] border-[#1f293d]" : "bg-[#161b22] border-[#252a36]"} flex items-center gap-4`}>
+            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+              <UserCheck size={20} />
             </div>
             <div>
-              <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Active Candidates</span>
-              <h3 className="text-2xl font-black text-white font-mono mt-1">{activeCandidates.length}</h3>
+              <span className="text-[10px] uppercase tracking-wider font-semibold opacity-60">Active Candidates</span>
+              <h3 className="text-xl font-bold font-mono mt-0.5">{activeCandidates.length}</h3>
             </div>
           </div>
 
-          <div className="p-6 rounded-2xl bg-[#0d0e11]/50 border border-white/5 backdrop-blur shadow-xl flex items-center gap-5">
-            <div className="w-12 h-12 rounded-xl bg-cyan-600/10 flex items-center justify-center text-cyan-500">
-              <Activity size={24} />
+          <div className={`p-5 rounded-xl border transition-colors ${isLight ? "bg-white border-slate-200 shadow-sm" : isMidnight ? "bg-[#111827] border-[#1f293d]" : "bg-[#161b22] border-[#252a36]"} flex items-center gap-4`}>
+            <div className="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-500">
+              <Activity size={20} />
             </div>
             <div>
-              <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Telemetry Records</span>
-              <h3 className="text-2xl font-black text-white font-mono mt-1">{telemetryCount}</h3>
+              <span className="text-[10px] uppercase tracking-wider font-semibold opacity-60">Telemetry Records</span>
+              <h3 className="text-xl font-bold font-mono mt-0.5">{telemetryCount}</h3>
             </div>
           </div>
         </section>
 
         {/* CANDIDATE MANAGEMENT CONTAINER */}
-        <section className="bg-[#0d0e11]/50 border border-white/5 rounded-2xl shadow-2xl p-6 backdrop-blur flex flex-col min-h-[400px]">
-          <div className="flex items-center justify-between mb-6 flex-shrink-0">
+        <section className={`border rounded-xl p-6 transition-colors ${isLight ? "bg-white border-slate-200 shadow-sm text-slate-800" : isMidnight ? "bg-[#111827] border-[#1f293d] text-slate-100" : "bg-[#161b22] border-[#252a36] text-slate-100"} flex flex-col min-h-[400px]`}>
+          <div className="flex items-center justify-between mb-5 flex-shrink-0">
             <div>
-              <h2 className="text-lg font-bold text-white">My Candidates</h2>
-              <p className="text-xs text-slate-500">Create candidate assessment sessions, choose challenges, and view their interactive telemetry.</p>
+              <h2 className="text-base font-bold">My Candidates</h2>
+              <p className="text-xs opacity-60 mt-0.5">Create candidate assessment sessions, choose challenges, and view their interactive telemetry.</p>
             </div>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="flex items-center gap-2 text-xs px-4 py-2.5 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-teal-600/10 active:scale-95"
+              className="flex items-center gap-1.5 text-xs px-3.5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-semibold transition-all shadow-sm active:scale-95"
             >
               <Plus size={14} />
-              Add Candidate
+              <span>Add Candidate</span>
             </button>
           </div>
 
@@ -307,42 +351,65 @@ export default function InterviewerDashboard() {
                 </thead>
                 <tbody className="divide-y divide-white/5 text-xs">
                   {candidates.map((c) => {
-                    const repoName =
-                      REPOSITORIES.find((r) => r.id === c.assignedRepoId)?.name || c.assignedRepoId;
+                    const repoObj = REPOSITORIES.find((r) => r.id === c.assignedRepoId);
+                    const repoName = repoObj?.name || c.assignedRepoId;
                     return (
                       <tr key={c.id} className="hover:bg-white/[0.01] transition-colors">
                         <td className="px-6 py-4 font-bold text-white">{c.name}</td>
                         <td className="px-6 py-4 font-mono text-teal-400">{c.userId}</td>
                         <td className="px-6 py-4 font-mono text-slate-400">{c.passwordHash}</td>
-                        <td className="px-6 py-4 text-slate-300 font-medium">{repoName}</td>
+                        <td className="px-6 py-4 text-slate-300 font-medium">
+                          <div className="flex items-center gap-2">
+                            <span>{repoName}</span>
+                            {repoObj?.framework === "django" && (
+                              <span className="text-[8px] font-bold uppercase px-1.5 py-0.5 rounded bg-teal-500/10 text-teal-400 border border-teal-500/20">
+                                DJANGO
+                              </span>
+                            )}
+                          </div>
+                        </td>
                         <td className="px-6 py-4">
                           <span
-                            className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full ${
+                            className={`text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full border ${
                               c.active
-                                ? "bg-emerald-500/10 text-emerald-400"
-                                : "bg-rose-500/10 text-rose-400"
+                                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                                : "bg-amber-500/10 text-amber-400 border-amber-500/20"
                             }`}
                           >
-                            {c.active ? "Active" : "Deleted"}
+                            {c.active ? "In Progress" : "Test Stopped"}
                           </span>
                         </td>
-                        <td className="px-6 py-4 flex items-center gap-3">
+                        <td className="px-6 py-4 flex items-center gap-2">
+                          {/* View Telemetry */}
                           <button
                             title="View Telemetry"
                             onClick={() => router.push(`/admin/telemetry?candidateId=${c.id}`)}
-                            className="p-1.5 hover:bg-white/5 border border-transparent hover:border-white/5 text-slate-400 hover:text-white rounded-lg transition-all"
+                            className="p-1.5 hover:bg-white/5 border border-transparent hover:border-white/10 text-slate-400 hover:text-white rounded-lg transition-all"
                           >
                             <Eye size={14} />
                           </button>
-                          {c.active && (
-                            <button
-                              title="Delete Candidate"
-                              onClick={() => setCandidateToDelete(c)}
-                              className="p-1.5 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/10 text-slate-500 hover:text-rose-400 rounded-lg transition-all"
-                            >
-                              <Trash2 size={14} />
-                            </button>
-                          )}
+
+                          {/* Stop / Resume Test Button */}
+                          <button
+                            title={c.active ? "Stop Test (Locks candidate IDE session)" : "Resume Test"}
+                            onClick={() => handleToggleCandidateStatus(c)}
+                            className={`p-1.5 rounded-lg border transition-all ${
+                              c.active
+                                ? "hover:bg-amber-500/10 border-transparent hover:border-amber-500/20 text-slate-400 hover:text-amber-400"
+                                : "hover:bg-emerald-500/10 border-transparent hover:border-emerald-500/20 text-slate-400 hover:text-emerald-400"
+                            }`}
+                          >
+                            {c.active ? <Square size={14} fill="currentColor" /> : <Play size={14} fill="currentColor" />}
+                          </button>
+
+                          {/* Delete Candidate Button */}
+                          <button
+                            title="Delete Candidate (Telemetry Preserved)"
+                            onClick={() => setCandidateToDelete(c)}
+                            className="p-1.5 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 text-slate-500 hover:text-rose-400 rounded-lg transition-all"
+                          >
+                            <Trash2 size={14} />
+                          </button>
                         </td>
                       </tr>
                     );
@@ -356,20 +423,22 @@ export default function InterviewerDashboard() {
 
       {/* CREATE CANDIDATE MODAL */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-[#0d0e11] border border-white/10 rounded-2xl p-8 max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-200">
-            <h3 className="text-lg font-bold text-white mb-2">Create Candidate Credentials</h3>
-            <p className="text-xs text-slate-500 mb-6">Enter candidate name. Credentials and randomly generated password will be generated automatically.</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-200 p-4">
+          <div className={`border rounded-lg p-6 md:p-8 max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-200 ${
+            isLight ? "bg-white border-slate-200 text-slate-800" : "bg-[#0d0e11] border-white/10 text-white"
+          }`}>
+            <h3 className={`text-lg font-bold mb-1 ${isLight ? "text-slate-900" : "text-white"}`}>Create Candidate Credentials</h3>
+            <p className="text-xs opacity-70 mb-5">Enter candidate name. Credentials and randomly generated password will be generated automatically.</p>
             
             {createError && (
-              <div className="mb-4 p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold">
+              <div className="mb-4 p-3 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-500 text-xs font-semibold">
                 {createError}
               </div>
             )}
 
             <form onSubmit={handleCreateCandidate} className="space-y-4">
               <div>
-                <label className="block text-[9px] uppercase font-bold text-slate-500 tracking-wider mb-1.5">
+                <label className="block text-[10px] uppercase font-bold opacity-70 mb-1.5">
                   Candidate Name
                 </label>
                 <input
@@ -378,12 +447,16 @@ export default function InterviewerDashboard() {
                   value={name}
                   onChange={handleNameChange}
                   placeholder="e.g., Alice Smith"
-                  className="w-full px-4 py-2.5 bg-white/[0.02] border border-white/5 hover:border-white/10 focus:border-teal-500/50 rounded-xl text-sm outline-none transition-all"
+                  className={`w-full px-3.5 py-2.5 border rounded-md text-sm outline-none transition-all ${
+                    isLight
+                      ? "bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-400 focus:border-teal-500"
+                      : "bg-white/[0.02] border-white/10 text-white placeholder:text-slate-600 focus:border-teal-500/50"
+                  }`}
                 />
               </div>
 
               <div>
-                <label className="block text-[9px] uppercase font-bold text-slate-500 tracking-wider mb-1.5">
+                <label className="block text-[10px] uppercase font-bold opacity-70 mb-1.5">
                   Candidate User ID (Auto Suggested)
                 </label>
                 <input
@@ -392,28 +465,36 @@ export default function InterviewerDashboard() {
                   value={userId}
                   onChange={(e) => setUserId(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ""))}
                   placeholder="e.g., alice_smith"
-                  className="w-full px-4 py-2.5 bg-white/[0.02] border border-white/5 hover:border-white/10 focus:border-teal-500/50 rounded-xl text-sm outline-none transition-all font-mono text-teal-400"
+                  className={`w-full px-3.5 py-2.5 border rounded-md text-sm outline-none transition-all font-mono text-teal-600 dark:text-teal-400 ${
+                    isLight
+                      ? "bg-slate-50 border-slate-300"
+                      : "bg-white/[0.02] border-white/10"
+                  }`}
                 />
               </div>
 
               <div>
-                <label className="block text-[9px] uppercase font-bold text-slate-500 tracking-wider mb-1.5">
+                <label className="block text-[10px] uppercase font-bold opacity-70 mb-1.5">
                   Assign Challenge repo
                 </label>
                 <select
                   value={assignedRepoId}
                   onChange={(e) => setAssignedRepoId(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-[#16181d] border border-white/5 rounded-xl text-sm outline-none text-slate-300 hover:bg-[#1a1d24] transition-colors cursor-pointer"
+                  className={`w-full px-3.5 py-2.5 border rounded-md text-sm outline-none cursor-pointer ${
+                    isLight
+                      ? "bg-slate-50 border-slate-300 text-slate-800"
+                      : "bg-[#16181d] border-white/10 text-slate-300"
+                  }`}
                 >
                   {REPOSITORIES.map((r) => (
                     <option key={r.id} value={r.id}>
-                      {r.name} ({r.category.toUpperCase()})
+                      {r.name} [{r.framework && r.framework !== "none" ? r.framework.toUpperCase() : r.category.toUpperCase()}]
                     </option>
                   ))}
                 </select>
               </div>
 
-              <div className="flex justify-end gap-3 pt-4">
+              <div className="flex justify-end gap-2.5 pt-3 border-t border-white/5">
                 <button
                   type="button"
                   onClick={() => {
@@ -422,14 +503,14 @@ export default function InterviewerDashboard() {
                     setUserId("");
                     setCreateError("");
                   }}
-                  className="px-4 py-2.5 text-xs font-bold text-slate-400 hover:text-white transition-colors"
+                  className="px-4 py-2 text-xs font-semibold opacity-70 hover:opacity-100 rounded-md transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creating}
-                  className="px-6 py-2.5 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-bold transition-all disabled:opacity-50"
+                  className="px-5 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded-md text-xs font-bold transition-all disabled:opacity-50 shadow-sm"
                 >
                   {creating ? "Generating..." : "Generate Account"}
                 </button>
@@ -441,46 +522,54 @@ export default function InterviewerDashboard() {
 
       {/* CREDENTIALS GENERATED SUCCESS MODAL */}
       {showSuccessModal && createdDetails && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-[#0d0e11] border border-white/10 rounded-2xl p-8 max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-200">
-            <h3 className="text-lg font-black text-white uppercase tracking-tight mb-2">Account Generated Successfully!</h3>
-            <p className="text-xs text-slate-500 mb-6">Share these credentials with the candidate. The system password has been randomly generated.</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md animate-in fade-in duration-200 p-4">
+          <div className={`border rounded-lg p-6 md:p-8 max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-200 ${
+            isLight ? "bg-white border-slate-200 text-slate-800" : "bg-[#0d0e11] border-white/10 text-white"
+          }`}>
+            <h3 className={`text-lg font-bold mb-1 ${isLight ? "text-slate-900" : "text-white"}`}>Account Generated Successfully!</h3>
+            <p className="text-xs opacity-70 mb-5">Share these credentials with the candidate. The system password has been randomly generated.</p>
 
-            <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-4 font-mono text-xs">
+            <div className={`p-4 rounded-md border space-y-3.5 font-mono text-xs ${
+              isLight ? "bg-slate-50 border-slate-200 text-slate-800" : "bg-white/[0.02] border-white/5 text-slate-200"
+            }`}>
               <div>
-                <span className="text-[9px] uppercase font-bold text-slate-600 tracking-wider font-sans">Login Portal URL</span>
-                <p className="text-white mt-0.5 break-all">{window.location.origin}/login</p>
+                <span className="text-[10px] uppercase font-bold opacity-60 font-sans">Login Portal URL</span>
+                <p className="mt-0.5 break-all font-semibold">{window.location.origin}/login</p>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <span className="text-[9px] uppercase font-bold text-slate-600 tracking-wider font-sans">User ID</span>
-                  <p className="text-teal-400 font-bold mt-0.5">{createdDetails.userId}</p>
+                  <span className="text-[10px] uppercase font-bold opacity-60 font-sans">User ID</span>
+                  <p className="text-teal-600 dark:text-teal-400 font-bold mt-0.5">{createdDetails.userId}</p>
                 </div>
                 <div>
-                  <span className="text-[9px] uppercase font-bold text-slate-600 tracking-wider font-sans">Password</span>
-                  <p className="text-emerald-400 font-bold mt-0.5">{createdDetails.password}</p>
+                  <span className="text-[10px] uppercase font-bold opacity-60 font-sans">Password</span>
+                  <p className="text-emerald-600 dark:text-emerald-400 font-bold mt-0.5">{createdDetails.password}</p>
                 </div>
               </div>
               <div>
-                <span className="text-[9px] uppercase font-bold text-slate-600 tracking-wider font-sans">Challenge</span>
-                <p className="text-slate-300 mt-0.5">{createdDetails.assignedChallenge}</p>
+                <span className="text-[10px] uppercase font-bold opacity-60 font-sans">Challenge</span>
+                <p className="mt-0.5 opacity-80">{createdDetails.assignedChallenge}</p>
               </div>
             </div>
 
-            <div className="flex gap-3 mt-6">
+            <div className="flex gap-2.5 mt-5">
               <button
                 onClick={handleCopyCredentials}
-                className="flex-1 flex items-center justify-center gap-2 py-3 border border-white/5 hover:border-white/10 bg-white/5 hover:bg-white/10 text-white rounded-xl text-xs font-bold transition-all"
+                className={`flex-1 flex items-center justify-center gap-2 py-2.5 border rounded-md text-xs font-semibold transition-all ${
+                  isLight
+                    ? "bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-800"
+                    : "bg-white/5 hover:bg-white/10 border-white/10 text-white"
+                }`}
               >
                 {copied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
-                {copied ? "Copied Shareable Info" : "Copy Credentials"}
+                <span>{copied ? "Copied Shareable Info" : "Copy Credentials"}</span>
               </button>
               <button
                 onClick={() => {
                   setShowSuccessModal(false);
                   setCreatedDetails(null);
                 }}
-                className="px-6 py-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-bold transition-all"
+                className="px-5 py-2.5 bg-teal-600 hover:bg-teal-500 text-white rounded-md text-xs font-semibold transition-all shadow-sm"
               >
                 Done
               </button>
@@ -491,27 +580,29 @@ export default function InterviewerDashboard() {
 
       {/* DELETE CANDIDATE CONFIRMATION MODAL */}
       {candidateToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-[#0d0e11] border border-white/10 rounded-2xl p-8 max-sm w-full shadow-2xl animate-in zoom-in-95 duration-200">
-            <h3 className="text-lg font-bold text-white mb-2">Delete Candidate Account</h3>
-            <p className="text-xs text-slate-400 leading-relaxed mb-6">
-              Are you sure you want to delete <span className="font-bold text-white">{candidateToDelete.name}</span>?
-              <br />
-              <span className="text-rose-500 font-semibold">Their session will immediately end, and login capability will be disabled.</span>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-200 p-4">
+          <div className={`border rounded-lg p-6 md:p-8 max-w-sm w-full shadow-2xl animate-in zoom-in-95 duration-200 ${
+            isLight ? "bg-white border-slate-200 text-slate-800" : "bg-[#0d0e11] border-white/10 text-white"
+          }`}>
+            <h3 className={`text-lg font-bold mb-2 ${isLight ? "text-slate-900" : "text-white"}`}>Delete Candidate</h3>
+            <p className="text-xs opacity-75 leading-relaxed mb-6">
+              Are you sure you want to remove <span className={`font-bold ${isLight ? "text-slate-900" : "text-white"}`}>{candidateToDelete.name}</span> (<span className="font-mono text-teal-600 dark:text-teal-400">{candidateToDelete.userId}</span>) from your roster?
+              <br /><br />
+              <span className="text-emerald-600 dark:text-emerald-400 font-semibold">✓ All telemetry logs and session records will remain permanently saved in the system.</span>
             </p>
 
-            <div className="flex justify-end gap-3">
+            <div className="flex justify-end gap-2.5">
               <button
                 onClick={() => setCandidateToDelete(null)}
-                className="px-4 py-2.5 text-xs font-bold text-slate-400 hover:text-white transition-colors"
+                className="px-4 py-2 text-xs font-semibold opacity-70 hover:opacity-100 rounded-md transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteCandidate}
-                className="px-6 py-2.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition-all"
+                className="px-5 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-md text-xs font-bold transition-all shadow-sm"
               >
-                Delete Account
+                Delete Candidate
               </button>
             </div>
           </div>

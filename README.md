@@ -1,445 +1,192 @@
 # DEV-TRACE 🚀
 
-> **Intelligent Developer Assessment Platform** | Real-time Telemetry Analysis + AI/ML-Powered Candidate Evaluation
-
-A cutting-edge web-based platform that combines live code execution tracing with machine learning-driven developer proficiency assessment and integrity detection.
+> **Intelligent Developer Assessment Platform** | Framework-Isolated Sandboxes (Django, Python, C++, Java, Web) + Real-time IDE Telemetry + AI/ML Behavioral Evaluation
 
 ---
 
 ## 📌 Overview
 
-DEV-TRACE is a next-generation developer evaluation tool designed for technical recruiting, skills assessment, and code interview analysis. It goes beyond traditional coding challenges by continuously analyzing developer behavior patterns through sophisticated telemetry collection and AI/ML models.
+**DEV-TRACE** is a technical assessment and developer evaluation platform built for engineering teams, technical recruiters, and coding interviews.
 
-**The Magic:** Raw IDE telemetry → Intelligent Candidate Insights
+Unlike traditional coding assessment platforms that only check unit test pass rates, DEV-TRACE:
+1. **Creates isolated framework environments for each specific test** (e.g. dedicated Django 5.0 in-memory test runner sandbox, GCC C++ compiler, Eclipse Temurin Java JDK, or Python runtimes).
+2. **Collects real-time IDE telemetry** (5,000–10,000+ keystroke, paste, focus, and diff events per session).
+3. **Applies Machine Learning models** (Random Forest & XGBoost) to classify candidate technical proficiency and detect autonomous vs. AI-assisted coding behaviors.
+4. **Provides an enterprise control deck** for Admins and Interviewers to provision candidate credentials and inspect telemetry replays.
+5. **Includes a microservice challenge** (`devtrace-payment-service`) targeting concurrency, distributed locking, idempotency, floating-point math, and memory leak debugging.
 
 ---
 
 ## ✨ Core Features
 
-### 🎯 Real-time Code Execution & Tracing
-- **💻 Monaco Editor Integration** - Professional code editing with syntax highlighting
-- **🔍 Execution Tracing** - Track function calls, variable states, and execution paths
-- **📊 Visual Flow Analysis** - Understand code execution with intuitive visualizations
-- **⚡ Fast & Responsive** - Built with Next.js 15 for lightning-quick performance
+### 1. 🏗️ Framework-Isolated Test Environments
+When a candidate starts a challenge, the platform spins up an environment tailored specifically to that framework:
+- **Django Framework Sandbox** (`framework: "django"`):
+  - Automatically provisions multi-file projects (`models.py`, `views.py`, `tests.py`, `settings.py`, `manage.py`, `serializers.py`).
+  - Self-contained in-memory SQLite database configuration.
+  - Test runner executes `python manage.py test --noinput` inside the sandbox with full assertion reports.
+- **Python Sandbox** (`category: "python"`): Python 3.9/3.11 isolated container.
+- **C++ Sandbox** (`category: "cpp"`): GCC 12 container compiling with `g++` and running binaries.
+- **Java Sandbox** (`category: "java"`): Eclipse Temurin 17 JDK container compiling with `javac` and running JVM classes.
+- **Web Live Preview** (`category: "web"`): Real-time sandboxed browser frame for HTML5, CSS3, and JavaScript challenges.
 
-### 🤖 AI/ML Behavioral Analysis *(The Innovation)*
-- **📈 Telemetry Collection** - Captures 5,000-10,000+ events per assessment
-- **🧠 Feature Engineering** - Converts raw telemetry into 50+ behavioral features
-- **🎓 Technical Proficiency Scoring** - Classifies developers as Novice, Intermediate, or Advanced
-- **🔐 Algorithmic Integrity Detection** - Identifies Autonomous, AI-Assisted, or AI-Carried coding patterns
-- **🤖 LLM-Assisted Analytics** - Generates human-readable behavioral reports
+### 2. 💻 Monaco Editor & Candidate IDE
+- VS Code-like editing experience with syntax highlighting for Python, C++, Java, HTML, CSS, JavaScript, and Markdown.
+- Multi-file workspace navigation with framework-specific file icons (`FileExplorer.tsx`).
+- Integrated color-coded terminal with command support and instant test feedback (`MockTerminal.tsx`).
+- Real-time stability score and session timer HUD.
 
----
+### 3. 🤖 AI/ML Behavioral Telemetry & Evaluation
+- **High-Density Telemetry Collection**: Captures fine-grained IDE interactions (keystrokes, pastes, focus loss, tab switching, edit diffs).
+- **Feature Engineering Pipeline**: Transforms raw events into 50+ behavioral metrics (typing speed, pasting density, code stability, refactoring coefficient, build frequency).
+- **Technical Proficiency Classifier**: Predicts candidate skill tier (**Novice**, **Intermediate**, or **Advanced**).
+- **Algorithmic Integrity Classifier**: Categorizes problem-solving style into **Autonomous**, **AI-Assisted**, or **AI-Carried**.
 
-## 🛠️ Tech Stack
-
-| Layer | Technologies |
-|-------|--------------|
-| **Frontend** | Next.js 15, React 19, TypeScript |
-| **Editor** | Monaco Editor for VSCode-like experience |
-| **Styling** | Tailwind CSS + CSS (79.4% codebase) |
-| **State Management** | Zustand (lightweight, performant) |
-| **Icons** | Lucide React |
-| **ML Framework** | Random Forest, XGBoost (Python backend) |
-| **Analytics** | LLM integration for insight generation |
-
----
-
-## 🚀 How It Works
-
-### Step 1: Telemetry Collection
-Every developer action generates events:
-
-```json
-{
-  "event": "KEYSTROKE_BATCH",
-  "chars_added": 50,
-  "chars_deleted": 10,
-  "timestamp": "2026-06-14T10:30:00Z"
-}
-```
-
-```json
-{
-  "event": "PASTE_DETECTED",
-  "length": 400,
-  "frequency": "high"
-}
-```
-
-```json
-{
-  "event": "FOCUS_LOST",
-  "duration": 3000
-}
-```
-
-### Step 2: Feature Engineering
-Telemetry is transformed into ML-ready numerical features:
-
-| Feature | Example | Purpose |
-|---------|---------|---------|
-| **Typing Speed** | 68 WPM | Raw productivity metric |
-| **Pasting Density** | 0.15 | External content reliance |
-| **Code Stability** | 0.89 | Solution confidence |
-| **Refactor Coefficient** | 0.42 | Problem-solving approach |
-| **Build Success Rate** | 0.73 | Code quality |
-| **Focus Lost Count** | 2 | Attention span |
-
-**Feature Vector:**
-```
-X = [68, 0.15, 0.89, 2, 0.42, 3, 8]
-```
-
-### Step 3: ML Classification
-
-#### **Model 1: Technical Proficiency** 
-Predicts developer skill level:
-- `0` = Novice
-- `1` = Intermediate  
-- `2` = Advanced
-
-#### **Model 2: Algorithmic Integrity**
-Detects external assistance patterns:
-- `0` = Autonomous (pure developer coding)
-- `1` = AI-Assisted (appropriate tool usage)
-- `2` = AI-Carried (solution from LLM/tool)
-
-### Step 4: Pattern Recognition
-The AI analyzes event sequences:
-
-```
-FOCUS_LOST (5 sec) 
-    ↓
-PASTE_DETECTED (600 chars) 
-    ↓
-FILE_SAVE 
-    ↓
-BUILD_SUCCESS
-```
-
-**AI Interpretation:** Potential external assistance detected ⚠️
-
-### Step 5: Human-Readable Reporting
-Instead of raw numbers, recruiters get:
-
-```
-✓ Candidate explored documentation first
-✓ Demonstrated structured debugging  
-✓ Used minimal external content
-✓ Showed iterative refinement
-✓ Build consistency: 8 successes, 3 failures
-```
+### 4. 🛡️ Admin & Interviewer Control Decks
+- Multi-role authentication (Admin, Interviewer, Candidate).
+- Candidate credential generator with automated password generation and challenge assignment.
+- Telemetry Session Inspector with visual stability charts, event timelines, and code diff logs.
 
 ---
 
-## 📊 Candidate Assessment Output
-
-### Technical Profile Example
+## 📂 Repository File Directory
 
 ```
-Developer: John Doe
-Assessment Duration: 45 minutes
-Events Processed: 7,234
-
-┌─────────────────────────────────┐
-│ TECHNICAL PROFICIENCY: ADVANCED │
-│ Confidence: 94%                 │
-└─────────────────────────────────┘
-
-┌─────────────────────────────────┐
-│ ALGORITHMIC INTEGRITY: AUTONOMOUS│
-│ Confidence: 89%                 │
-└─────────────────────────────────┘
-
-Key Metrics:
-├─ Typing Speed: 72 WPM
-├─ Code Stability: 0.92
-├─ Refactoring Approach: 0.58
-├─ Build Success Rate: 85%
-└─ Focus Consistency: High
-
-Behavioral Insights:
-✓ Strong problem decomposition
-✓ Minimal external resource usage
-✓ Iterative solution refinement
-✓ Good error handling practices
+├── package.json                         # Project dependencies, scripts, and build metadata
+├── tsconfig.json                        # TypeScript configuration and path aliases
+├── next.config.js                       # Next.js 15 application configuration
+├── tailwind.config.js                   # Tailwind CSS styling and theme configuration
+├── README.md                            # Complete platform overview and operational guide
+├── CONTEXT.md                           # Detailed file map and architectural context
+│
+├── src/                                 # Next.js Source Code
+│   ├── app/
+│   │   ├── page.tsx                     # Landing / route redirector
+│   │   ├── layout.tsx                   # Main HTML layout and typography
+│   │   ├── globals.css                  # Dark-mode styling tokens and UI utilities
+│   │   ├── login/page.tsx               # Candidate login portal
+│   │   ├── login/staff/page.tsx         # Admin / Interviewer login portal
+│   │   ├── ide/page.tsx                 # Candidate IDE with framework runner & telemetry
+│   │   ├── admin/page.tsx               # Administrator dashboard & candidate manager
+│   │   ├── admin/telemetry/page.tsx     # Telemetry inspection & session analytics
+│   │   ├── interviewer/page.tsx         # Interviewer dashboard
+│   │   │
+│   │   └── api/
+│   │       ├── auth/                    # Login, session verification, and logout routes
+│   │       ├── admin/                   # Candidate & interviewer CRUD, telemetry ingestion
+│   │       └── execute/route.ts         # Framework sandbox runner (Django, Python, C++, Java)
+│   │
+│   ├── components/
+│   │   ├── FileExplorer.tsx             # File tree component with framework-aware icons
+│   │   ├── MockTerminal.tsx             # Interactive colorized terminal emulator
+│   │   ├── LivePreview.tsx              # Sandboxed browser iframe for web challenges
+│   │   └── CodingQuestion.tsx           # Problem description drawer
+│   │
+│   ├── data/
+│   │   ├── brokenRepo.ts                # Challenge repositories (Django, Python, C++, Java, Web)
+│   │   └── db.json                      # Local JSON persistence database
+│   │
+│   └── store/
+│       └── telemetryStore.ts            # Zustand telemetry state manager
+│
+└── devtrace-payment-service/            # Concurrent Payment Ingestion Microservice Challenge
+    └── devtrace-payment-service/
+        ├── package.json                 # Express, Redis, PostgreSQL, Jest dependencies
+        ├── ASSESSMENT.md                # Bug matrix, grading rubric, simulated Slack hints
+        ├── README.md                    # Microservice running instructions
+        ├── src/
+        │   ├── config/redis.ts          # Redis client manager
+        │   ├── middleware/rateLimiter.ts # Rate limiter with seeded memory leak
+        │   ├── services/paymentProcessor.ts # Ingestion pipeline & floating point bugs
+        │   └── services/reconciliationWorker.ts # Ledger worker with concurrency bugs
+        └── tests/payment.test.ts        # Automated integration test suite
 ```
-
----
-
-## 🤖 ML Models Used
-
-### Random Forest Classifier
-**Why?** Telemetry features are:
-- Non-linear relationships
-- Mixed data types
-- Behavioral patterns
-
-```
-Tree 1: If (Pasting_Density > 0.7 AND Refactor < 0.1) → AI-Carried
-Tree 2: If (Code_Stability > 0.8 AND Pasting_Density < 0.2) → Advanced
-Tree N: ... voting ensemble ...
-Final: Majority decision
-```
-
-### XGBoost (Gradient Boosting)
-**Why?** Superior performance:
-- 95%+ accuracy on validation sets
-- Better generalization to new candidates
-- Feature importance rankings
-- Fast inference
-
-Sequential learning corrects previous errors across boosting iterations.
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 16+
-- npm or yarn
-- Python 3.8+ (for ML backend - optional for UI)
+- **Node.js** (v18.x or v20.x recommended)
+- **npm** or **yarn**
+- *(Optional for containerized sandbox)*: **Podman** or **Docker** (fallback executes locally if container daemon is not present).
 
-### Installation
+### Installation & Run
 
-1. **Clone the repository:**
+1. **Clone the repository & install dependencies:**
    ```bash
    git clone https://github.com/Strangemortal/DEV-TRACE.git
-   cd DEV-TRACE
-   ```
-
-2. **Install dependencies:**
-   ```bash
+   cd dev
    npm install
    ```
 
-3. **Configure environment (optional):**
-   ```bash
-   cp .env.example .env.local
-   ```
-
-4. **Run development server:**
+2. **Start the Next.js development server:**
    ```bash
    npm run dev
    ```
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-5. **Open in browser:**
-   ```
-   http://localhost:3000
-   ```
+3. **Access Portals:**
+   - **Candidate IDE**: [http://localhost:3000/login](http://localhost:3000/login)
+   - **Staff / Admin Deck**: [http://localhost:3000/login/staff](http://localhost:3000/login/staff) *(Default Admin username: `admin`, password: `password123`)*
 
-### Available Scripts
+---
 
+## 🧪 Available Assessment Challenges
+
+| Challenge ID | Challenge Name | Framework / Language | Difficulty | Sandbox Environment |
+|---|---|---|---|---|
+| `django-orm-store` | **Django Store & Coupon Calculator** | **Django 5.0** | Intermediate | Isolated Django In-Memory Sandbox (`python manage.py test`) |
+| `express-auth-api` | **Express.js REST API & Rate Limiter** | **Node.js / Express** | Intermediate | Isolated Node 20 Sandbox (`node test.js`) |
+| `spring-boot-order-service` | **Spring Boot Order Service & Tax Calc** | **Java 17 / Spring Boot** | Advanced | Isolated JDK 17 Sandbox (`javac *.java && java OrderApplicationTests`) |
+| `fastapi-async-crud` | **FastAPI Async CRUD & Pydantic Validator** | **Python 3.11 / FastAPI** | Intermediate | Isolated FastAPI Sandbox (`python test_main.py`) |
+| `flask-inventory-api` | **Flask RESTful Inventory & Blueprint** | **Python 3.11 / Flask** | Beginner | Isolated Flask Sandbox (`python test_app.py`) |
+| `nextjs-api-cache` | **Next.js 15 Server Actions & API Cache** | **Next.js 15 App Router** | Intermediate | Isolated Next.js Sandbox (`node test_actions.js`) |
+| `python-challenge` | Python String Reversal | Python 3.9 | Beginner | Python Alpine Sandbox |
+| `python-data-analyzer` | Data Analyzer Pro (Python Fixes) | Python 3.9 | Intermediate | Python Alpine Sandbox |
+| `python-secret-validator` | Secret Code Validator (Regex) | Python 3.9 | Advanced | Python Alpine Sandbox |
+| `cpp-array-reversal` | Array Reversal Pointer Bug | C++ | Beginner | GCC 12 Container |
+| `cpp-linked-list` | Linked List Sum Fix | C++ | Intermediate | GCC 12 Container |
+| `cpp-shape-calculator` | Shape Calculator Polymorphism | C++ | Advanced | GCC 12 Container |
+| `java-string-ops` | String Operations Fix | Java | Beginner | Eclipse Temurin 17 JDK |
+| `java-grade-calculator` | Grade Calculator Float Cast | Java | Intermediate | Eclipse Temurin 17 JDK |
+| `java-bank-account` | Bank Account OOP & Overdraft | Java | Advanced | Eclipse Temurin 17 JDK |
+| `acme-corp` | AcmeCorp Landing Page | Vanilla Web | Beginner | Web Live Preview |
+| `todo-app` | TaskMaster Pro Logic | Vanilla Web | Intermediate | Web Live Preview |
+| `weather-dash` | WeatherDash API Promises | Vanilla Web | Advanced | Web Live Preview |
+
+---
+
+## 💳 Payment Ingestion Microservice (`devtrace-payment-service`)
+
+A realistic microservice challenge designed to assess senior backend engineering competency:
+- **Bug 1: IEEE-754 Floating Point Math**: Dollar calculations losing precision.
+- **Bug 2: Concurrency & Missing Distributed Lock**: Race conditions and double-charges under high traffic.
+- **Bug 3: Unhandled Async Rejections**: Background worker crashing during queue drain.
+- **Bug 4: Memory Leak in Rate Limiter**: Unbounded module-level `Map` exhausting pod memory.
+- **Bug 5: Missing Transaction Isolation**: Lost updates on concurrent PostgreSQL ledger writes.
+
+To run the payment service challenge:
 ```bash
-npm run dev      # Development server with hot-reload
-npm run build    # Production build
-npm start        # Start production server
-npm run lint     # ESLint code checking
+cd devtrace-payment-service/devtrace-payment-service
+npm install
+npm test
 ```
 
 ---
 
-## 🎯 Use Cases
+## 📡 REST API Reference
 
-| Use Case | Benefit |
-|----------|---------|
-| **Technical Recruiting** | Assess candidates objectively with AI-backed insights |
-| **Coding Interviews** | Real-time behavior analysis during assessments |
-| **Skills Evaluation** | Identify proficiency levels without bias |
-| **Cheating Detection** | Detect AI usage and external assistance patterns |
-| **Developer Growth** | Track improvement over multiple assessments |
-| **Academic Integrity** | Monitor student work during programming exams |
-
----
-
-## 🔮 Future Scope & Roadmap
-
-### Phase 1: Current (Now)
-- ✅ Core UI & Editor Infrastructure
-- ✅ Telemetry Collection Engine
-- ✅ Basic Feature Extraction
-
-### Phase 2: ML Enhancement (Next)
-- 🔄 Random Forest Model Integration
-- 🔄 XGBoost Implementation
-- 🔄 Model Training Pipeline
-- 🔄 Real-time Prediction
-
-### Phase 3: Advanced AI (Future)
-
-#### **Sequence Models for Behavioral Analysis**
-```
-LSTM / GRU / Transformer
-Can learn temporal patterns directly from event sequences
-```
-
-**Why?** Current approach uses engineered features. Sequence models can:
-- Learn complex patterns automatically
-- Adapt to new coding styles
-- Capture temporal dependencies
-
-#### **Transformer-Based Architecture**
-Inspired by attention mechanisms:
-```
-Raw Event Sequence
-    ↓
-Attention Layers
-    ↓
-Behavioral Pattern Recognition
-    ↓
-Developer Profile
-```
-
-**Advantages:**
-- Learn "good developer patterns" automatically
-- Detect novel cheating patterns
-- Generalize across programming languages
-- Explainable attention weights
-
-### Phase 4: Multi-Language Support
-- Support for Python, Java, C++, Go, Rust
-- Language-specific telemetry interpretation
-- Cross-language proficiency metrics
-
-### Phase 5: Collaborative Features
-- Team assessment dashboards
-- Comparative analytics
-- Historical tracking
-- Benchmark comparisons
-
----
-
-## 📈 Key Metrics Tracked
-
-### Productivity Metrics
-- **Typing Speed:** Characters per minute
-- **Edit Ratio:** Code added vs. deleted
-- **Build Frequency:** Compilation attempts
-
-### Quality Metrics
-- **Code Stability:** Build success ratio
-- **Refactoring Patterns:** Problem-solving iterations
-- **Error Correction:** Time to fix bugs
-
-### Integrity Metrics
-- **Pasting Density:** External code usage
-- **Focus Events:** Attention span
-- **Solution Time:** Speed vs. quality tradeoff
-
----
-
-## 🤝 Contributing
-
-We welcome contributions! Areas where we need help:
-
-1. **ML Model Training** - Build and validate classifiers
-2. **Telemetry Optimization** - Improve data collection efficiency
-3. **UI/UX Enhancement** - Make insights more actionable
-4. **Backend Integration** - Scale the inference pipeline
-5. **Documentation** - Improve feature documentation
-
-### How to Contribute
-
-```bash
-# 1. Fork the repository
-# 2. Create feature branch
-git checkout -b feature/AmazingFeature
-
-# 3. Make changes & commit
-git commit -m 'Add AmazingFeature'
-
-# 4. Push & open PR
-git push origin feature/AmazingFeature
-```
-
----
-
-## 📚 Technical Documentation
-
-### Telemetry Event Types
-
-| Event | Meaning | Example Use |
-|-------|---------|-------------|
-| `KEYSTROKE_BATCH` | Multiple keystrokes | Detect typing patterns |
-| `PASTE_DETECTED` | Pasted content | Identify external code |
-| `FOCUS_LOST` | Tab/window switch | Measure focus quality |
-| `BUILD_ATTEMPT` | Compilation triggered | Assess code maturity |
-| `FILE_NAVIGATION` | File changes | Understand complexity |
-| `HINT_USAGE` | Help requested | Measure struggle points |
-
-### Feature Extraction Algorithm
-
-```python
-features = {
-    'typing_speed': wpm_calculator(keystroke_events),
-    'paste_density': paste_events / total_events,
-    'code_stability': build_successes / build_attempts,
-    'refactor_coefficient': refactoring_events / total_edits,
-    'focus_lost_count': count_focus_lost_events(),
-    'build_success_rate': successful_builds / total_builds,
-}
-```
-
----
-
-## 🐛 Known Limitations & Solutions
-
-| Limitation | Impact | Solution |
-|-----------|--------|----------|
-| Single-file tracing | Limited scope | Multi-file support in Phase 2 |
-| Browser dependency | Offline not supported | Hybrid architecture (TBD) |
-| Large file rendering | Performance hit | Code virtualization (TBD) |
-| Limited language support | Narrow use case | Language plugin system (Phase 4) |
-
----
-
-## 📋 Project Statistics
-
-- **Primary Language:** TypeScript (79.4%)
-- **Styling:** CSS (18.8%)
-- **Supporting:** JavaScript (1.8%)
-- **Total Events Per Assessment:** 5,000-10,000+
-- **ML Model Accuracy Target:** 95%+
-- **Assessment Duration:** 30-60 minutes
+- `POST /api/auth/login` — Candidate authentication
+- `POST /api/auth/staff-login` — Administrator & Interviewer authentication
+- `GET /api/auth/me` — Resolve active user session
+- `POST /api/admin/candidates` — Generate candidate account with assigned challenge
+- `GET /api/admin/candidates` — Retrieve all registered candidates
+- `POST /api/admin/telemetry` — Ingest session telemetry dump
+- `GET /api/admin/telemetry` — Retrieve session telemetry logs
+- `POST /api/execute` — Execute code inside framework-isolated sandbox (Django, Python, C++, Java)
 
 ---
 
 ## 📄 License
-
-Currently without a specific license. For licensing inquiries, please contact [@Strangemortal](https://github.com/Strangemortal).
-
----
-
-## 💬 Support & Feedback
-
-- **Issues:** [GitHub Issues](https://github.com/Strangemortal/DEV-TRACE/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/Strangemortal/DEV-TRACE/discussions)
-- **Contact:** [@Strangemortal](https://github.com/Strangemortal)
-
----
-
-## 🎓 Research & Academic Background
-
-DEV-TRACE is inspired by:
-- Real-time telemetry analysis in modern IDEs
-- Machine learning for behavior classification
-- Academic integrity detection systems
-- Developer profiling research
-
-The AI/ML component transforms raw telemetry into actionable insights, making automated candidate assessment both **accurate** and **explainable**.
-
----
-
-## 🙌 Acknowledgments
-
-- Built with ❤️ by developers, for developers
-- Powered by machine learning innovation
-- Inspired by modern recruitment technology
-- Thanks to the open-source community
-
----
-
-**Made with 💻, 🤖, and ☕ by Strangemortal**
-
-*"Because great developers shouldn't be hidden by great copycat skills."*
+This project is licensed under the MIT License.

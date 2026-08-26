@@ -1,10 +1,46 @@
-node_modules
-node_modules
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+.yarn/install-state.gz
 
+# Next.js Build Artifacts
+.next/
+out/
+build/
+dist/
 
-DevTrace Assessment Credentials
+# TypeScript Build Info
+*.tsbuildinfo
+next-env.d.ts
 
-URL: http://localhost:3000/login
-User ID: likhith_93
-Password: WFiN4Huc
-Challenge: Data Analyzer Pro (Python Fixes)
+# Temporary Execution Sandboxes
+tmp_code/
+
+# Environment Variables & Secrets
+.env
+.env*.local
+!.env.example
+
+# Runtime & Sandbox Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS Files
+.DS_Store
+Thumbs.db
+*.pem
+
+# IDE & Editor Settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary Archives & Presentations
+devtrace-payment-service/
+devtrace-payment-service.zip
+*.pptx

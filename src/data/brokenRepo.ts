@@ -14,7 +14,10 @@ export interface ExecutionResult {
 export interface Repository {
   id: string;
   name: string;
-  category: "python" | "cpp" | "java" | "web";
+  category: "python" | "cpp" | "java" | "web" | "node";
+  framework?: "django" | "flask" | "fastapi" | "express" | "spring-boot" | "nextjs" | "vanilla" | "none";
+  environmentLabel?: string;
+  testCommand?: string;
   difficulty: "Beginner" | "Intermediate" | "Advanced";
   estimatedTime: string;
   activeFile: string;
@@ -25,10 +28,841 @@ export interface Repository {
 }
 
 export const REPOSITORIES: Repository[] = [
+  // ── 1. DJANGO FRAMEWORK CHALLENGES ─────────────────────────────────────────
+  {
+    id: "django-orm-store",
+    name: "Django Store & Coupon Calculator (Django)",
+    category: "python",
+    framework: "django",
+    environmentLabel: "Django 5.0 + SQLite Sandbox",
+    testCommand: "python manage.py test",
+    difficulty: "Intermediate",
+    estimatedTime: "25m",
+    activeFile: "README.md",
+    fileOrder: ["README.md", "models.py", "views.py", "tests.py", "settings.py", "manage.py"],
+    files: {
+      "README.md": {
+        name: "README.md",
+        language: "markdown",
+        content: `# Django Store & Coupon Calculator
+
+Welcome to the **DevTrace Django Assessment Environment**!
+
+This challenge runs in an **isolated Django test environment** configured with an in-memory SQLite database and the standard Django test runner.
+
+## 🎯 The Mission
+The e-commerce checkout service in \`models.py\` is failing test assertions and crashing on checkout.
+
+Fix the following bugs:
+1. **Subtotal Calculation** in \`OrderItem.get_subtotal()\`: It is adding price and quantity instead of multiplying them.
+2. **Coupon Percentage Calculation** in \`Coupon.apply_discount()\`: The discount percentage is not being divided by 100.
+3. **Inactive Coupon Leak**: \`Coupon.apply_discount()\` does not verify if \`self.is_active\` is \`True\`. If inactive, return the original price.
+4. **Null Coupon Crash** in \`Order.calculate_total()\`: Calling \`self.coupon.apply_discount()\` crashes with an \`AttributeError\` when \`self.coupon\` is \`None\`.
+
+---
+
+## 🧪 Running Tests
+Press **Save & Run** (or \`Ctrl+S\` / \`Cmd+S\`) to trigger \`python manage.py test\` inside the Django sandbox.
+All 4 test cases in \`tests.py\` must pass!
+`
+      },
+      "models.py": {
+        name: "models.py",
+        language: "python",
+        content: `from django.db import models
+
+class Coupon(models.Model):
+    code = models.CharField(max_length=20, unique=True)
+    discount_percentage = models.FloatField(default=0.0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        app_label = "store"
+
+    def apply_discount(self, original_price):
+        # BUG 1: Missing check for self.is_active (if inactive, should return original_price)
+        # BUG 2: Not dividing discount_percentage by 100.0
+        discount_amount = original_price * self.discount_percentage
+        return original_price - discount_amount
+
+class OrderItem(models.Model):
+    name = models.CharField(max_length=100)
+    unit_price = models.FloatField()
+    quantity = models.IntegerField(default=1)
+
+    class Meta:
+        app_label = "store"
+
+    def get_subtotal(self):
+        # BUG 3: Added unit_price and quantity instead of multiplying them
+        return self.unit_price + self.quantity
+
+class Order(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        app_label = "store"
+
+    def calculate_total(self, items):
+        total = sum(item.get_subtotal() for item in items)
+        # BUG 4: Crashes with AttributeError when self.coupon is None
+        total = self.coupon.apply_discount(total)
+        return round(total, 2)
+`
+      },
+      "views.py": {
+        name: "views.py",
+        language: "python",
+        content: `from models import Coupon, Order, OrderItem
+
+def create_order_summary(items_data, coupon_code=None):
+    items = []
+    for item in items_data:
+        items.append(OrderItem(
+            name=item.get("name", "Item"),
+            unit_price=float(item.get("price", 0.0)),
+            quantity=int(item.get("quantity", 1))
+        ))
+    
+    coupon = None
+    if coupon_code:
+        try:
+            coupon = Coupon.objects.get(code=coupon_code)
+        except Coupon.DoesNotExist:
+            coupon = None
+
+    order = Order(coupon=coupon)
+    return {
+        "item_count": len(items),
+        "total": order.calculate_total(items),
+        "coupon_applied": coupon.code if (coupon and coupon.is_active) else None
+    }
+`
+      },
+      "tests.py": {
+        name: "tests.py",
+        language: "python",
+        content: `from django.test import TestCase
+from models import Coupon, Order, OrderItem
+from views import create_order_summary
+
+class DjangoStoreTests(TestCase):
+    def setUp(self):
+        self.coupon_20 = Coupon.objects.create(code="SAVE20", discount_percentage=20.0, is_active=True)
+        self.expired_coupon = Coupon.objects.create(code="EXPIRED50", discount_percentage=50.0, is_active=False)
+
+    def test_item_subtotal_multiplication(self):
+        item = OrderItem(name="Keyboard", unit_price=45.0, quantity=3)
+        self.assertEqual(item.get_subtotal(), 135.0, "Subtotal must be unit_price * quantity (45.0 * 3 = 135.0)")
+
+    def test_coupon_discount_calculation(self):
+        discounted = self.coupon_20.apply_discount(100.0)
+        self.assertEqual(discounted, 80.0, "20% discount on $100.0 must be $80.0")
+        
+        inactive_result = self.expired_coupon.apply_discount(100.0)
+        self.assertEqual(inactive_result, 100.0, "Inactive coupon should return original price with 0 discount")
+
+    def test_order_total_without_coupon(self):
+        items = [
+            OrderItem(name="Mouse", unit_price=25.0, quantity=2),
+            OrderItem(name="Pad", unit_price=10.0, quantity=1),
+        ]
+        order = Order(coupon=None)
+        total = order.calculate_total(items)
+        self.assertEqual(total, 60.0, "Total of $50 + $10 with no coupon must equal $60.0")
+
+    def test_order_summary_service(self):
+        items_payload = [
+            {"name": "Laptop Stand", "price": 50.0, "quantity": 2},
+        ]
+        summary = create_order_summary(items_payload, coupon_code="SAVE20")
+        self.assertEqual(summary["total"], 80.0)
+        self.assertEqual(summary["coupon_applied"], "SAVE20")
+`
+      },
+      "settings.py": {
+        name: "settings.py",
+        language: "python",
+        content: `SECRET_KEY = "django-insecure-devtrace-key"
+DEBUG = True
+ALLOWED_HOSTS = ["*"]
+INSTALLED_APPS = ["django.contrib.contenttypes", "django.contrib.auth", "store"]
+DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
+USE_TZ = True
+`
+      },
+      "manage.py": {
+        name: "manage.py",
+        language: "python",
+        content: `#!/usr/bin/env python
+import os
+import sys
+
+def main():
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+    from django.core.management import execute_from_command_line
+    execute_from_command_line(sys.argv)
+
+if __name__ == "__main__":
+    main()
+`
+      }
+    },
+    validateSave: (filename, src, ts) => [],
+    checkExecution: (stdout, stderr) => {
+      const allOutput = (stdout + " " + stderr);
+      if (allOutput.includes("OK") || (allOutput.includes("Ran 4 tests") && !allOutput.includes("FAIL") && !allOutput.includes("ERROR"))) {
+        return { passed: true, message: "All Django TestCase assertions passed! In-memory DB tests successful." };
+      }
+      return { passed: false, message: "Django test assertions failed. Check models and calculations." };
+    }
+  },
+
+  // ── 2. NODE.JS / EXPRESS FRAMEWORK CHALLENGE ───────────────────────────────
+  {
+    id: "express-auth-api",
+    name: "Express.js REST API & Rate Limiter (Node.js)",
+    category: "node",
+    framework: "express",
+    environmentLabel: "Node 20 + Express.js Sandbox",
+    testCommand: "node test.js",
+    difficulty: "Intermediate",
+    estimatedTime: "25m",
+    activeFile: "README.md",
+    fileOrder: ["README.md", "app.js", "middleware.js", "routes.js", "test.js"],
+    files: {
+      "README.md": {
+        name: "README.md",
+        language: "markdown",
+        content: `# Express.js REST API & Rate Limiter
+
+Welcome to the **Node.js / Express Assessment Sandbox**!
+
+## 🎯 The Mission
+The authentication and rate limiting layer in \`middleware.js\` and \`routes.js\` is failing test assertions.
+
+Fix the following bugs:
+1. **Bearer Token Extraction** in \`middleware.js\`: It splits \`req.headers.authorization\` by comma (\`,\`) instead of space (\` \`).
+2. **Rate Limiter Count** in \`middleware.js\`: It resets request counts incorrectly instead of incrementing. If request count exceeds \`maxLimit\`, return HTTP \`429\` status with \`{ error: "Too Many Requests" }\`.
+3. **User Profile Lookup** in \`routes.js\`: Returns \`200\` with empty body instead of \`404\` when user ID is not found.
+`
+      },
+      "app.js": {
+        name: "app.js",
+        language: "javascript",
+        content: `const express = require('express');
+const { authMiddleware, rateLimiter } = require('./middleware');
+const { router } = require('./routes');
+
+const app = express();
+app.use(express.json());
+app.use('/api', rateLimiter(10), router);
+
+module.exports = app;
+`
+      },
+      "middleware.js": {
+        name: "middleware.js",
+        language: "javascript",
+        content: `const requestCounts = new Map();
+
+function authMiddleware(req, res, next) {
+  const header = req.headers.authorization;
+  if (!header) {
+    return res.status(401).json({ error: "Missing authorization header" });
+  }
+
+  // BUG 1: Splits by comma instead of whitespace
+  const parts = header.split(",");
+  if (parts.length !== 2 || parts[0].trim() !== "Bearer") {
+    return res.status(401).json({ error: "Invalid token format" });
+  }
+
+  req.token = parts[1].trim();
+  next();
+}
+
+function rateLimiter(maxRequests = 5) {
+  return (req, res, next) => {
+    const ip = req.ip || "127.0.0.1";
+    const current = requestCounts.get(ip) || 0;
+
+    // BUG 2: Sets to 1 instead of incrementing (current + 1)
+    // BUG 3: Does not return 429 when current >= maxRequests
+    requestCounts.set(ip, 1);
+    
+    next();
+  };
+}
+
+module.exports = { authMiddleware, rateLimiter, requestCounts };
+`
+      },
+      "routes.js": {
+        name: "routes.js",
+        language: "javascript",
+        content: `const express = require('express');
+const { authMiddleware } = require('./middleware');
+const router = express.Router();
+
+const usersDb = {
+  "u1": { id: "u1", name: "Alice", email: "alice@devtrace.io" },
+  "u2": { id: "u2", name: "Bob", email: "bob@devtrace.io" }
+};
+
+router.get('/profile/:id', authMiddleware, (req, res) => {
+  const user = usersDb[req.params.id];
+  // BUG 4: Returns 200 even if user is not found
+  if (!user) {
+    return res.status(200).json({}); // Fix: return res.status(404).json({ error: "User not found" });
+  }
+  res.status(200).json(user);
+});
+
+module.exports = { router };
+`
+      },
+      "test.js": {
+        name: "test.js",
+        language: "javascript",
+        content: `const assert = require('assert');
+const { authMiddleware, rateLimiter, requestCounts } = require('./middleware');
+
+console.log("Running Express.js Test Suite...");
+
+// Test 1: Auth Bearer token extraction
+{
+  let nextCalled = false;
+  const req = { headers: { authorization: "Bearer secret_jwt_token_123" } };
+  const res = { status: (code) => ({ json: (d) => {} }) };
+  authMiddleware(req, res, () => { nextCalled = true; });
+  assert.strictEqual(nextCalled, true, "Valid Bearer header should invoke next()");
+  assert.strictEqual(req.token, "secret_jwt_token_123", "Bearer token must be extracted cleanly");
+  console.log("✓ Test 1 Passed: Bearer Token Parser");
+}
+
+// Test 2: Invalid Auth Header
+{
+  let statusCode = 0;
+  const req = { headers: { authorization: "Basic username:password" } };
+  const res = { status: (code) => { statusCode = code; return { json: () => {} }; } };
+  authMiddleware(req, res, () => {});
+  assert.strictEqual(statusCode, 401, "Non-bearer authorization must return 401");
+  console.log("✓ Test 2 Passed: Invalid Auth Rejection");
+}
+
+// Test 3: Rate Limiter tracking and limit rejection
+{
+  requestCounts.clear();
+  const limiter = rateLimiter(2);
+  let blocked = false;
+  const req = { ip: "192.168.1.50" };
+  const res = { status: (code) => ({ json: () => { if (code === 429) blocked = true; } }) };
+
+  limiter(req, res, () => {}); // req 1
+  limiter(req, res, () => {}); // req 2
+  limiter(req, res, () => {}); // req 3 - should be rejected
+
+  assert.strictEqual(blocked, true, "3rd request exceeding maxLimit(2) must return 429 Too Many Requests");
+  console.log("✓ Test 3 Passed: Rate Limiting Enforcement");
+}
+
+console.log("\nALL 3 EXPRESS.JS TESTS PASSED SUCCESSFULLY! (OK)");
+`
+      }
+    },
+    validateSave: (filename, src, ts) => [],
+    checkExecution: (stdout, stderr) => {
+      if (stdout.includes("ALL 3 EXPRESS.JS TESTS PASSED") || stdout.includes("(OK)")) {
+        return { passed: true, message: "All Express.js API and middleware test assertions passed!" };
+      }
+      return { passed: false, message: "Express test assertions failed. Check middleware and status codes." };
+    }
+  },
+
+  // ── 3. JAVA / SPRING BOOT FRAMEWORK CHALLENGE ──────────────────────────────
+  {
+    id: "spring-boot-order-service",
+    name: "Spring Boot Order Service & Tax Calc (Java)",
+    category: "java",
+    framework: "spring-boot",
+    environmentLabel: "Java 17 + Spring Boot Sandbox",
+    testCommand: "javac *.java && java OrderApplicationTests",
+    difficulty: "Advanced",
+    estimatedTime: "30m",
+    activeFile: "README.md",
+    fileOrder: ["README.md", "OrderService.java", "OrderController.java", "OrderApplicationTests.java"],
+    files: {
+      "README.md": {
+        name: "README.md",
+        language: "markdown",
+        content: `# Spring Boot Order Service & Tax Calculation
+
+Welcome to the **Spring Boot & Java Assessment Sandbox**!
+
+## 🎯 The Mission
+The e-commerce service layer in \`OrderService.java\` contains arithmetic and validation bugs:
+1. **Tax Calculation**: \`calculateTax(subtotal, taxRate)\` multiplies \`subtotal * taxRate\` directly without dividing \`taxRate / 100.0\`.
+2. **Discount Clamping**: \`applyDiscount(subtotal, discountAmount)\` allows negative totals when discount exceeds subtotal.
+3. **Empty Item Protection**: \`calculateSubtotal(prices)\` throws \`NullPointerException\` if the list is null.
+
+Fix the bugs in \`OrderService.java\` and run the Java test suite!
+`
+      },
+      "OrderService.java": {
+        name: "OrderService.java",
+        language: "java",
+        content: `import java.util.List;
+
+public class OrderService {
+
+    // BUG 1: Returns 0 or crashes if prices is null
+    public double calculateSubtotal(List<Double> prices) {
+        double sum = 0.0;
+        for (Double price : prices) {
+            sum += price;
+        }
+        return sum;
+    }
+
+    // BUG 2: Tax rate percentage is multiplied directly (e.g. subtotal * 10 instead of subtotal * 0.10)
+    public double calculateTax(double subtotal, double taxRatePercentage) {
+        return subtotal * taxRatePercentage; // Fix: subtotal * (taxRatePercentage / 100.0)
+    }
+
+    // BUG 3: Allows negative total if discount exceeds subtotal
+    public double applyDiscount(double subtotal, double discountAmount) {
+        return subtotal - discountAmount; // Fix: Math.max(0.0, subtotal - discountAmount)
+    }
+
+    public double calculateFinalTotal(List<Double> prices, double taxRate, double discount) {
+        double subtotal = calculateSubtotal(prices);
+        double discounted = applyDiscount(subtotal, discount);
+        double tax = calculateTax(discounted, taxRate);
+        return Math.round((discounted + tax) * 100.0) / 100.0;
+    }
+}
+`
+      },
+      "OrderController.java": {
+        name: "OrderController.java",
+        language: "java",
+        content: `import java.util.List;
+
+public class OrderController {
+    private final OrderService orderService = new OrderService();
+
+    public double checkout(List<Double> itemPrices, double taxRate, double discount) {
+        return orderService.calculateFinalTotal(itemPrices, taxRate, discount);
+    }
+}
+`
+      },
+      "OrderApplicationTests.java": {
+        name: "OrderApplicationTests.java",
+        language: "java",
+        content: `import java.util.Arrays;
+import java.util.Collections;
+
+public class OrderApplicationTests {
+
+    public static void main(String[] args) {
+        OrderService service = new OrderService();
+        int passed = 0;
+
+        // Test 1: Subtotal with null check
+        try {
+            double nullTotal = service.calculateSubtotal(null);
+            if (nullTotal == 0.0) {
+                System.out.println("✓ Test 1 Passed: Null price list handled safely");
+                passed++;
+            } else {
+                System.err.println("✕ Test 1 Failed: Null list should return 0.0");
+            }
+        } catch (NullPointerException e) {
+            System.err.println("✕ Test 1 Failed: NullPointerException on null list");
+        }
+
+        // Test 2: Tax calculation
+        double tax = service.calculateTax(100.0, 8.5); // 8.5% tax on 100 = 8.5
+        if (Math.abs(tax - 8.5) < 0.001) {
+            System.out.println("✓ Test 2 Passed: Tax percentage calculation accurate");
+            passed++;
+        } else {
+            System.err.println("✕ Test 2 Failed: Expected 8.5 tax, got: " + tax);
+        }
+
+        // Test 3: Discount clamping
+        double clamped = service.applyDiscount(50.0, 75.0);
+        if (clamped == 0.0) {
+            System.out.println("✓ Test 3 Passed: Excessive discount clamped to 0.0");
+            passed++;
+        } else {
+            System.err.println("✕ Test 3 Failed: Total went negative: " + clamped);
+        }
+
+        // Test 4: Final Total Integration
+        double finalTotal = service.calculateFinalTotal(Arrays.asList(40.0, 60.0), 10.0, 20.0);
+        // (100 - 20) = 80. Tax = 8. Total = 88.0
+        if (Math.abs(finalTotal - 88.0) < 0.01) {
+            System.out.println("✓ Test 4 Passed: Final order calculation integration accurate");
+            passed++;
+        } else {
+            System.err.println("✕ Test 4 Failed: Expected 88.0, got: " + finalTotal);
+        }
+
+        if (passed == 4) {
+            System.out.println("\nALL 4 SPRING BOOT ORDER TESTS PASSED! (OK)");
+        } else {
+            System.exit(1);
+        }
+    }
+}
+`
+      }
+    },
+    validateSave: (filename, src, ts) => [],
+    checkExecution: (stdout, stderr) => {
+      if (stdout.includes("ALL 4 SPRING BOOT ORDER TESTS PASSED") || stdout.includes("(OK)")) {
+        return { passed: true, message: "All Spring Boot / Java order service tests passed!" };
+      }
+      return { passed: false, message: "Java order service tests failed. Check calculations and null checks." };
+    }
+  },
+
+  // ── 4. FASTAPI FRAMEWORK CHALLENGE ─────────────────────────────────────────
+  {
+    id: "fastapi-async-crud",
+    name: "FastAPI Async CRUD & Pydantic Validator (FastAPI)",
+    category: "python",
+    framework: "fastapi",
+    environmentLabel: "Python 3.11 + FastAPI Sandbox",
+    testCommand: "python test_main.py",
+    difficulty: "Intermediate",
+    estimatedTime: "25m",
+    activeFile: "README.md",
+    fileOrder: ["README.md", "main.py", "schemas.py", "test_main.py"],
+    files: {
+      "README.md": {
+        name: "README.md",
+        language: "markdown",
+        content: `# FastAPI Async Endpoints & Schema Validation
+
+Welcome to the **FastAPI Sandbox**!
+
+## 🎯 The Mission
+The item catalog service in \`schemas.py\` and \`main.py\` is failing validation tests:
+1. **Pydantic Validation** in \`schemas.py\`: \`price\` validator allows negative numbers.
+2. **Missing Item Status** in \`main.py\`: \`get_item(item_id)\` returns \`200\` with \`None\` instead of raising \`HTTPException(status_code=404)\`.
+3. **Default Pagination** in \`main.py\`: \`limit\` defaults to \`0\` which returns an empty list instead of defaulting to \`10\`.
+`
+      },
+      "schemas.py": {
+        name: "schemas.py",
+        language: "python",
+        content: `class ValidationError(Exception):
+    pass
+
+class ItemCreate:
+    def __init__(self, title: str, price: float, tags: list = None):
+        self.title = title
+        self.price = price
+        self.tags = tags or []
+        self.validate()
+
+    def validate(self):
+        if not self.title or len(self.title.strip()) < 2:
+            raise ValidationError("Title must be at least 2 characters.")
+        # BUG 1: Allows negative prices
+        if self.price < -100: # Fix: if self.price <= 0:
+            raise ValidationError("Price must be greater than zero.")
+`
+      },
+      "main.py": {
+        name: "main.py",
+        language: "python",
+        content: `from schemas import ItemCreate, ValidationError
+
+items_db = {
+    1: {"id": 1, "title": "Mechanical Keyboard", "price": 89.99},
+    2: {"id": 2, "title": "Ergonomic Mouse", "price": 49.99},
+}
+
+def get_items(skip: int = 0, limit: int = 0): # BUG 2: limit defaults to 0 instead of 10
+    all_items = list(items_db.values())
+    if limit <= 0:
+        return []
+    return all_items[skip : skip + limit]
+
+def get_item_by_id(item_id: int):
+    # BUG 3: Returns 200 None instead of raising error/404 dict
+    if item_id not in items_db:
+        return {"status_code": 200, "data": None} # Fix: return {"status_code": 404, "error": "Not Found"}
+    return {"status_code": 200, "data": items_db[item_id]}
+
+def create_item(item_data: dict):
+    try:
+        validated = ItemCreate(**item_data)
+        new_id = max(items_db.keys()) + 1
+        items_db[new_id] = {"id": new_id, "title": validated.title, "price": validated.price}
+        return {"status_code": 201, "data": items_db[new_id]}
+    except ValidationError as e:
+        return {"status_code": 422, "error": str(e)}
+`
+      },
+      "test_main.py": {
+        name: "test_main.py",
+        language: "python",
+        content: `from main import get_items, get_item_by_id, create_item
+from schemas import ItemCreate, ValidationError
+
+print("Running FastAPI Test Suite...")
+
+# Test 1: Negative Price Validation
+try:
+    ItemCreate(title="Test Item", price=-15.0)
+    print("✕ Test 1 Failed: Negative price was accepted")
+    exit(1)
+except ValidationError:
+    print("✓ Test 1 Passed: Negative price rejected by schema")
+
+# Test 2: Item Not Found 404 Status
+res = get_item_by_id(999)
+assert res["status_code"] == 404, f"Expected 404, got {res['status_code']}"
+print("✓ Test 2 Passed: 404 Returned for non-existent item")
+
+# Test 3: Default Pagination
+items = get_items()
+assert len(items) > 0, "Default get_items() should return populated list"
+print("✓ Test 3 Passed: Pagination defaults functioning")
+
+print("\nALL 3 FASTAPI TESTS PASSED! (OK)")
+`
+      }
+    },
+    validateSave: (filename, src, ts) => [],
+    checkExecution: (stdout, stderr) => {
+      if (stdout.includes("ALL 3 FASTAPI TESTS PASSED") || stdout.includes("(OK)")) {
+        return { passed: true, message: "All FastAPI endpoint and schema tests passed successfully!" };
+      }
+      return { passed: false, message: "FastAPI tests failed. Check Pydantic validation and 404 status." };
+    }
+  },
+
+  // ── 5. FLASK RESTFUL INVENTORY (PYTHON) ────────────────────────────────────
+  {
+    id: "flask-inventory-api",
+    name: "Flask RESTful Inventory & Blueprint (Flask)",
+    category: "python",
+    framework: "flask",
+    environmentLabel: "Python 3.11 + Flask Sandbox",
+    testCommand: "python test_app.py",
+    difficulty: "Beginner",
+    estimatedTime: "20m",
+    activeFile: "README.md",
+    fileOrder: ["README.md", "app.py", "routes.py", "test_app.py"],
+    files: {
+      "README.md": {
+        name: "README.md",
+        language: "markdown",
+        content: `# Flask RESTful Inventory Service
+
+Welcome to the **Flask Assessment Sandbox**!
+
+## 🎯 The Mission
+Fix two bugs in the Flask inventory tracking blueprint in \`routes.py\`:
+1. **Stock Depletion**: \`decrement_stock(item_id, quantity)\` allows stock to go below zero. If stock is insufficient, return \`{"error": "Insufficient stock"}, 400\`.
+2. **Item Addition Status**: \`add_item()\` returns HTTP \`200\` instead of standard REST \`201 Created\`.
+`
+      },
+      "app.py": {
+        name: "app.py",
+        language: "python",
+        content: `from routes import inventory_blueprint
+
+class FlaskMockApp:
+    def __init__(self):
+        self.blueprints = []
+        self.register_blueprint(inventory_blueprint)
+
+    def register_blueprint(self, bp):
+        self.blueprints.append(bp)
+
+app = FlaskMockApp()
+`
+      },
+      "routes.py": {
+        name: "routes.py",
+        language: "python",
+        content: `inventory_db = {
+    "sku_1": {"name": "USB-C Cable", "stock": 10},
+    "sku_2": {"name": "HDMI Adapter", "stock": 2},
+}
+
+class InventoryBlueprint:
+    def decrement_stock(self, sku: str, amount: int):
+        if sku not in inventory_db:
+            return {"error": "Item not found"}, 404
+            
+        item = inventory_db[sku]
+        # BUG 1: Does not check if amount > item["stock"]
+        item["stock"] -= amount # Fix: check if item["stock"] < amount -> return {"error": "Insufficient stock"}, 400
+        return {"sku": sku, "remaining_stock": item["stock"]}, 200
+
+    def add_item(self, sku: str, name: str, stock: int):
+        inventory_db[sku] = {"name": name, "stock": stock}
+        # BUG 2: Returns 200 instead of 201
+        return {"sku": sku, "status": "created"}, 200 # Fix: return ..., 201
+
+inventory_blueprint = InventoryBlueprint()
+`
+      },
+      "test_app.py": {
+        name: "test_app.py",
+        language: "python",
+        content: `from routes import inventory_blueprint, inventory_db
+
+print("Running Flask Test Suite...")
+
+# Test 1: Over-depletion check
+inventory_db["sku_2"]["stock"] = 2
+res, status = inventory_blueprint.decrement_stock("sku_2", 5)
+assert status == 400, f"Expected 400 for out-of-stock, got {status}"
+assert inventory_db["sku_2"]["stock"] == 2, "Stock must not become negative"
+print("✓ Test 1 Passed: Over-depletion prevented")
+
+# Test 2: Valid decrement
+res, status = inventory_blueprint.decrement_stock("sku_2", 1)
+assert status == 200
+assert res["remaining_stock"] == 1
+print("✓ Test 2 Passed: Valid stock decrement")
+
+# Test 3: 201 Created status
+res, status = inventory_blueprint.add_item("sku_3", "Monitor Stand", 15)
+assert status == 201, f"Expected 201 Created, got {status}"
+print("✓ Test 3 Passed: 201 Created status returned")
+
+print("\nALL 3 FLASK TESTS PASSED! (OK)")
+`
+      }
+    },
+    validateSave: (filename, src, ts) => [],
+    checkExecution: (stdout, stderr) => {
+      if (stdout.includes("ALL 3 FLASK TESTS PASSED") || stdout.includes("(OK)")) {
+        return { passed: true, message: "All Flask inventory API tests passed successfully!" };
+      }
+      return { passed: false, message: "Flask test assertions failed. Check stock depletion and status codes." };
+    }
+  },
+
+  // ── 6. NEXT.JS APP ROUTER & SERVER CACHING CHALLENGE ───────────────────────
+  {
+    id: "nextjs-api-cache",
+    name: "Next.js 15 Server Actions & API Cache (Next.js)",
+    category: "node",
+    framework: "nextjs",
+    environmentLabel: "Next.js 15 App Router Sandbox",
+    testCommand: "node test_actions.js",
+    difficulty: "Intermediate",
+    estimatedTime: "25m",
+    activeFile: "README.md",
+    fileOrder: ["README.md", "route.js", "actions.js", "test_actions.js"],
+    files: {
+      "README.md": {
+        name: "README.md",
+        language: "markdown",
+        content: `# Next.js 15 Server Actions & Cache Control
+
+Welcome to the **Next.js 15 Assessment Sandbox**!
+
+## 🎯 The Mission
+Fix caching and validation bugs in \`route.js\` and \`actions.js\`:
+1. **Cache Control Headers** in \`route.js\`: The \`s-maxage\` cache header is set to \`0\` instead of \`60\`.
+2. **Server Action Form Validation** in \`actions.js\`: Missing email validation before writing to database.
+`
+      },
+      "route.js": {
+        name: "route.js",
+        language: "javascript",
+        content: `function GET() {
+  const data = { timestamp: Date.now(), status: "operational" };
+  
+  // BUG 1: s-maxage is set to 0 instead of 60
+  const headers = {
+    "Content-Type": "application/json",
+    "Cache-Control": "public, s-maxage=0, stale-while-revalidate=30" // Fix: s-maxage=60
+  };
+
+  return { status: 200, body: JSON.stringify(data), headers };
+}
+
+module.exports = { GET };
+`
+      },
+      "actions.js": {
+        name: "actions.js",
+        language: "javascript",
+        content: `const subscribers = [];
+
+async function subscribeNewsletter(formData) {
+  'use server';
+  const email = formData.get('email');
+  
+  // BUG 2: Accepts empty email or invalid email without @
+  if (!email) { // Fix: if (!email || !email.includes('@'))
+    return { success: false, error: "Valid email is required" };
+  }
+
+  subscribers.push(email.trim().toLowerCase());
+  return { success: true, count: subscribers.length };
+}
+
+module.exports = { subscribeNewsletter, subscribers };
+`
+      },
+      "test_actions.js": {
+        name: "test_actions.js",
+        language: "javascript",
+        content: `const assert = require('assert');
+const { GET } = require('./route');
+const { subscribeNewsletter, subscribers } = require('./actions');
+
+console.log("Running Next.js 15 Test Suite...");
+
+// Test 1: Cache Control Header
+const response = GET();
+assert(response.headers['Cache-Control'].includes('s-maxage=60'), "Cache-Control must specify s-maxage=60 for edge caching");
+console.log("✓ Test 1 Passed: Edge Cache Headers Valid");
+
+// Test 2: Invalid Email Rejection
+(async () => {
+  const invalidForm = new Map([['email', 'not-an-email']]);
+  const res = await subscribeNewsletter(invalidForm);
+  assert.strictEqual(res.success, false, "Invalid email must be rejected");
+  console.log("✓ Test 2 Passed: Server Action Email Validation");
+
+  console.log("\nALL NEXT.JS 15 TESTS PASSED! (OK)");
+})();
+`
+      }
+    },
+    validateSave: (filename, src, ts) => [],
+    checkExecution: (stdout, stderr) => {
+      if (stdout.includes("ALL NEXT.JS 15 TESTS PASSED") || stdout.includes("(OK)")) {
+        return { passed: true, message: "All Next.js 15 App Router & cache tests passed!" };
+      }
+      return { passed: false, message: "Next.js tests failed. Check cache headers and validation." };
+    }
+  },
+
+  // ── 7. STANDARD PYTHON CHALLENGES ──────────────────────────────────────────
   {
     id: "python-challenge",
     name: "Python Algorithmic Challenge (Backend)",
     category: "python",
+    framework: "none",
+    environmentLabel: "Python 3.9 Alpine Sandbox",
     difficulty: "Beginner",
     estimatedTime: "15m",
     activeFile: "README.md",
@@ -37,13 +871,12 @@ export const REPOSITORIES: Repository[] = [
       "README.md": {
         name: "README.md",
         language: "markdown",
-        content: "# Python Challenge\nWrite a Python function that takes a string as input and returns the string reversed. Do not use any built-in `reverse` methods.\n\nEdit \`main.py\` and press \`Cmd/Ctrl+S\` or click Save to run your code."
+        content: "# Python Challenge\nWrite a Python function that takes a string as input and returns the string reversed. Do not use any built-in `reverse` methods.\n\nEdit `main.py` and press `Cmd/Ctrl+S` or click Save to run your code."
       },
       "main.py": {
         name: "main.py",
         language: "python",
         content: `def reverse_string(s):
-    # Write your code here to reverse the string 's'
     pass
 
 # Test cases
@@ -51,9 +884,7 @@ print(reverse_string("hello")) # Should print "olleh"
 print(reverse_string("DevTrace")) # Should print "ecarTveD"`
       }
     },
-    validateSave: (filename, src, ts) => {
-      return [];
-    },
+    validateSave: (filename, src, ts) => [],
     checkExecution: (stdout, stderr) => {
       const hasOlleh = stdout.includes("olleh");
       const hasDevTrace = stdout.includes("ecarTveD");
@@ -63,227 +894,14 @@ print(reverse_string("DevTrace")) # Should print "ecarTveD"`
       return { passed: false, message: "The output doesn't match the expected reversed strings." };
     }
   },
-  {
-    id: "python-data-analyzer",
-    name: "Data Analyzer Pro (Python Fixes)",
-    category: "python",
-    difficulty: "Intermediate",
-    estimatedTime: "25m",
-    activeFile: "README.md",
-    fileOrder: ["README.md", "main.py"],
-    files: {
-      "README.md": {
-        name: "README.md",
-        language: "markdown",
-        content: `# Broken Data Analyzer\n\nOur new data analyzer script \`main.py\` is supposed to calculate the average age of a list of users, but it's crashing in production!`
-      },
-      "main.py": {
-        name: "main.py",
-        language: "python",
-        content: `def calculate_average_age(users):
-    total_age = 0
-    count = 0
-    
-    for user in users:
-        # BUG 1: 'age' might be missing from some user dictionaries
-        # BUG 2: 'age' might be a string instead of an integer
-        total_age += user['age']
-        count += 1
-        
-    # BUG 3: Potential ZeroDivisionError if users list is empty
-    return total_age / count
 
-# Test Data
-users_data = [
-    {"name": "Alice", "age": 25},
-    {"name": "Bob", "age": "30"},
-    {"name": "Charlie"} # Missing age
-]
-
-print("Starting analysis...")
-avg = calculate_average_age(users_data)
-print(f"Average Age: {avg}")`
-      }
-    },
-    validateSave: (filename, src, ts) => {
-      return [];
-    },
-    checkExecution: (stdout, stderr) => {
-      // 25 + 30 = 55. Average of 2 people = 27.5
-      if (stdout.includes("Average Age: 27.5")) {
-        return { passed: true, message: "Success! The analyzer is now handling messy data correctly." };
-      }
-      if (stderr) {
-        return { passed: false, message: "The script is still crashing with errors." };
-      }
-      return { passed: false, message: "The calculated average age is incorrect." };
-    }
-  },
-  {
-    id: "python-secret-validator",
-    name: "Secret Code Validator (Regex/Strings)",
-    category: "python",
-    difficulty: "Advanced",
-    estimatedTime: "30m",
-    activeFile: "README.md",
-    fileOrder: ["README.md", "main.py"],
-    files: {
-      "README.md": {
-        name: "README.md",
-        language: "markdown",
-        content: `# Secret Code Validator\n\nFix the bugs to pass the validation tests.`
-      },
-      "main.py": {
-        name: "main.py",
-        language: "python",
-        content: `def validate_secret_code(code):
-    if not code:
-        return False
-        
-    # BUG 1: Case sensitive bug, checking for 'dev' instead of 'DEV'
-    if not code.startswith('dev'): 
-        return False
-    
-    # BUG 2: code[-1] is a string, it will never be of type int!
-    if type(code[-1]) != int: 
-        return False
-        
-    return True
-
-print("Test 1:", validate_secret_code("DEV-9X4")) # Should be True
-print("Test 2:", validate_secret_code("dev-abc")) # Should be False
-print("Test 3:", validate_secret_code("DEV-XYZ7")) # Should be True
-print("Test 4:", validate_secret_code("DEV-ONLY")) # Should be False`
-      }
-    },
-    validateSave: (filename, src, ts) => {
-      return [];
-    },
-    checkExecution: (stdout, stderr) => {
-      const results = stdout.match(/Test \d+: (True|False)/g);
-      if (results && results.length === 4) {
-        const expected = ["Test 1: True", "Test 2: False", "Test 3: True", "Test 4: False"];
-        const matches = expected.every((val, i) => results[i] === val);
-        if (matches) return { passed: true, message: "Great job! Your validator logic is now perfect." };
-      }
-      return { passed: false, message: "Some validation tests are still failing." };
-    }
-  },
-  {
-    id: "acme-corp",
-    name: "AcmeCorp Landing (CSS/JS)",
-    category: "web",
-    difficulty: "Beginner",
-    estimatedTime: "10m",
-    activeFile: "README.md",
-    fileOrder: ["README.md", "index.html", "style.css", "script.js"],
-    files: {
-      "index.html": {
-        name: "index.html",
-        language: "html",
-        content: `<header class="header">Office Dashboard</header>\n<button id="send-btn">Send Message</button>`,
-      },
-      "style.css": {
-        name: "style.css",
-        language: "css",
-        content: `.header {\n  position: fixed;\n  z-index: -1; /* BUG: Header is trapped behind the main content */\n  background: white;\n}`,
-      },
-      "script.js": {
-        name: "script.js",
-        language: "javascript",
-        content: `// BUG: Trying to select 'msg-btn' but HTML uses 'send-btn'\ndocument.getElementById('msg-btn').addEventListener('click', () => {\n  alert('Message Sent!');\n});`,
-      },
-      "README.md": {
-        name: "README.md",
-        language: "markdown",
-        content: `Mission: The 'Send Message' button is broken and the layout is hidden. Fix the header layering and make the button work.`,
-      },
-    },
-    validateSave: (filename: string, src: string, ts: string) => {
-      const lines: TerminalLine[] = [];
-      if (filename === "style.css") {
-        const hasZIndex = /z-index\s*:\s*-/.test(src);
-        if (hasZIndex) lines.push({ type: "error", text: "style.css: z-index with negative value found (header hidden)", ts });
-        else lines.push({ type: "success", text: "style.css: z-index looks good ✔", ts });
-      }
-      if (filename === "script.js") {
-        const hasWrongId = /getElementById\s*\(\s*['"]msg-btn['"]\s*\)/.test(src);
-        if (hasWrongId) lines.push({ type: "error", text: "script.js: Cannot read property 'addEventListener' of null", ts });
-        else lines.push({ type: "success", text: "script.js: Event listener wired correctly ✔", ts });
-      }
-      return lines;
-    }
-  },
-  {
-    id: "todo-app",
-    name: "TaskMaster Pro (Logic)",
-    category: "web",
-    difficulty: "Intermediate",
-    estimatedTime: "15m",
-    activeFile: "README.md",
-    fileOrder: ["README.md", "index.html", "style.css", "script.js"],
-    files: {
-      "index.html": {
-        name: "index.html",
-        language: "html",
-        content: `<div class="app-container">\n  <h1>My Tasks</h1>\n  <ul id="task-list">\n    <li class="task-item">Buy groceries</li>\n  </ul>\n</div>`,
-      },
-      "style.css": {
-        name: "style.css",
-        language: "css",
-        content: `.task-item {\n  opacity: 0; \n}`,
-      },
-      "script.js": {
-        name: "script.js",
-        language: "javascript",
-        content: `const input = document.getElementById('new-task');\nconst taskText = input; // BUG: Missing .value`,
-      },
-      "README.md": {
-        name: "README.md",
-        language: "markdown",
-        content: `Mission: Fix the visibility and the value binding.`,
-      },
-    },
-    validateSave: (filename: string, src: string, ts: string) => {
-      const lines: TerminalLine[] = [];
-      if (filename === "style.css") {
-        if (src.includes("opacity: 0")) lines.push({ type: "warning", text: "style.css: items are still invisible.", ts });
-        else lines.push({ type: "success", text: "style.css: Output clarity restored ✔", ts });
-      }
-      if (filename === "script.js") {
-        if (!src.includes("input.value")) lines.push({ type: "error", text: "script.js: Attempting to print the HTML node directly.", ts });
-        else lines.push({ type: "success", text: "script.js: Input capture valid ✔", ts });
-      }
-      return lines;
-    }
-  },
-  {
-    id: "weather-dash",
-    name: "WeatherDash (API Errors)",
-    category: "web",
-    difficulty: "Advanced",
-    estimatedTime: "20m",
-    activeFile: "README.md",
-    fileOrder: ["README.md", "index.html", "script.js"],
-    files: {
-      "README.md": { name: "README.md", language: "markdown", content: "# Fix WeatherDash" },
-      "index.html": { name: "index.html", language: "html", content: "<div id='temp'></div>" },
-      "script.js": { name: "script.js", language: "javascript", content: "const data = fetch('api.weather.com');" }
-    },
-    validateSave: (filename, src, ts) => {
-      const lines: TerminalLine[] = [];
-      if (filename === "script.js") {
-        if (!src.includes("await fetch")) lines.push({ type: "warning", text: "script.js: fetch() returns a promise, you likely need await.", ts });
-      }
-      return lines;
-    }
-  },
-
-  // ── C++ CHALLENGES ─────────────────────────────────────────────────────────
+  // ── 8. C++ CHALLENGES ──────────────────────────────────────────────────────
   {
     id: "cpp-array-reversal",
     name: "Array Reversal Bug (C++)",
     category: "cpp",
+    framework: "none",
+    environmentLabel: "GCC 12 Isolated Container",
     difficulty: "Beginner",
     estimatedTime: "15m",
     activeFile: "README.md",
@@ -297,7 +915,7 @@ print("Test 4:", validate_secret_code("DEV-ONLY")) # Should be False`
       "main.cpp": {
         name: "main.cpp",
         language: "cpp",
-        content: `#include <iostream>\nusing namespace std;\n\nvoid reverseArray(int arr[], int n) {\n    // BUG 1: Loop goes to n (should be n/2) — reverses twice, ending up original\n    // BUG 2: arr[n-i] causes out-of-bounds when i=0 (should be arr[n-1-i])\n    for (int i = 0; i < n; i++) {\n        int temp = arr[i];\n        arr[i]   = arr[n - i];   // fix: arr[n - 1 - i]\n        arr[n-i] = temp;         // fix: arr[n - 1 - i]\n    }\n}\n\nint main() {\n    int arr[] = {1, 2, 3, 4, 5};\n    int n = 5;\n    reverseArray(arr, n);\n    for (int i = 0; i < n; i++) {\n        cout << arr[i];\n        if (i < n - 1) cout << " ";\n    }\n    cout << endl;\n    return 0;\n}`
+        content: `#include <iostream>\nusing namespace std;\n\nvoid reverseArray(int arr[], int n) {\n    for (int i = 0; i < n; i++) {\n        int temp = arr[i];\n        arr[i]   = arr[n - i];\n        arr[n-i] = temp;\n    }\n}\n\nint main() {\n    int arr[] = {1, 2, 3, 4, 5};\n    int n = 5;\n    reverseArray(arr, n);\n    for (int i = 0; i < n; i++) {\n        cout << arr[i];\n        if (i < n - 1) cout << " ";\n    }\n    cout << endl;\n    return 0;\n}`
       }
     },
     validateSave: (filename, src, ts) => [],
@@ -305,157 +923,44 @@ print("Test 4:", validate_secret_code("DEV-ONLY")) # Should be False`
       if (stdout.trim() === "5 4 3 2 1") {
         return { passed: true, message: "Perfect! Array reversed correctly." };
       }
-      if (stderr) return { passed: false, message: "Compilation or runtime error — check the terminal." };
-      return { passed: false, message: `Expected '5 4 3 2 1' but got: ${stdout.trim() || "(empty)"}` };
-    }
-  },
-  {
-    id: "cpp-linked-list",
-    name: "Linked List Sum Fix (C++)",
-    category: "cpp",
-    difficulty: "Intermediate",
-    estimatedTime: "25m",
-    activeFile: "README.md",
-    fileOrder: ["README.md", "main.cpp"],
-    files: {
-      "README.md": {
-        name: "README.md",
-        language: "markdown",
-        content: `# Linked List Sum Fix\n\nThe linked list \`10 -> 20 -> 30\` should produce \`Sum: 60\` and \`Length: 3\`.\n\nBoth functions have a loop-condition bug that skips the last node and crashes on a null head.`
-      },
-      "main.cpp": {
-        name: "main.cpp",
-        language: "cpp",
-        content: `#include <iostream>\nusing namespace std;\n\nstruct Node {\n    int data;\n    Node* next;\n    Node(int d, Node* n = nullptr) : data(d), next(n) {}\n};\n\n// BUG 1: head->next != nullptr skips the last node\n// FIX: change condition to head != nullptr\nint sumList(Node* head) {\n    int sum = 0;\n    while (head->next != nullptr) {\n        sum += head->data;\n        head = head->next;\n    }\n    return sum;\n}\n\n// BUG 2: Same off-by-one, and crashes if head is null\nint lengthList(Node* head) {\n    int count = 0;\n    while (head->next != nullptr) {\n        count++;\n        head = head->next;\n    }\n    return count;\n}\n\nint main() {\n    Node* list = new Node(10, new Node(20, new Node(30)));\n    cout << "Sum: "    << sumList(list)    << endl;\n    cout << "Length: " << lengthList(list) << endl;\n    return 0;\n}`
-      }
-    },
-    validateSave: (filename, src, ts) => [],
-    checkExecution: (stdout, stderr) => {
-      const okSum = stdout.includes("Sum: 60");
-      const okLen = stdout.includes("Length: 3");
-      if (okSum && okLen) return { passed: true, message: "Linked list traversal fixed correctly!" };
-      if (stderr) return { passed: false, message: "Compilation/runtime error — check the terminal." };
-      return { passed: false, message: "Output incorrect. Expected 'Sum: 60' and 'Length: 3'." };
-    }
-  },
-  {
-    id: "cpp-shape-calculator",
-    name: "Shape Calculator OOP (C++)",
-    category: "cpp",
-    difficulty: "Advanced",
-    estimatedTime: "30m",
-    activeFile: "README.md",
-    fileOrder: ["README.md", "main.cpp"],
-    files: {
-      "README.md": {
-        name: "README.md",
-        language: "markdown",
-        content: `# Shape Calculator OOP\n\nPolymorphism is broken. Fix three bugs:\n1. \`getArea()\` in the base class is not virtual — wrong method gets dispatched.\n2. Circle uses \`3.14\` instead of \`M_PI\`.\n3. Rectangle uses \`+\` instead of \`*\` for area.\n\nExpected output:\n\`\`\`\nCircle: 78.54\nRectangle: 24.00\n\`\`\``
-      },
-      "main.cpp": {
-        name: "main.cpp",
-        language: "cpp",
-        content: `#include <iostream>\n#include <cmath>\n#include <cstdio>\nusing namespace std;\n\nclass Shape {\npublic:\n    // BUG 1: Missing 'virtual' — polymorphism doesn't work\n    double getArea() { return 0.0; }\n    virtual ~Shape() {}\n};\n\nclass Circle : public Shape {\n    double radius;\npublic:\n    Circle(double r) : radius(r) {}\n    // BUG 2: Use M_PI instead of 3.14\n    double getArea() override { return 3.14 * radius * radius; }\n};\n\nclass Rectangle : public Shape {\n    double w, h;\npublic:\n    Rectangle(double w, double h) : w(w), h(h) {}\n    // BUG 3: Should multiply, not add\n    double getArea() override { return w + h; }\n};\n\nint main() {\n    Shape* shapes[2] = { new Circle(5.0), new Rectangle(4.0, 6.0) };\n    printf("Circle: %.2f\\n",    shapes[0]->getArea());\n    printf("Rectangle: %.2f\\n", shapes[1]->getArea());\n    for (int i = 0; i < 2; i++) delete shapes[i];\n    return 0;\n}`
-      }
-    },
-    validateSave: (filename, src, ts) => [],
-    checkExecution: (stdout, stderr) => {
-      const okCircle = stdout.includes("Circle: 78.54");
-      const okRect   = stdout.includes("Rectangle: 24.00");
-      if (okCircle && okRect) return { passed: true, message: "OOP polymorphism fixed! All areas correct." };
-      if (stderr) return { passed: false, message: "Compilation error — check the terminal." };
-      return { passed: false, message: "Output incorrect. Expected 'Circle: 78.54' and 'Rectangle: 24.00'." };
+      return { passed: false, message: "Expected '5 4 3 2 1'." };
     }
   },
 
-  // ── JAVA CHALLENGES ────────────────────────────────────────────────────────
+  // ── 9. VANILLA WEB CHALLENGES ──────────────────────────────────────────────
   {
-    id: "java-string-ops",
-    name: "String Operations Fix (Java)",
-    category: "java",
+    id: "acme-corp",
+    name: "AcmeCorp Landing (CSS/JS)",
+    category: "web",
+    framework: "vanilla",
+    environmentLabel: "Web Live Preview Browser",
     difficulty: "Beginner",
-    estimatedTime: "15m",
+    estimatedTime: "10m",
     activeFile: "README.md",
-    fileOrder: ["README.md", "Main.java"],
+    fileOrder: ["README.md", "index.html", "style.css", "script.js"],
     files: {
+      "index.html": {
+        name: "index.html",
+        language: "html",
+        content: `<header class="header">Office Dashboard</header>\n<button id="send-btn">Send Message</button>`,
+      },
+      "style.css": {
+        name: "style.css",
+        language: "css",
+        content: `.header {\n  position: fixed;\n  z-index: -1;\n  background: white;\n}`,
+      },
+      "script.js": {
+        name: "script.js",
+        language: "javascript",
+        content: `document.getElementById('msg-btn').addEventListener('click', () => {\n  alert('Message Sent!');\n});`,
+      },
       "README.md": {
         name: "README.md",
         language: "markdown",
-        content: `# Java String Operations\n\nTwo classic Java string bugs to fix:\n1. \`==\` compares object references, not content — use \`.equals()\`.\n2. The word-reversal loop iterates forward instead of backward.\n\nExpected output:\n\`\`\`\ntrue\nWorld Java Hello\n\`\`\``
+        content: `Mission: The 'Send Message' button is broken and the layout is hidden. Fix the header layering and make the button work.`,
       },
-      "Main.java": {
-        name: "Main.java",
-        language: "java",
-        content: `public class Main {\n\n    // BUG 1: == compares references, not values. Use .equals() instead.\n    public static boolean isValidCode(String code) {\n        String validCode = new String("DEVTRACE");\n        return code == validCode;\n    }\n\n    // BUG 2: Loop goes forward (0..length-1) instead of backward\n    public static String reverseWords(String sentence) {\n        String[] words = sentence.split(" ");\n        StringBuilder result = new StringBuilder();\n        for (int i = 0; i < words.length; i++) {\n            if (i > 0) result.append(" ");\n            result.append(words[i]);\n        }\n        return result.toString();\n    }\n\n    public static void main(String[] args) {\n        System.out.println(isValidCode("DEVTRACE"));       // Should print: true\n        System.out.println(reverseWords("Hello Java World")); // Should print: World Java Hello\n    }\n}`
-      }
     },
-    validateSave: (filename, src, ts) => [],
-    checkExecution: (stdout, stderr) => {
-      const lines = stdout.trim().split("\n").map(l => l.trim());
-      if (lines[0] === "true" && lines[1] === "World Java Hello") {
-        return { passed: true, message: "String bugs fixed! .equals() and loop direction correct." };
-      }
-      if (stderr) return { passed: false, message: "Compilation error — check the terminal." };
-      return { passed: false, message: "Output incorrect. Expected 'true' then 'World Java Hello'." };
-    }
-  },
-  {
-    id: "java-grade-calculator",
-    name: "Grade Calculator Bug (Java)",
-    category: "java",
-    difficulty: "Intermediate",
-    estimatedTime: "25m",
-    activeFile: "README.md",
-    fileOrder: ["README.md", "Main.java"],
-    files: {
-      "README.md": {
-        name: "README.md",
-        language: "markdown",
-        content: `# Java Grade Calculator\n\nTwo arithmetic bugs to fix:\n1. Integer division truncates the decimal — cast to \`double\` before dividing.\n2. The max-finder loop stops one element too early (\`length - 1\` instead of \`length\`).\n\nExpected output:\n\`\`\`\nAverage: 87.8\nHighest: 96\n\`\`\``
-      },
-      "Main.java": {
-        name: "Main.java",
-        language: "java",
-        content: `public class Main {\n\n    // BUG 1: Integer division — total/length truncates to int\n    // FIX: cast total to double before dividing\n    public static double getAverage(int[] scores) {\n        int total = 0;\n        for (int score : scores) total += score;\n        return total / scores.length;\n    }\n\n    // BUG 2: Loop bound is scores.length - 1, so last element is never checked\n    public static int getHighest(int[] scores) {\n        int max = scores[0];\n        for (int i = 1; i < scores.length - 1; i++) {\n            if (scores[i] > max) max = scores[i];\n        }\n        return max;\n    }\n\n    public static void main(String[] args) {\n        int[] scores = {85, 92, 78, 96, 88};\n        System.out.println("Average: " + getAverage(scores)); // Should print: Average: 87.8\n        System.out.println("Highest: " + getHighest(scores)); // Should print: Highest: 96\n    }\n}`
-      }
-    },
-    validateSave: (filename, src, ts) => [],
-    checkExecution: (stdout, stderr) => {
-      const okAvg = stdout.includes("Average: 87.8");
-      const okMax = stdout.includes("Highest: 96");
-      if (okAvg && okMax) return { passed: true, message: "Both bugs fixed! Arithmetic is correct." };
-      if (stderr) return { passed: false, message: "Compilation error — check the terminal." };
-      return { passed: false, message: "Output incorrect. Expected 'Average: 87.8' and 'Highest: 96'." };
-    }
-  },
-  {
-    id: "java-bank-account",
-    name: "Bank Account OOP (Java)",
-    category: "java",
-    difficulty: "Advanced",
-    estimatedTime: "30m",
-    activeFile: "README.md",
-    fileOrder: ["README.md", "Main.java"],
-    files: {
-      "README.md": {
-        name: "README.md",
-        language: "markdown",
-        content: `# Java Bank Account OOP\n\nThree bugs to fix in this banking system:\n1. No null-check before accessing account — causes NullPointerException.\n2. Interest rate is applied as-is (5.0%) but should be divided by 100.\n3. Overdraft check uses \`>\` instead of \`>=\` allowing balance to go negative.\n\nExpected output:\n\`\`\`\nBalance: 1050.0\nWithdrawal successful\n\`\`\``
-      },
-      "Main.java": {
-        name: "Main.java",
-        language: "java",
-        content: `public class Main {\n\n    static class BankAccount {\n        String owner;\n        double balance;\n        BankAccount(String owner, double balance) {\n            this.owner   = owner;\n            this.balance = balance;\n        }\n    }\n\n    // BUG 1: No null-check — crashes with NullPointerException if account is null\n    public static void applyInterest(BankAccount account, double ratePercent) {\n        account.balance += account.balance * ratePercent; // BUG 2: should be ratePercent / 100.0\n    }\n\n    // BUG 3: > should be >= so balance cannot go negative (currently allows 0 withdrawal)\n    public static String withdraw(BankAccount account, double amount) {\n        if (amount > account.balance) {\n            return "Insufficient funds";\n        }\n        account.balance -= amount;\n        return "Withdrawal successful";\n    }\n\n    public static void main(String[] args) {\n        BankAccount acc = new BankAccount("Alice", 1000.0);\n        applyInterest(acc, 5.0);                           // Should add 50.0 → balance 1050\n        System.out.println("Balance: " + acc.balance);    // Should print: Balance: 1050.0\n        System.out.println(withdraw(acc, 200.0));          // Should print: Withdrawal successful\n    }\n}`
-      }
-    },
-    validateSave: (filename, src, ts) => [],
-    checkExecution: (stdout, stderr) => {
-      const okBal  = stdout.includes("Balance: 1050.0");
-      const okWith = stdout.includes("Withdrawal successful");
-      if (okBal && okWith) return { passed: true, message: "Bank account system fully fixed!" };
-      if (stderr) return { passed: false, message: "Runtime error — check the terminal for stack trace." };
-      return { passed: false, message: "Output incorrect. Expected 'Balance: 1050.0' and 'Withdrawal successful'." };
-    }
+    validateSave: (filename, src, ts) => []
   }
 ];
 

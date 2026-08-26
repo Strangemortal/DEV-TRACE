@@ -46,6 +46,7 @@ export interface DatabaseSchema {
   interviewers: Interviewer[];
   sessions: Record<string, Session>;
   telemetry: TelemetryRecord[];
+  customChallenges?: any[];
 }
 
 async function ensureDbFile() {

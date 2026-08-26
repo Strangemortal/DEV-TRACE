@@ -27,6 +27,7 @@ export async function POST(req: NextRequest) {
       if (userId === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
         role = "admin";
         name = "Administrator";
+        const sessionToken = `admin_${crypto.randomUUID()}`;
         
         const newSession: Session = {
           userId: ADMIN_USERNAME,
@@ -34,7 +35,35 @@ export async function POST(req: NextRequest) {
           expiresAt,
         };
         db.sessions[sessionToken] = newSession;
+        await writeDb(db);
+
+        const response = NextResponse.json({
+          success: true,
+          role,
+          name,
+        });
+
+        response.cookies.set("devtrace_session", sessionToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 24 * 60 * 60,
+          path: "/",
+        });
+
+        return response;
       } else {
+        // Check if candidate tried to login on staff portal
+        const isCandidate = db.candidates.some(
+          (c) => c.userId.toLowerCase() === userId.toLowerCase() && c.passwordHash === password
+        );
+        if (isCandidate) {
+          return NextResponse.json(
+            { error: "Candidate accounts cannot access the Staff & Invigilator Portal. Please use the Candidate Portal." },
+            { status: 403 }
+          );
+        }
+
         // Find interviewer
         const interviewer = db.interviewers?.find(
           (i) => i.userId.toLowerCase() === userId.toLowerCase() && i.passwordHash === password
@@ -49,6 +78,7 @@ export async function POST(req: NextRequest) {
 
         role = "interviewer";
         name = interviewer.name;
+        const sessionToken = `interviewer_${crypto.randomUUID()}`;
 
         const newSession: Session = {
           userId: interviewer.userId,
@@ -56,8 +86,37 @@ export async function POST(req: NextRequest) {
           expiresAt,
         };
         db.sessions[sessionToken] = newSession;
+        await writeDb(db);
+
+        const response = NextResponse.json({
+          success: true,
+          role,
+          name,
+        });
+
+        response.cookies.set("devtrace_session", sessionToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 24 * 60 * 60,
+          path: "/",
+        });
+
+        return response;
       }
     } else {
+      // Candidate login check
+      // First check if staff tried to login on candidate portal
+      if (
+        (userId === ADMIN_USERNAME && password === ADMIN_PASSWORD) ||
+        db.interviewers?.some((i) => i.userId.toLowerCase() === userId.toLowerCase() && i.passwordHash === password)
+      ) {
+        return NextResponse.json(
+          { error: "Staff & Invigilator accounts cannot log in through the Candidate Portal. Please use the Staff Portal (/staff)." },
+          { status: 403 }
+        );
+      }
+
       // Find candidate
       const candidate = db.candidates.find(
         (c) => c.userId.toLowerCase() === userId.toLowerCase() && c.passwordHash === password && c.active
@@ -74,6 +133,7 @@ export async function POST(req: NextRequest) {
       name = candidate.name;
       candidateId = candidate.id;
       assignedRepoId = candidate.assignedRepoId;
+      const sessionToken = `candidate_${crypto.randomUUID()}`;
 
       const newSession: Session = {
         userId,
@@ -82,29 +142,25 @@ export async function POST(req: NextRequest) {
         expiresAt,
       };
       db.sessions[sessionToken] = newSession;
+      await writeDb(db);
+
+      const response = NextResponse.json({
+        success: true,
+        role,
+        name,
+        assignedRepoId,
+      });
+
+      response.cookies.set("devtrace_session", sessionToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 24 * 60 * 60,
+        path: "/",
+      });
+
+      return response;
     }
-
-    // Save session to db
-    await writeDb(db);
-
-    // Create response
-    const response = NextResponse.json({
-      success: true,
-      role,
-      name,
-      assignedRepoId,
-    });
-
-    // Set cookie
-    response.cookies.set("devtrace_session", sessionToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 24 * 60 * 60, // 24 hours in seconds
-      path: "/",
-    });
-
-    return response;
   } catch (error) {
     console.error("Login route error:", error);
     return NextResponse.json(

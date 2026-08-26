@@ -1,38 +1,32 @@
 {
   "candidates": [
     {
-      "id": "4d48d959-dd58-447c-b9ef-0e8dee7a3147",
-      "name": "John Doe",
-      "userId": "john_doe_84",
-      "passwordHash": "eSA8IHGA",
-      "assignedRepoId": "cpp-array-reversal",
-      "active": false,
-      "createdAt": 1779185259298
-    },
-    {
-      "id": "c930ef01-847c-451b-bcda-b5483fd868ee",
-      "name": "likhith",
-      "userId": "likhith_93",
-      "passwordHash": "WFiN4Huc",
-      "assignedRepoId": "python-data-analyzer",
-      "active": false,
-      "createdAt": 1779193103561
-    },
-    {
-      "id": "79b19124-ad49-44d0-bcd2-7b55b361ebb5",
-      "name": "bbk",
-      "userId": "bbk_52",
-      "passwordHash": "6mrNO1FV",
-      "assignedRepoId": "weather-dash",
+      "id": "203b08b1-0b1a-43c8-a9c1-18f538c2523b",
+      "name": "bharat",
+      "userId": "bharat_50",
+      "passwordHash": "HWUORPzL",
+      "assignedRepoId": "ai-fastapi-mt9x8gde",
       "active": true,
-      "createdAt": 1779197732886
+      "createdAt": 1787738329634,
+      "createdBy": "admin"
     }
   ],
   "sessions": {
-    "ffbe99ce-5a97-4838-8430-6a3f192dae67": {
+    "admin_e37a9965-2310-4cc9-baea-912f2bbeaea8": {
       "userId": "admin",
       "role": "admin",
-      "expiresAt": 1779284225537
+      "expiresAt": 1787824891523
+    },
+    "admin_7edb3aaf-d169-4a89-882b-22d5e5153bcb": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1787846296675
+    },
+    "candidate_973ce43c-33c3-44b9-85e7-0abec9bc9442": {
+      "userId": "bharat_50",
+      "role": "candidate",
+      "candidateId": "203b08b1-0b1a-43c8-a9c1-18f538c2523b",
+      "expiresAt": 1787846773409
     }
   },
   "telemetry": [
@@ -716,6 +710,358 @@
           "ts": "2026-05-19T13:36:29.830Z"
         }
       ]
+    },
+    {
+      "id": "40008e02-7c9b-4fc3-a379-7cb251748b56",
+      "candidateId": "9fcaea1d-a59b-49fb-8745-13ae12f9b95e",
+      "candidateName": "bharat",
+      "repoId": "weather-dash",
+      "submittedAt": 1787560260546,
+      "sessionStart": 1787560231075,
+      "duration": 28,
+      "stability": 100,
+      "events": [
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "index.html",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-08-24T08:30:39.363Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "script.js",
+            "previous_file": "index.html"
+          },
+          "ts": "2026-08-24T08:30:41.067Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "index.html",
+            "previous_file": "script.js"
+          },
+          "ts": "2026-08-24T08:30:44.955Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "index.html",
+            "diff": 1,
+            "total_length": 22
+          },
+          "ts": "2026-08-24T08:30:51.996Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "index.html",
+            "diff": 1,
+            "total_length": 23
+          },
+          "ts": "2026-08-24T08:30:52.129Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "index.html",
+            "diff": 1,
+            "total_length": 24
+          },
+          "ts": "2026-08-24T08:30:52.148Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "index.html",
+            "diff": 1,
+            "total_length": 25
+          },
+          "ts": "2026-08-24T08:30:52.334Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "README.md",
+            "previous_file": "index.html"
+          },
+          "ts": "2026-08-24T08:30:53.356Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "script.js",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-08-24T08:30:54.315Z"
+        },
+        {
+          "type": "KEYSTROKE_RAW",
+          "meta": {
+            "file": "script.js",
+            "diff": 27,
+            "total_length": 65
+          },
+          "ts": "2026-08-24T08:30:59.072Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "file": "README.md",
+            "lines_pasted": 1,
+            "chars_pasted": 27,
+            "words_pasted": 2,
+            "content": "= fetch('api.weather.com');",
+            "preview": "= fetch('api.weather.com');",
+            "range": {
+              "startLine": 1,
+              "endLine": 1,
+              "startCol": 39,
+              "endCol": 66
+            }
+          },
+          "ts": "2026-08-24T08:30:59.073Z"
+        }
+      ]
+    },
+    {
+      "id": "282b6db5-b294-41f4-89fd-0ebaec64a0d2",
+      "candidateId": "203b08b1-0b1a-43c8-a9c1-18f538c2523b",
+      "candidateName": "bharat",
+      "repoId": "ai-fastapi-mt9x8gde",
+      "submittedAt": 1787738441517,
+      "sessionStart": 1787738361494,
+      "duration": 79,
+      "stability": 85,
+      "events": [
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-08-26T09:59:22.937Z"
+          },
+          "ts": "2026-08-26T09:59:22.937Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 0,
+            "timestamp": "2026-08-26T09:59:23.371Z"
+          },
+          "ts": "2026-08-26T09:59:23.371Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "models.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-08-26T09:59:26.138Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "views.py",
+            "previous_file": "models.py"
+          },
+          "ts": "2026-08-26T09:59:27.047Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "tests.py",
+            "previous_file": "views.py"
+          },
+          "ts": "2026-08-26T09:59:27.958Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "README.md",
+            "previous_file": "tests.py"
+          },
+          "ts": "2026-08-26T09:59:29.030Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "Django test assertions failed. Check models and calculations."
+          },
+          "ts": "2026-08-26T09:59:34.765Z"
+        },
+        {
+          "type": "AI_HINT_REQUESTED",
+          "meta": {
+            "level": 1,
+            "activeFile": "README.md"
+          },
+          "ts": "2026-08-26T09:59:46.157Z"
+        },
+        {
+          "type": "AI_EXPLAIN_ERROR",
+          "meta": {
+            "length": 498
+          },
+          "ts": "2026-08-26T09:59:59.890Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "models.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-08-26T10:00:09.121Z"
+        }
+      ]
+    },
+    {
+      "id": "df715279-5e4b-4b68-96ec-35de8a81f7bd",
+      "candidateId": "203b08b1-0b1a-43c8-a9c1-18f538c2523b",
+      "candidateName": "bharat",
+      "repoId": "ai-fastapi-mt9x8gde",
+      "submittedAt": 1787738479491,
+      "sessionStart": 1787738361494,
+      "duration": 117,
+      "stability": 80,
+      "events": [
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-08-26T09:59:22.937Z"
+          },
+          "ts": "2026-08-26T09:59:22.937Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 0,
+            "timestamp": "2026-08-26T09:59:23.371Z"
+          },
+          "ts": "2026-08-26T09:59:23.371Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "models.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-08-26T09:59:26.138Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "views.py",
+            "previous_file": "models.py"
+          },
+          "ts": "2026-08-26T09:59:27.047Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "tests.py",
+            "previous_file": "views.py"
+          },
+          "ts": "2026-08-26T09:59:27.958Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "README.md",
+            "previous_file": "tests.py"
+          },
+          "ts": "2026-08-26T09:59:29.030Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "Django test assertions failed. Check models and calculations."
+          },
+          "ts": "2026-08-26T09:59:34.765Z"
+        },
+        {
+          "type": "AI_HINT_REQUESTED",
+          "meta": {
+            "level": 1,
+            "activeFile": "README.md"
+          },
+          "ts": "2026-08-26T09:59:46.157Z"
+        },
+        {
+          "type": "AI_EXPLAIN_ERROR",
+          "meta": {
+            "length": 498
+          },
+          "ts": "2026-08-26T09:59:59.890Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "models.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-08-26T10:00:09.121Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-08-26T10:01:07.518Z"
+          },
+          "ts": "2026-08-26T10:01:07.518Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 0,
+            "timestamp": "2026-08-26T10:01:07.625Z"
+          },
+          "ts": "2026-08-26T10:01:07.625Z"
+        }
+      ]
+    }
+  ],
+  "interviewers": [],
+  "customChallenges": [
+    {
+      "id": "ai-fastapi-mt9x8gde",
+      "name": "FastAPI: make a calculator and put some i",
+      "category": "python",
+      "framework": "fastapi",
+      "environmentLabel": "FastAPI 0.110 + Python 3.11 Sandbox",
+      "testCommand": "python test_main.py",
+      "difficulty": "intermediate",
+      "estimatedTime": "25m",
+      "activeFile": "README.md",
+      "fileOrder": [
+        "README.md",
+        "limiter.py",
+        "main.py",
+        "test_main.py"
+      ],
+      "files": {
+        "README.md": {
+          "name": "README.md",
+          "language": "markdown",
+          "content": "# 🚨 Production Incident #5120: Async Token Bucket Rate Limiter Leak\n\n## 📌 Context\nOur API gateway uses an in-memory sliding token-bucket algorithm to protect microservices against DDoS attacks and brute-force spikes.\nDuring peak traffic, clients observed that tokens were not replenishing over time, and burst requests were incorrectly blocked.\n\n## 🏗️ Architecture\n- `limiter.py`: In-memory TokenBucket implementation (`consume()`, `refill()`).\n- `main.py`: FastAPI application endpoints with middleware rate limiting.\n- `test_main.py`: Test suite validating token consumption, burst allowances, and time-based replenishment.\n\n## 🎯 Acceptance Criteria\n1. Fix `TokenBucket.refill()` in `limiter.py` to accurately compute elapsed time since `last_refill` and add `elapsed * refill_rate` tokens up to `capacity`.\n2. Fix `TokenBucket.consume(cost)` to verify whether `self.tokens >= cost` before deducting.\n3. Pass all assertion tests in `test_main.py`.\n"
+        },
+        "limiter.py": {
+          "name": "limiter.py",
+          "language": "python",
+          "content": "import time\n\nclass TokenBucket:\n    def __init__(self, capacity: int, refill_rate: float):\n        self.capacity = capacity\n        self.refill_rate = refill_rate # tokens per second\n        self.tokens = float(capacity)\n        self.last_refill = time.time()\n\n    def refill(self) -> None:\n        now = time.time()\n        # BUG: Uses multiplication instead of time difference\n        elapsed = now\n        new_tokens = elapsed * self.refill_rate\n        self.tokens = min(float(self.capacity), self.tokens + new_tokens)\n        self.last_refill = now\n\n    def consume(self, cost: int = 1) -> bool:\n        self.refill()\n        # BUG: Deducts unconditionally without checking balance\n        self.tokens -= cost\n        return True\n"
+        },
+        "main.py": {
+          "name": "main.py",
+          "language": "python",
+          "content": "from limiter import TokenBucket\n\nbucket = TokenBucket(capacity=10, refill_rate=2.0)\n\ndef handle_api_request(client_id: str, cost: int = 1) -> dict:\n    if bucket.consume(cost):\n        return {\"status\": 200, \"message\": \"Request processed\", \"client\": client_id}\n    return {\"status\": 429, \"error\": \"Too Many Requests\", \"retry_after\": 1.0}\n"
+        },
+        "test_main.py": {
+          "name": "test_main.py",
+          "language": "python",
+          "content": "import time\nfrom limiter import TokenBucket\n\ndef run_tests():\n    # Test 1: Initial capacity burst\n    tb = TokenBucket(capacity=5, refill_rate=1.0)\n    for _ in range(5):\n        assert tb.consume(1) is True, \"Should allow up to capacity\"\n\n    # Test 2: Reject when empty\n    assert tb.consume(1) is False, \"Should reject when tokens exhausted\"\n\n    # Test 3: Replenishment over time\n    time.sleep(1.1)\n    assert tb.consume(1) is True, \"Should replenish at least 1 token after 1.1 seconds\"\n\n    print(\"ALL FASTAPI RATE LIMITER TESTS PASSED (OK)\")\n\nif __name__ == \"__main__\":\n    run_tests()\n"
+        }
+      }
     }
   ]
 }

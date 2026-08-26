@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Terminal, X, Minus, Trash2 } from "lucide-react";
+import { Terminal, Trash2, Sparkles } from "lucide-react";
+import { useThemeStore } from "@/store/themeStore";
 
 export interface TerminalLine {
   type: "info" | "success" | "error" | "warning" | "system";
@@ -13,15 +14,8 @@ interface Props {
   lines: TerminalLine[];
   onCommand?: (cmd: string) => void;
   onClear?: () => void;
+  onExplainError?: (errorText: string) => void;
 }
-
-const COLOR: Record<TerminalLine["type"], string> = {
-  info: "text-blue-400",
-  success: "text-emerald-400",
-  error: "text-rose-400",
-  warning: "text-amber-400",
-  system: "text-indigo-400",
-};
 
 const PREFIX: Record<TerminalLine["type"], string> = {
   info: "•",
@@ -31,9 +25,11 @@ const PREFIX: Record<TerminalLine["type"], string> = {
   system: "λ",
 };
 
-export default function MockTerminal({ lines, onCommand, onClear }: Props) {
+export default function MockTerminal({ lines, onCommand, onClear, onExplainError }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { theme } = useThemeStore();
+  const isLight = theme === "light";
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -49,54 +45,100 @@ export default function MockTerminal({ lines, onCommand, onClear }: Props) {
     }
   };
 
+  const getLineColor = (type: TerminalLine["type"]) => {
+    if (isLight) {
+      switch (type) {
+        case "success": return "text-emerald-700";
+        case "error": return "text-rose-700";
+        case "warning": return "text-amber-700";
+        case "system": return "text-indigo-700 font-semibold";
+        case "info":
+        default: return "text-slate-700";
+      }
+    }
+    switch (type) {
+      case "success": return "text-emerald-400";
+      case "error": return "text-rose-400";
+      case "warning": return "text-amber-400";
+      case "system": return "text-indigo-400 font-semibold";
+      case "info":
+      default: return "text-slate-300";
+    }
+  };
+
   return (
     <div 
-      className="flex flex-col h-full bg-[#0a0a0c] font-mono text-xs border border-white/5 shadow-2xl"
+      className={`flex flex-col h-full font-mono text-xs border-t transition-colors duration-150 ${
+        isLight
+          ? "bg-white border-slate-200 text-slate-800"
+          : theme === "midnight"
+          ? "bg-[#0d121f] border-[#1f293d] text-slate-200"
+          : "bg-[#101319] border-[#252a36] text-slate-200"
+      }`}
       onClick={() => inputRef.current?.focus()}
     >
       {/* Title bar */}
-      <div className="flex items-center gap-2 px-4 py-2 bg-[#121216] border-b border-white/5 select-none">
+      <div
+        className={`flex items-center gap-2 px-4 py-2 border-b select-none ${
+          isLight ? "bg-slate-50 border-slate-200" : "bg-black/20 border-white/5"
+        }`}
+      >
         <div className="flex gap-1.5 mr-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
-          <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
-          <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+          <div className="w-2.5 h-2.5 rounded-full bg-slate-400/40" />
+          <div className="w-2.5 h-2.5 rounded-full bg-slate-400/40" />
+          <div className="w-2.5 h-2.5 rounded-full bg-slate-400/40" />
         </div>
-        <Terminal size={12} className="text-slate-400" />
-        <span className="text-slate-400 text-[10px] font-medium uppercase tracking-wider">
-          Console — v1.2.0
+        <Terminal size={12} className={isLight ? "text-slate-500" : "text-slate-400"} />
+        <span className="text-[10px] font-semibold tracking-wider uppercase opacity-60">
+          Terminal & Test Console
         </span>
         
-        <div className="ml-auto flex items-center gap-3">
+        <div className="ml-auto flex items-center gap-2">
+          {lines.some((l) => l.type === "error") && onExplainError && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                const errs = lines.filter((l) => l.type === "error").map((l) => l.text).join("\n");
+                onExplainError(errs);
+              }}
+              className="flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 transition-all active:scale-95 shadow-sm"
+              title="Explain terminal errors with AI"
+            >
+              <Sparkles size={11} className="text-indigo-400" />
+              <span>Explain with AI</span>
+            </button>
+          )}
+
           <button 
             onClick={(e) => { e.stopPropagation(); onClear?.(); }}
-            className="p-1 hover:bg-white/5 rounded text-slate-500 hover:text-slate-300 transition-colors"
+            className={`p-1 rounded transition-colors ${
+              isLight ? "hover:bg-slate-200 text-slate-500" : "hover:bg-white/10 text-slate-400"
+            }`}
             title="Clear Console"
           >
             <Trash2 size={12} />
           </button>
-          <Minus size={12} className="text-slate-600 cursor-pointer hover:text-slate-400" />
-          <X size={12} className="text-slate-600 cursor-pointer hover:text-slate-400" />
         </div>
       </div>
 
       {/* Output */}
-      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-1.5 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+      <div className="flex-1 overflow-y-auto px-5 py-3 space-y-1 scrollbar-thin">
         {lines.map((line, i) => (
-          <div key={i} className={`flex gap-3 leading-6 animate-in fade-in slide-in-from-left-2 duration-300 ${COLOR[line.type]}`}>
-            <span className="flex-shrink-0 w-4 text-center opacity-60 font-bold">{PREFIX[line.type]}</span>
-            <span className="flex-1 whitespace-pre-wrap font-mono tracking-tight">{line.text}</span>
+          <div key={i} className={`flex gap-2.5 leading-5 ${getLineColor(line.type)}`}>
+            <span className="flex-shrink-0 w-3 text-center opacity-60 font-bold">{PREFIX[line.type]}</span>
+            <span className="flex-1 whitespace-pre-wrap font-mono">{line.text}</span>
             {line.ts && (
-              <span className="text-slate-700 flex-shrink-0 text-[10px] tabular-nums">{line.ts}</span>
+              <span className="opacity-40 flex-shrink-0 text-[10px] tabular-nums">{line.ts}</span>
             )}
           </div>
         ))}
         {/* Input line */}
-        <div className="flex gap-3 text-slate-400 mt-2 items-center">
-          <span className="w-4 text-center text-indigo-500 font-bold">❯</span>
+        <div className={`flex gap-2.5 mt-2 items-center ${isLight ? "text-slate-600" : "text-slate-400"}`}>
+          <span className="w-3 text-center font-bold text-blue-500">❯</span>
           <input
             ref={inputRef}
             type="text"
-            className="flex-1 bg-transparent border-none outline-none text-slate-200 placeholder-slate-800 p-0 m-0 font-mono focus:ring-0"
+            className="flex-1 bg-transparent border-none outline-none p-0 m-0 font-mono text-xs focus:ring-0"
             onKeyDown={handleKeyDown}
             autoFocus
             spellCheck={false}

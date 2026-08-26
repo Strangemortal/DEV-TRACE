@@ -17,6 +17,8 @@ export type EventType =
   | "TAB_SWITCH"
   | "GIT_COMMAND"
   | "EXECUTION_RESULT"
+  | "AI_HINT_REQUESTED"
+  | "AI_EXPLAIN_ERROR"
   | "SUBMISSION";
 
 export interface TelemetryEvent {

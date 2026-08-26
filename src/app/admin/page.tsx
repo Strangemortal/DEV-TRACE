@@ -17,18 +17,45 @@ import {
   Activity,
   Award,
   Shield,
+  Sparkles,
+  Wand2,
+  Code,
+  FileCode,
+  FolderPlus,
+  Play,
+  Square,
+  Ban,
 } from "lucide-react";
 import { REPOSITORIES } from "@/data/brokenRepo";
+import { useThemeStore } from "@/store/themeStore";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function AdminDashboard() {
   const router = useRouter();
+  const { theme } = useThemeStore();
+  const isLight = theme === "light";
+  const isMidnight = theme === "midnight";
+
   const [candidates, setCandidates] = useState<any[]>([]);
   const [interviewers, setInterviewers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [authLoading, setAuthLoading] = useState(true);
   
   // Navigation / Tabs state
-  const [activeTab, setActiveTab] = useState<"candidates" | "interviewers">("candidates");
+  const [activeTab, setActiveTab] = useState<"candidates" | "interviewers" | "ai-generator">("candidates");
+
+  // Custom challenges from library
+  const [customChallenges, setCustomChallenges] = useState<any[]>([]);
+
+  // AI Challenge Generator state
+  const [aiFramework, setAiFramework] = useState("django");
+  const [aiDifficulty, setAiDifficulty] = useState("intermediate");
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [aiGenerating, setAiGenerating] = useState(false);
+  const [aiChallenge, setAiChallenge] = useState<any>(null);
+  const [aiActiveFile, setAiActiveFile] = useState("");
+  const [aiSaved, setAiSaved] = useState(false);
+  const [aiPreviewTab, setAiPreviewTab] = useState<"brief" | "code">("brief");
 
   // Create candidate form modal state
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -64,13 +91,20 @@ export default function AdminDashboard() {
       try {
         const res = await fetch("/api/auth/me");
         const data = await res.json();
-        if (!data.user || data.user.role !== "admin") {
+        if (!data.user) {
           router.replace("/login/staff");
-        } else {
+        } else if (data.user.role === "candidate") {
+          router.replace("/ide");
+        } else if (data.user.role === "interviewer") {
+          router.replace("/interviewer");
+        } else if (data.user.role === "admin") {
           setAuthLoading(false);
           fetchCandidates();
           fetchInterviewers();
           fetchTelemetryCount();
+          fetchCustomChallenges();
+        } else {
+          router.replace("/login/staff");
         }
       } catch (err) {
         router.replace("/login/staff");
@@ -78,6 +112,68 @@ export default function AdminDashboard() {
     }
     checkAuth();
   }, [router]);
+
+  async function fetchCustomChallenges() {
+    try {
+      const res = await fetch("/api/ai/generate-challenge");
+      const data = await res.json();
+      if (res.ok) {
+        setCustomChallenges(data.customChallenges || []);
+      }
+    } catch (error) {
+      console.error("Failed to load custom challenges:", error);
+    }
+  }
+
+  const handleGenerateAIChallenge = async () => {
+    setAiGenerating(true);
+    setAiSaved(false);
+    try {
+      const res = await fetch("/api/ai/generate-challenge", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: aiPrompt,
+          framework: aiFramework,
+          difficulty: aiDifficulty,
+          saveToLibrary: false,
+        }),
+      });
+      const data = await res.json();
+      if (data.success && data.challenge) {
+        setAiChallenge(data.challenge);
+        setAiActiveFile(data.challenge.activeFile || data.challenge.fileOrder[0]);
+      } else {
+        alert(data.error || "Failed to generate AI challenge");
+      }
+    } catch (e) {
+      console.error("Generate challenge error:", e);
+    } finally {
+      setAiGenerating(false);
+    }
+  };
+
+  const handleSaveAIChallenge = async () => {
+    if (!aiChallenge) return;
+    try {
+      const res = await fetch("/api/ai/generate-challenge", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: aiPrompt,
+          framework: aiFramework,
+          difficulty: aiDifficulty,
+          saveToLibrary: true,
+        }),
+      });
+      if (res.ok) {
+        setAiSaved(true);
+        fetchCustomChallenges();
+      }
+    } catch (e) {
+      console.error("Save AI challenge error:", e);
+    }
+  };
 
   async function fetchCandidates() {
     try {
@@ -206,6 +302,24 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleToggleCandidateStatus = async (candidate: any) => {
+    try {
+      const res = await fetch(`/api/admin/candidates/${candidate.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ active: !candidate.active }),
+      });
+      if (res.ok) {
+        fetchCandidates();
+      } else {
+        const data = await res.json();
+        alert(data.error || "Failed to update candidate status");
+      }
+    } catch (error) {
+      console.error("Error toggling candidate status:", error);
+    }
+  };
+
   const handleDeleteCandidate = async () => {
     if (!candidateToDelete) return;
     try {
@@ -273,55 +387,86 @@ export default function AdminDashboard() {
   const activeCandidates = candidates.filter((c) => c.active);
 
   return (
-    <div className="min-h-screen w-screen bg-[#08090a] text-slate-300 flex flex-col font-sans overflow-x-hidden selection:bg-blue-500/30">
-      {/* Radial glow background */}
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[100px] pointer-events-none" />
-
+    <div
+      className={`min-h-screen w-screen flex flex-col font-sans overflow-x-hidden transition-colors duration-150 ${
+        isLight
+          ? "bg-slate-50 text-slate-900"
+          : isMidnight
+          ? "bg-[#0b0f19] text-slate-100"
+          : "bg-[#0f1117] text-slate-200"
+      }`}
+    >
       {/* TOP HEADER */}
-      <header className="h-16 flex items-center gap-4 px-8 bg-[#0d0e11]/80 backdrop-blur-xl border-b border-white/5 flex-shrink-0 z-40 shadow-2xl">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
-            <Zap size={20} className="text-white" fill="white" />
+      <header
+        className={`h-14 flex items-center gap-4 px-6 border-b flex-shrink-0 z-30 transition-colors ${
+          isLight
+            ? "bg-white border-slate-200 shadow-sm"
+            : isMidnight
+            ? "bg-[#111827] border-[#1f293d]"
+            : "bg-[#161b22] border-[#252a36]"
+        }`}
+      >
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center shadow-sm">
+            <Zap size={16} className="text-white" />
           </div>
           <div>
-            <h1 className="text-xs font-black tracking-[0.2em] text-white uppercase leading-none mb-1">
+            <h1 className="text-xs font-bold tracking-wider text-inherit uppercase leading-none">
               DevTrace
             </h1>
-            <div className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">
-                Admin Control Deck
-              </span>
-            </div>
+            <span className="text-[9px] font-medium opacity-60">Admin Deck</span>
           </div>
         </div>
 
-        <div className="h-8 w-px bg-white/5 mx-2" />
+        <div className={`h-6 w-px mx-1 ${isLight ? "bg-slate-200" : "bg-white/10"}`} />
 
-        <nav className="flex items-center gap-2">
+        <nav className="flex items-center gap-1.5">
           <button
             onClick={() => setActiveTab("candidates")}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               activeTab === "candidates"
-                ? "bg-white/5 border border-white/10 text-white cursor-default"
-                : "border border-transparent text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                ? isLight
+                  ? "bg-blue-50 text-blue-700 font-bold"
+                  : "bg-white/10 text-white font-bold"
+                : isLight
+                ? "text-slate-600 hover:bg-slate-100"
+                : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
             }`}
           >
-            Candidate Roster
+            Candidates
           </button>
           <button
             onClick={() => setActiveTab("interviewers")}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               activeTab === "interviewers"
-                ? "bg-white/5 border border-white/10 text-white cursor-default"
-                : "border border-transparent text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                ? isLight
+                  ? "bg-blue-50 text-blue-700 font-bold"
+                  : "bg-white/10 text-white font-bold"
+                : isLight
+                ? "text-slate-600 hover:bg-slate-100"
+                : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
             }`}
           >
-            Interviewer Roster
+            Interviewers
+          </button>
+          <button
+            onClick={() => setActiveTab("ai-generator")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              activeTab === "ai-generator"
+                ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold shadow-sm"
+                : isLight
+                ? "text-slate-600 hover:bg-slate-100"
+                : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+            }`}
+          >
+            <Sparkles size={13} className="text-amber-400" />
+            <span>AI Test Maker</span>
           </button>
           <button
             onClick={() => router.push("/admin/telemetry")}
-            className="px-4 py-1.5 hover:bg-white/5 border border-transparent hover:border-white/5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all"
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              isLight ? "text-slate-600 hover:bg-slate-100" : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+            }`}
           >
             Telemetry Logs
           </button>
@@ -329,75 +474,81 @@ export default function AdminDashboard() {
 
         <div className="flex-1" />
 
+        <ThemeToggle />
+
         <button
           onClick={handleLogout}
-          className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition-colors"
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+            isLight
+              ? "border-slate-300 hover:bg-slate-100 text-slate-700"
+              : "border-white/10 hover:bg-white/10 text-slate-300"
+          }`}
         >
-          <LogOut size={14} />
-          Sign Out
+          <LogOut size={13} />
+          <span>Sign Out</span>
         </button>
       </header>
 
       {/* DASHBOARD BODY */}
-      <main className="flex-1 p-8 max-w-7xl w-full mx-auto space-y-8 z-10">
+      <main className="flex-1 p-8 max-w-7xl w-full mx-auto space-y-6 z-10">
         
         {/* STATS DECK */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          <div className="p-6 rounded-2xl bg-[#0d0e11]/50 border border-white/5 backdrop-blur shadow-xl flex items-center gap-5">
-            <div className="w-12 h-12 rounded-xl bg-blue-600/10 flex items-center justify-center text-blue-500">
-              <Users size={24} />
+        <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+          <div className={`p-5 rounded-xl border transition-colors ${isLight ? "bg-white border-slate-200 shadow-sm" : isMidnight ? "bg-[#111827] border-[#1f293d]" : "bg-[#161b22] border-[#252a36]"} flex items-center gap-4`}>
+            <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">
+              <Users size={20} />
             </div>
             <div>
-              <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Total Candidates</span>
-              <h3 className="text-2xl font-black text-white font-mono mt-1">{candidates.length}</h3>
+              <span className="text-[10px] uppercase tracking-wider font-semibold opacity-60">Total Candidates</span>
+              <h3 className="text-xl font-bold font-mono mt-0.5">{candidates.length}</h3>
             </div>
           </div>
 
-          <div className="p-6 rounded-2xl bg-[#0d0e11]/50 border border-white/5 backdrop-blur shadow-xl flex items-center gap-5">
-            <div className="w-12 h-12 rounded-xl bg-emerald-600/10 flex items-center justify-center text-emerald-500">
-              <UserCheck size={24} />
+          <div className={`p-5 rounded-xl border transition-colors ${isLight ? "bg-white border-slate-200 shadow-sm" : isMidnight ? "bg-[#111827] border-[#1f293d]" : "bg-[#161b22] border-[#252a36]"} flex items-center gap-4`}>
+            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+              <UserCheck size={20} />
             </div>
             <div>
-              <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Active Candidates</span>
-              <h3 className="text-2xl font-black text-white font-mono mt-1">{activeCandidates.length}</h3>
+              <span className="text-[10px] uppercase tracking-wider font-semibold opacity-60">Active Candidates</span>
+              <h3 className="text-xl font-bold font-mono mt-0.5">{activeCandidates.length}</h3>
             </div>
           </div>
 
-          <div className="p-6 rounded-2xl bg-[#0d0e11]/50 border border-white/5 backdrop-blur shadow-xl flex items-center gap-5">
-            <div className="w-12 h-12 rounded-xl bg-violet-600/10 flex items-center justify-center text-violet-500">
-              <Shield size={24} />
+          <div className={`p-5 rounded-xl border transition-colors ${isLight ? "bg-white border-slate-200 shadow-sm" : isMidnight ? "bg-[#111827] border-[#1f293d]" : "bg-[#161b22] border-[#252a36]"} flex items-center gap-4`}>
+            <div className="w-10 h-10 rounded-lg bg-violet-500/10 flex items-center justify-center text-violet-500">
+              <Shield size={20} />
             </div>
             <div>
-              <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Interviewers</span>
-              <h3 className="text-2xl font-black text-white font-mono mt-1">{interviewers.length}</h3>
+              <span className="text-[10px] uppercase tracking-wider font-semibold opacity-60">Interviewers</span>
+              <h3 className="text-xl font-bold font-mono mt-0.5">{interviewers.length}</h3>
             </div>
           </div>
 
-          <div className="p-6 rounded-2xl bg-[#0d0e11]/50 border border-white/5 backdrop-blur shadow-xl flex items-center gap-5">
-            <div className="w-12 h-12 rounded-xl bg-indigo-600/10 flex items-center justify-center text-indigo-500">
-              <Activity size={24} />
+          <div className={`p-5 rounded-xl border transition-colors ${isLight ? "bg-white border-slate-200 shadow-sm" : isMidnight ? "bg-[#111827] border-[#1f293d]" : "bg-[#161b22] border-[#252a36]"} flex items-center gap-4`}>
+            <div className="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-500">
+              <Activity size={20} />
             </div>
             <div>
-              <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Submitted Sessions</span>
-              <h3 className="text-2xl font-black text-white font-mono mt-1">{telemetryCount}</h3>
+              <span className="text-[10px] uppercase tracking-wider font-semibold opacity-60">Submitted Sessions</span>
+              <h3 className="text-xl font-bold font-mono mt-0.5">{telemetryCount}</h3>
             </div>
           </div>
         </section>
 
         {activeTab === "candidates" ? (
           /* CANDIDATE MANAGEMENT CONTAINER */
-          <section className="bg-[#0d0e11]/50 border border-white/5 rounded-2xl shadow-2xl p-6 backdrop-blur flex flex-col min-h-[400px]">
-            <div className="flex items-center justify-between mb-6 flex-shrink-0">
+          <section className={`border rounded-xl p-6 transition-colors ${isLight ? "bg-white border-slate-200 shadow-sm text-slate-800" : isMidnight ? "bg-[#111827] border-[#1f293d] text-slate-100" : "bg-[#161b22] border-[#252a36] text-slate-100"} flex flex-col min-h-[400px]`}>
+            <div className="flex items-center justify-between mb-5 flex-shrink-0">
               <div>
-                <h2 className="text-lg font-bold text-white">Candidates</h2>
-                <p className="text-xs text-slate-500">Add candidates, select their assessment challenge, and share system credentials.</p>
+                <h2 className="text-base font-bold">Candidates</h2>
+                <p className="text-xs opacity-60 mt-0.5">Manage candidates, challenge assignments, and credentials.</p>
               </div>
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="flex items-center gap-2 text-xs px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-blue-600/10 active:scale-95"
+                className="flex items-center gap-1.5 text-xs px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all shadow-sm active:scale-95"
               >
                 <Plus size={14} />
-                Add Candidate
+                <span>Add Candidate</span>
               </button>
             </div>
 
@@ -428,8 +579,8 @@ export default function AdminDashboard() {
                   </thead>
                   <tbody className="divide-y divide-white/5 text-xs">
                     {candidates.map((c) => {
-                      const repoName =
-                        REPOSITORIES.find((r) => r.id === c.assignedRepoId)?.name || c.assignedRepoId;
+                      const repoObj = REPOSITORIES.find((r) => r.id === c.assignedRepoId);
+                      const repoName = repoObj?.name || c.assignedRepoId;
                       const creator = interviewers.find(i => i.userId === c.createdBy);
                       const creatorName = creator ? creator.name : (c.createdBy === 'admin' ? 'Admin' : c.createdBy || 'Admin');
                       
@@ -438,36 +589,59 @@ export default function AdminDashboard() {
                           <td className="px-6 py-4 font-bold text-white">{c.name}</td>
                           <td className="px-6 py-4 font-mono text-blue-400">{c.userId}</td>
                           <td className="px-6 py-4 font-mono text-slate-400">{c.passwordHash}</td>
-                          <td className="px-6 py-4 text-slate-300 font-medium">{repoName}</td>
+                          <td className="px-6 py-4 text-slate-300 font-medium">
+                            <div className="flex items-center gap-2">
+                              <span>{repoName}</span>
+                              {repoObj?.framework === "django" && (
+                                <span className="text-[8px] font-bold uppercase px-1.5 py-0.5 rounded bg-teal-500/10 text-teal-400 border border-teal-500/20">
+                                  DJANGO
+                                </span>
+                              )}
+                            </div>
+                          </td>
                           <td className="px-6 py-4 text-slate-400 font-mono capitalize">{creatorName}</td>
                           <td className="px-6 py-4">
                             <span
-                              className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full ${
+                              className={`text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full border ${
                                 c.active
-                                  ? "bg-emerald-500/10 text-emerald-400"
-                                  : "bg-rose-500/10 text-rose-400"
+                                  ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                                  : "bg-amber-500/10 text-amber-400 border-amber-500/20"
                               }`}
                             >
-                              {c.active ? "Active" : "Deleted"}
+                              {c.active ? "In Progress" : "Test Stopped"}
                             </span>
                           </td>
-                          <td className="px-6 py-4 flex items-center gap-3">
+                          <td className="px-6 py-4 flex items-center gap-2">
+                            {/* View Telemetry */}
                             <button
                               title="View Telemetry"
                               onClick={() => router.push(`/admin/telemetry?candidateId=${c.id}`)}
-                              className="p-1.5 hover:bg-white/5 border border-transparent hover:border-white/5 text-slate-400 hover:text-white rounded-lg transition-all"
+                              className="p-1.5 hover:bg-white/5 border border-transparent hover:border-white/10 text-slate-400 hover:text-white rounded-lg transition-all"
                             >
                               <Eye size={14} />
                             </button>
-                            {c.active && (
-                              <button
-                                title="Delete Candidate"
-                                onClick={() => setCandidateToDelete(c)}
-                                className="p-1.5 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/10 text-slate-500 hover:text-rose-400 rounded-lg transition-all"
-                              >
-                                <Trash2 size={14} />
-                              </button>
-                            )}
+
+                            {/* Stop / Resume Test Button */}
+                            <button
+                              title={c.active ? "Stop Test (Locks candidate IDE session)" : "Resume Test"}
+                              onClick={() => handleToggleCandidateStatus(c)}
+                              className={`p-1.5 rounded-lg border transition-all ${
+                                c.active
+                                  ? "hover:bg-amber-500/10 border-transparent hover:border-amber-500/20 text-slate-400 hover:text-amber-400"
+                                  : "hover:bg-emerald-500/10 border-transparent hover:border-emerald-500/20 text-slate-400 hover:text-emerald-400"
+                              }`}
+                            >
+                              {c.active ? <Square size={14} fill="currentColor" /> : <Play size={14} fill="currentColor" />}
+                            </button>
+
+                            {/* Delete Candidate Button */}
+                            <button
+                              title="Delete Candidate (Telemetry Preserved)"
+                              onClick={() => setCandidateToDelete(c)}
+                              className="p-1.5 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 text-slate-500 hover:text-rose-400 rounded-lg transition-all"
+                            >
+                              <Trash2 size={14} />
+                            </button>
                           </td>
                         </tr>
                       );
@@ -477,7 +651,8 @@ export default function AdminDashboard() {
               </div>
             )}
           </section>
-        ) : (
+        ) : activeTab === "interviewers" ? (
+          /* INTERVIEWER MANAGEMENT CONTAINER */
           /* INTERVIEWER MANAGEMENT CONTAINER */
           <section className="bg-[#0d0e11]/50 border border-white/5 rounded-2xl shadow-2xl p-6 backdrop-blur flex flex-col min-h-[400px]">
             <div className="flex items-center justify-between mb-6 flex-shrink-0">
@@ -543,25 +718,271 @@ export default function AdminDashboard() {
               </div>
             )}
           </section>
+        ) : (
+          /* AI CHALLENGE GENERATOR STUDIO */
+          <section className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              {/* Left Column: Generator Form & Templates */}
+              <div className="lg:col-span-5 space-y-4">
+                <div className={`p-5 md:p-6 rounded-lg border ${isLight ? "bg-white border-slate-200 shadow-sm" : "bg-[#0d0e11]/60 border-white/5"}`}>
+                  <div className="flex items-center gap-2.5 mb-4">
+                    <div className="w-8 h-8 rounded-md bg-indigo-600 flex items-center justify-center shadow-sm">
+                      <Sparkles size={16} className="text-white" />
+                    </div>
+                    <div>
+                      <h3 className={`text-sm font-bold ${isLight ? "text-slate-900" : "text-white"}`}>AI Challenge Synthesizer</h3>
+                      <p className="text-[11px] opacity-70">Generate realistic multi-file debugging repos</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 text-xs">
+                    {/* Framework Selector */}
+                    <div>
+                      <label className="block text-[10px] uppercase font-bold opacity-70 mb-1.5">
+                        Target Framework & Stack
+                      </label>
+                      <select
+                        value={aiFramework}
+                        onChange={(e) => setAiFramework(e.target.value)}
+                        className={`w-full px-3.5 py-2 rounded-md border text-xs outline-none transition-colors ${
+                          isLight
+                            ? "bg-slate-50 border-slate-300 text-slate-800 focus:border-indigo-500"
+                            : "bg-[#121620] border-white/10 text-slate-200 focus:border-indigo-500/50"
+                        }`}
+                      >
+                        <option value="django">Django 5 (Python / ORM / Views / Tests)</option>
+                        <option value="fastapi">FastAPI (Python / Pydantic / Async)</option>
+                        <option value="spring">Spring Boot 3 (Java / JUnit 5 / Maven)</option>
+                        <option value="express">Node.js & Express (TypeScript / Mocha)</option>
+                        <option value="flask">Flask (Python / Pytest / Auth)</option>
+                        <option value="nextjs">Next.js 15 (React 19 / Server Components)</option>
+                      </select>
+                    </div>
+
+                    {/* Difficulty */}
+                    <div>
+                      <label className="block text-[10px] uppercase font-bold opacity-70 mb-1.5">
+                        Seniority Difficulty Level
+                      </label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {["beginner", "intermediate", "advanced"].map((lvl) => (
+                          <button
+                            key={lvl}
+                            type="button"
+                            onClick={() => setAiDifficulty(lvl)}
+                            className={`py-1.5 rounded-md capitalize font-semibold transition-all border text-xs ${
+                              aiDifficulty === lvl
+                                ? "bg-indigo-600 border-indigo-500 text-white shadow-sm font-bold"
+                                : isLight
+                                ? "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100"
+                                : "bg-white/[0.02] border-white/5 text-slate-400 hover:text-slate-200"
+                            }`}
+                          >
+                            {lvl}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Custom Prompt / Scenario */}
+                    <div>
+                      <label className="block text-[10px] uppercase font-bold opacity-70 mb-1.5">
+                        Custom Bug Scenario or Requirement
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={aiPrompt}
+                        onChange={(e) => setAiPrompt(e.target.value)}
+                        placeholder="e.g., E-commerce shopping cart discount calculation bug when applying coupon codes..."
+                        className={`w-full p-3 rounded-md border text-xs outline-none transition-all resize-none ${
+                          isLight
+                            ? "bg-slate-50 border-slate-300 text-slate-800 placeholder:text-slate-400 focus:border-indigo-500"
+                            : "bg-white/[0.02] border-white/10 text-slate-200 placeholder:text-slate-600 focus:border-indigo-500"
+                        }`}
+                      />
+                    </div>
+
+                    {/* Curated Production Blueprints */}
+                    <div>
+                      <span className="block text-[10px] uppercase font-bold opacity-70 mb-2">
+                        Industry-Grade Production Scenarios
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {[
+                          { title: "💳 Idempotent Payment Webhook", desc: "Deduplication & balance lock" },
+                          { title: "🛒 Tiered Cart & Stock Clamping", desc: "Negative balance race condition" },
+                          { title: "⏱️ Sliding Token Bucket Limiter", desc: "Burst refill calculation bug" },
+                          { title: "🔐 Multi-Tenant RBAC & JWT Expiry", desc: "Permission boundary leak" },
+                          { title: "⚡ High-Concurrency Write Cache", desc: "Stale reads under heavy load" },
+                          { title: "📦 FIFO Queue with Retry Backoff", desc: "Dead-letter message handling" },
+                        ].map((t) => (
+                          <button
+                            key={t.title}
+                            type="button"
+                            onClick={() => setAiPrompt(`${t.title}: ${t.desc}`)}
+                            className={`p-2.5 rounded-md border text-left transition-all group ${
+                              isLight
+                                ? "bg-slate-50 hover:bg-indigo-50/50 border-slate-200 hover:border-indigo-300 text-slate-800"
+                                : "bg-white/[0.02] hover:bg-white/[0.06] border-white/5 hover:border-indigo-500/30 text-slate-200"
+                            }`}
+                          >
+                            <div className={`font-semibold text-xs transition-colors ${
+                              isLight ? "text-slate-800 group-hover:text-indigo-600" : "text-white group-hover:text-indigo-400"
+                            }`}>
+                              {t.title}
+                            </div>
+                            <div className="text-[10px] opacity-70 mt-0.5">{t.desc}</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Action Button - High Contrast Visible Button */}
+                    <button
+                      type="button"
+                      disabled={aiGenerating}
+                      onClick={handleGenerateAIChallenge}
+                      className="w-full flex items-center justify-center gap-2 py-3 rounded-md bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md transition-all active:scale-95 disabled:opacity-50"
+                    >
+                      <Wand2 size={16} className={aiGenerating ? "animate-spin" : ""} />
+                      <span>{aiGenerating ? "Synthesizing Production Challenge..." : "Synthesize Production Challenge"}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Code & Repo Live Preview */}
+              <div className="lg:col-span-7">
+                {aiChallenge ? (
+                  <div className={`p-5 md:p-6 rounded-lg border flex flex-col h-full ${isLight ? "bg-white border-slate-200 shadow-sm" : "bg-[#0d0e11]/60 border-white/5"}`}>
+                    <div className="flex items-center justify-between pb-4 border-b border-white/5 mb-4">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h3 className={`text-sm font-bold ${isLight ? "text-slate-900" : "text-white"}`}>{aiChallenge.name}</h3>
+                          <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase bg-indigo-500/10 text-indigo-500 border border-indigo-500/20">
+                            {aiChallenge.framework?.toUpperCase()}
+                          </span>
+                        </div>
+                        <p className="text-xs opacity-75 mt-1">{aiChallenge.description}</p>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        {aiSaved ? (
+                          <span className="px-3 py-1.5 rounded-md bg-emerald-500/10 text-emerald-500 text-xs font-bold border border-emerald-500/20 flex items-center gap-1.5">
+                            <Check size={13} /> Saved in Library
+                          </span>
+                        ) : (
+                          <button
+                            onClick={handleSaveAIChallenge}
+                            className="flex items-center gap-1.5 px-4 py-2 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-sm active:scale-95"
+                          >
+                            <FolderPlus size={14} />
+                            <span>Save to Library</span>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Preview Mode Switcher */}
+                    <div className="flex items-center justify-between mb-3">
+                      <div className={`flex rounded-md border p-0.5 text-[11px] font-semibold ${
+                        isLight ? "bg-slate-100 border-slate-200" : "bg-black/20 border-white/5"
+                      }`}>
+                        <button
+                          onClick={() => setAiPreviewTab("brief")}
+                          className={`px-3 py-1 rounded transition-all ${
+                            aiPreviewTab === "brief"
+                              ? "bg-indigo-600 text-white shadow-sm font-bold"
+                              : isLight ? "text-slate-600 hover:text-slate-900" : "text-slate-400 hover:text-white"
+                          }`}
+                        >
+                          📖 Problem Brief
+                        </button>
+                        <button
+                          onClick={() => setAiPreviewTab("code")}
+                          className={`px-3 py-1 rounded transition-all ${
+                            aiPreviewTab === "code"
+                              ? "bg-indigo-600 text-white shadow-sm font-bold"
+                              : isLight ? "text-slate-600 hover:text-slate-900" : "text-slate-400 hover:text-white"
+                          }`}
+                        >
+                          💻 Code & Test Files ({aiChallenge.fileOrder?.length || 0})
+                        </button>
+                      </div>
+
+                      {aiPreviewTab === "code" && (
+                        <div className="flex items-center gap-1 overflow-x-auto max-w-[280px] scrollbar-none">
+                          {aiChallenge.fileOrder?.map((fname: string) => (
+                            <button
+                              key={fname}
+                              onClick={() => setAiActiveFile(fname)}
+                              className={`px-2 py-1 rounded text-[10px] font-mono border transition-all ${
+                                aiActiveFile === fname
+                                  ? "bg-indigo-600 border-indigo-500 text-white font-bold"
+                                  : isLight
+                                  ? "bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200"
+                                  : "bg-white/5 border-white/5 text-slate-400 hover:text-slate-200"
+                              }`}
+                            >
+                              {fname}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Content Box */}
+                    {aiPreviewTab === "brief" ? (
+                      <div className={`flex-1 rounded-md border p-4 font-sans text-xs overflow-auto max-h-[380px] scrollbar-thin leading-relaxed ${
+                        isLight ? "bg-slate-50 border-slate-200 text-slate-800" : "bg-black/40 border-white/5 text-slate-200"
+                      }`}>
+                        <pre className="whitespace-pre-wrap font-sans text-xs select-text">
+                          {aiChallenge.files?.["README.md"]?.content || aiChallenge.description || "Review challenge specification and test cases."}
+                        </pre>
+                      </div>
+                    ) : (
+                      <div className={`flex-1 rounded-md border p-4 font-mono text-xs overflow-auto max-h-[380px] scrollbar-thin ${
+                        isLight ? "bg-slate-900 text-slate-100 border-slate-800" : "bg-black/40 border-white/5 text-slate-200"
+                      }`}>
+                        <pre>{aiChallenge.files?.[aiActiveFile]?.content || "// Select a file to preview code..."}</pre>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className={`h-full flex flex-col items-center justify-center p-12 text-center rounded-lg border border-dashed ${
+                    isLight ? "border-slate-300 bg-slate-50/50" : "border-white/10"
+                  }`}>
+                    <Wand2 size={36} className="opacity-40 mb-3 animate-bounce" />
+                    <h3 className={`text-sm font-bold ${isLight ? "text-slate-800" : "text-slate-400"}`}>No Generated Challenge Yet</h3>
+                    <p className="text-xs opacity-60 mt-1 max-w-sm">
+                      Select your target framework, adjust difficulty, pick an industry scenario or enter your custom requirements, and click Synthesize to generate multi-file broken code with integrated tests.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
         )}
       </main>
 
       {/* CREATE CANDIDATE MODAL */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-[#0d0e11] border border-white/10 rounded-2xl p-8 max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-200">
-            <h3 className="text-lg font-bold text-white mb-2">Create Candidate Credentials</h3>
-            <p className="text-xs text-slate-500 mb-6">Enter candidate name. Credentials and randomly generated password will be generated automatically.</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-200 p-4">
+          <div className={`border rounded-lg p-6 md:p-8 max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-200 ${
+            isLight ? "bg-white border-slate-200 text-slate-800" : "bg-[#0d0e11] border-white/10 text-white"
+          }`}>
+            <h3 className={`text-lg font-bold mb-1 ${isLight ? "text-slate-900" : "text-white"}`}>Create Candidate Credentials</h3>
+            <p className="text-xs opacity-70 mb-5">Enter candidate name. Credentials and randomly generated password will be generated automatically.</p>
             
             {createError && (
-              <div className="mb-4 p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold">
+              <div className="mb-4 p-3 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-500 text-xs font-semibold">
                 {createError}
               </div>
             )}
 
             <form onSubmit={handleCreateCandidate} className="space-y-4">
               <div>
-                <label className="block text-[9px] uppercase font-bold text-slate-500 tracking-wider mb-1.5">
+                <label className="block text-[10px] uppercase font-bold opacity-70 mb-1.5">
                   Candidate Name
                 </label>
                 <input
@@ -570,12 +991,16 @@ export default function AdminDashboard() {
                   value={name}
                   onChange={handleNameChange}
                   placeholder="e.g., Alice Smith"
-                  className="w-full px-4 py-2.5 bg-white/[0.02] border border-white/5 hover:border-white/10 focus:border-blue-500/50 rounded-xl text-sm outline-none transition-all"
+                  className={`w-full px-3.5 py-2.5 border rounded-md text-sm outline-none transition-all ${
+                    isLight
+                      ? "bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-400 focus:border-blue-500"
+                      : "bg-white/[0.02] border-white/10 text-white placeholder:text-slate-600 focus:border-blue-500/50"
+                  }`}
                 />
               </div>
 
               <div>
-                <label className="block text-[9px] uppercase font-bold text-slate-500 tracking-wider mb-1.5">
+                <label className="block text-[10px] uppercase font-bold opacity-70 mb-1.5">
                   Candidate User ID (Auto Suggested)
                 </label>
                 <input
@@ -584,28 +1009,36 @@ export default function AdminDashboard() {
                   value={userId}
                   onChange={(e) => setUserId(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ""))}
                   placeholder="e.g., alice_smith"
-                  className="w-full px-4 py-2.5 bg-white/[0.02] border border-white/5 hover:border-white/10 focus:border-blue-500/50 rounded-xl text-sm outline-none transition-all font-mono text-blue-400"
+                  className={`w-full px-3.5 py-2.5 border rounded-md text-sm outline-none transition-all font-mono text-blue-600 dark:text-blue-400 ${
+                    isLight
+                      ? "bg-slate-50 border-slate-300"
+                      : "bg-white/[0.02] border-white/10"
+                  }`}
                 />
               </div>
 
               <div>
-                <label className="block text-[9px] uppercase font-bold text-slate-500 tracking-wider mb-1.5">
+                <label className="block text-[10px] uppercase font-bold opacity-70 mb-1.5">
                   Assign Challenge repo
                 </label>
                 <select
                   value={assignedRepoId}
                   onChange={(e) => setAssignedRepoId(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-[#16181d] border border-white/5 rounded-xl text-sm outline-none text-slate-300 hover:bg-[#1a1d24] transition-colors cursor-pointer"
+                  className={`w-full px-3.5 py-2.5 border rounded-md text-sm outline-none cursor-pointer ${
+                    isLight
+                      ? "bg-slate-50 border-slate-300 text-slate-800"
+                      : "bg-[#16181d] border-white/10 text-slate-300"
+                  }`}
                 >
-                  {REPOSITORIES.map((r) => (
+                  {[...REPOSITORIES, ...customChallenges].map((r) => (
                     <option key={r.id} value={r.id}>
-                      {r.name} ({r.category.toUpperCase()})
+                      {r.name} [{r.framework && r.framework !== "none" ? r.framework.toUpperCase() : r.category?.toUpperCase() || "CUSTOM"}]
                     </option>
                   ))}
                 </select>
               </div>
 
-              <div className="flex justify-end gap-3 pt-4">
+              <div className="flex justify-end gap-2.5 pt-3 border-t border-white/5">
                 <button
                   type="button"
                   onClick={() => {
@@ -614,14 +1047,14 @@ export default function AdminDashboard() {
                     setUserId("");
                     setCreateError("");
                   }}
-                  className="px-4 py-2.5 text-xs font-bold text-slate-400 hover:text-white transition-colors"
+                  className="px-4 py-2 text-xs font-semibold opacity-70 hover:opacity-100 rounded-md transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creating}
-                  className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-all disabled:opacity-50"
+                  className="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-md text-xs font-bold transition-all disabled:opacity-50 shadow-sm"
                 >
                   {creating ? "Generating..." : "Generate Account"}
                 </button>
@@ -633,20 +1066,22 @@ export default function AdminDashboard() {
 
       {/* REGISTER INTERVIEWER MODAL */}
       {showInterviewerModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-[#0d0e11] border border-white/10 rounded-2xl p-8 max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-200">
-            <h3 className="text-lg font-bold text-white mb-2">Register Interviewer Account</h3>
-            <p className="text-xs text-slate-500 mb-6">Create credentials for the interviewer. Register their verification password below.</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-200 p-4">
+          <div className={`border rounded-lg p-6 md:p-8 max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-200 ${
+            isLight ? "bg-white border-slate-200 text-slate-800" : "bg-[#0d0e11] border-white/10 text-white"
+          }`}>
+            <h3 className={`text-lg font-bold mb-1 ${isLight ? "text-slate-900" : "text-white"}`}>Register Interviewer Account</h3>
+            <p className="text-xs opacity-70 mb-5">Create credentials for the interviewer. Register their verification password below.</p>
             
             {intCreateError && (
-              <div className="mb-4 p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold">
+              <div className="mb-4 p-3 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-500 text-xs font-semibold">
                 {intCreateError}
               </div>
             )}
 
             <form onSubmit={handleCreateInterviewer} className="space-y-4">
               <div>
-                <label className="block text-[9px] uppercase font-bold text-slate-500 tracking-wider mb-1.5">
+                <label className="block text-[10px] uppercase font-bold opacity-70 mb-1.5">
                   Interviewer Name
                 </label>
                 <input
@@ -655,12 +1090,16 @@ export default function AdminDashboard() {
                   value={intName}
                   onChange={handleIntNameChange}
                   placeholder="e.g., Sarah Connor"
-                  className="w-full px-4 py-2.5 bg-white/[0.02] border border-white/5 hover:border-white/10 focus:border-violet-500/50 rounded-xl text-sm outline-none transition-all"
+                  className={`w-full px-3.5 py-2.5 border rounded-md text-sm outline-none transition-all ${
+                    isLight
+                      ? "bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-400 focus:border-violet-500"
+                      : "bg-white/[0.02] border-white/10 text-white placeholder:text-slate-600 focus:border-violet-500/50"
+                  }`}
                 />
               </div>
 
               <div>
-                <label className="block text-[9px] uppercase font-bold text-slate-500 tracking-wider mb-1.5">
+                <label className="block text-[10px] uppercase font-bold opacity-70 mb-1.5">
                   Username / User ID (Auto Suggested)
                 </label>
                 <input
@@ -669,12 +1108,16 @@ export default function AdminDashboard() {
                   value={intUserId}
                   onChange={(e) => setIntUserId(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ""))}
                   placeholder="e.g., sarah_c"
-                  className="w-full px-4 py-2.5 bg-white/[0.02] border border-white/5 hover:border-white/10 focus:border-violet-500/50 rounded-xl text-sm outline-none transition-all font-mono text-violet-400"
+                  className={`w-full px-3.5 py-2.5 border rounded-md text-sm outline-none transition-all font-mono text-violet-600 dark:text-violet-400 ${
+                    isLight
+                      ? "bg-slate-50 border-slate-300"
+                      : "bg-white/[0.02] border-white/10"
+                  }`}
                 />
               </div>
 
               <div>
-                <label className="block text-[9px] uppercase font-bold text-slate-500 tracking-wider mb-1.5">
+                <label className="block text-[10px] uppercase font-bold opacity-70 mb-1.5">
                   Verification Password
                 </label>
                 <div className="flex gap-2">
@@ -684,7 +1127,11 @@ export default function AdminDashboard() {
                     value={intPassword}
                     onChange={(e) => setIntPassword(e.target.value)}
                     placeholder="Enter registration password"
-                    className="flex-1 px-4 py-2.5 bg-white/[0.02] border border-white/5 hover:border-white/10 focus:border-violet-500/50 rounded-xl text-sm outline-none transition-all font-mono text-white"
+                    className={`flex-1 px-3.5 py-2.5 border rounded-md text-sm outline-none transition-all font-mono ${
+                      isLight
+                        ? "bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-400"
+                        : "bg-white/[0.02] border-white/10 text-white placeholder:text-slate-600"
+                    }`}
                   />
                   <button
                     type="button"
@@ -696,14 +1143,18 @@ export default function AdminDashboard() {
                       }
                       setIntPassword(pw);
                     }}
-                    className="px-3 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 rounded-xl text-xs text-slate-300 font-bold transition-all"
+                    className={`px-3 border rounded-md text-xs font-bold transition-all ${
+                      isLight
+                        ? "bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-700"
+                        : "bg-white/5 hover:bg-white/10 border-white/10 text-slate-300"
+                    }`}
                   >
                     Generate
                   </button>
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 pt-4">
+              <div className="flex justify-end gap-2.5 pt-3 border-t border-white/5">
                 <button
                   type="button"
                   onClick={() => {
@@ -713,14 +1164,14 @@ export default function AdminDashboard() {
                     setIntPassword("");
                     setIntCreateError("");
                   }}
-                  className="px-4 py-2.5 text-xs font-bold text-slate-400 hover:text-white transition-colors"
+                  className="px-4 py-2 text-xs font-semibold opacity-70 hover:opacity-100 rounded-md transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={intCreating}
-                  className="px-6 py-2.5 bg-violet-600 hover:bg-violet-500 text-white rounded-xl text-xs font-bold transition-all disabled:opacity-50"
+                  className="px-5 py-2 bg-violet-600 hover:bg-violet-500 text-white rounded-md text-xs font-bold transition-all disabled:opacity-50 shadow-sm"
                 >
                   {intCreating ? "Registering..." : "Register Interviewer"}
                 </button>
@@ -732,46 +1183,54 @@ export default function AdminDashboard() {
 
       {/* CREDENTIALS GENERATED SUCCESS MODAL */}
       {showSuccessModal && createdDetails && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-[#0d0e11] border border-white/10 rounded-2xl p-8 max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-200">
-            <h3 className="text-lg font-black text-white uppercase tracking-tight mb-2">Account Generated Successfully!</h3>
-            <p className="text-xs text-slate-500 mb-6">Share these credentials with the candidate. The system password has been randomly generated.</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md animate-in fade-in duration-200 p-4">
+          <div className={`border rounded-lg p-6 md:p-8 max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-200 ${
+            isLight ? "bg-white border-slate-200 text-slate-800" : "bg-[#0d0e11] border-white/10 text-white"
+          }`}>
+            <h3 className={`text-lg font-bold mb-1 ${isLight ? "text-slate-900" : "text-white"}`}>Account Generated Successfully!</h3>
+            <p className="text-xs opacity-70 mb-5">Share these credentials with the candidate. The system password has been randomly generated.</p>
 
-            <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-4 font-mono text-xs">
+            <div className={`p-4 rounded-md border space-y-3.5 font-mono text-xs ${
+              isLight ? "bg-slate-50 border-slate-200 text-slate-800" : "bg-white/[0.02] border-white/5 text-slate-200"
+            }`}>
               <div>
-                <span className="text-[9px] uppercase font-bold text-slate-600 tracking-wider font-sans">Login Portal URL</span>
-                <p className="text-white mt-0.5 break-all">{window.location.origin}/login</p>
+                <span className="text-[10px] uppercase font-bold opacity-60 font-sans">Login Portal URL</span>
+                <p className="mt-0.5 break-all font-semibold">{window.location.origin}/login</p>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <span className="text-[9px] uppercase font-bold text-slate-600 tracking-wider font-sans">User ID</span>
-                  <p className="text-blue-400 font-bold mt-0.5">{createdDetails.userId}</p>
+                  <span className="text-[10px] uppercase font-bold opacity-60 font-sans">User ID</span>
+                  <p className="text-blue-600 dark:text-blue-400 font-bold mt-0.5">{createdDetails.userId}</p>
                 </div>
                 <div>
-                  <span className="text-[9px] uppercase font-bold text-slate-600 tracking-wider font-sans">Password</span>
-                  <p className="text-emerald-400 font-bold mt-0.5">{createdDetails.password}</p>
+                  <span className="text-[10px] uppercase font-bold opacity-60 font-sans">Password</span>
+                  <p className="text-emerald-600 dark:text-emerald-400 font-bold mt-0.5">{createdDetails.password}</p>
                 </div>
               </div>
               <div>
-                <span className="text-[9px] uppercase font-bold text-slate-600 tracking-wider font-sans">Challenge</span>
-                <p className="text-slate-300 mt-0.5">{createdDetails.assignedChallenge}</p>
+                <span className="text-[10px] uppercase font-bold opacity-60 font-sans">Challenge</span>
+                <p className="mt-0.5 opacity-80">{createdDetails.assignedChallenge}</p>
               </div>
             </div>
 
-            <div className="flex gap-3 mt-6">
+            <div className="flex gap-2.5 mt-5">
               <button
                 onClick={handleCopyCredentials}
-                className="flex-1 flex items-center justify-center gap-2 py-3 border border-white/5 hover:border-white/10 bg-white/5 hover:bg-white/10 text-white rounded-xl text-xs font-bold transition-all"
+                className={`flex-1 flex items-center justify-center gap-2 py-2.5 border rounded-md text-xs font-semibold transition-all ${
+                  isLight
+                    ? "bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-800"
+                    : "bg-white/5 hover:bg-white/10 border-white/10 text-white"
+                }`}
               >
                 {copied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
-                {copied ? "Copied Shareable Info" : "Copy Credentials"}
+                <span>{copied ? "Copied Shareable Info" : "Copy Credentials"}</span>
               </button>
               <button
                 onClick={() => {
                   setShowSuccessModal(false);
                   setCreatedDetails(null);
                 }}
-                className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-all"
+                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-md text-xs font-semibold transition-all shadow-sm"
               >
                 Done
               </button>
@@ -782,27 +1241,29 @@ export default function AdminDashboard() {
 
       {/* DELETE CANDIDATE CONFIRMATION MODAL */}
       {candidateToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-[#0d0e11] border border-white/10 rounded-2xl p-8 max-w-sm w-full shadow-2xl animate-in zoom-in-95 duration-200">
-            <h3 className="text-lg font-bold text-white mb-2">Delete Candidate Account</h3>
-            <p className="text-xs text-slate-400 leading-relaxed mb-6">
-              Are you sure you want to delete <span className="font-bold text-white">{candidateToDelete.name}</span>?
-              <br />
-              <span className="text-rose-500 font-semibold">Their session will immediately end, and login capability will be disabled.</span>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-200 p-4">
+          <div className={`border rounded-lg p-6 md:p-8 max-w-sm w-full shadow-2xl animate-in zoom-in-95 duration-200 ${
+            isLight ? "bg-white border-slate-200 text-slate-800" : "bg-[#0d0e11] border-white/10 text-white"
+          }`}>
+            <h3 className={`text-lg font-bold mb-2 ${isLight ? "text-slate-900" : "text-white"}`}>Delete Candidate</h3>
+            <p className="text-xs opacity-75 leading-relaxed mb-6">
+              Are you sure you want to remove <span className={`font-bold ${isLight ? "text-slate-900" : "text-white"}`}>{candidateToDelete.name}</span> (<span className="font-mono text-blue-600 dark:text-blue-400">{candidateToDelete.userId}</span>) from the roster?
+              <br /><br />
+              <span className="text-emerald-600 dark:text-emerald-400 font-semibold">✓ All telemetry logs and AI assessment reports will remain permanently saved in the system.</span>
             </p>
 
-            <div className="flex justify-end gap-3">
+            <div className="flex justify-end gap-2.5">
               <button
                 onClick={() => setCandidateToDelete(null)}
-                className="px-4 py-2.5 text-xs font-bold text-slate-400 hover:text-white transition-colors"
+                className="px-4 py-2 text-xs font-semibold opacity-70 hover:opacity-100 rounded-md transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteCandidate}
-                className="px-6 py-2.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition-all"
+                className="px-5 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-md text-xs font-bold transition-all shadow-sm"
               >
-                Delete Account
+                Delete Candidate
               </button>
             </div>
           </div>
@@ -811,25 +1272,27 @@ export default function AdminDashboard() {
 
       {/* DELETE INTERVIEWER CONFIRMATION MODAL */}
       {interviewerToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-[#0d0e11] border border-white/10 rounded-2xl p-8 max-w-sm w-full shadow-2xl animate-in zoom-in-95 duration-200">
-            <h3 className="text-lg font-bold text-white mb-2">Delete Interviewer Account</h3>
-            <p className="text-xs text-slate-400 leading-relaxed mb-6">
-              Are you sure you want to delete <span className="font-bold text-white">{interviewerToDelete.name}</span>?
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-200 p-4">
+          <div className={`border rounded-lg p-6 md:p-8 max-w-sm w-full shadow-2xl animate-in zoom-in-95 duration-200 ${
+            isLight ? "bg-white border-slate-200 text-slate-800" : "bg-[#0d0e11] border-white/10 text-white"
+          }`}>
+            <h3 className={`text-lg font-bold mb-2 ${isLight ? "text-slate-900" : "text-white"}`}>Delete Interviewer Account</h3>
+            <p className="text-xs opacity-75 leading-relaxed mb-6">
+              Are you sure you want to delete <span className={`font-bold ${isLight ? "text-slate-900" : "text-white"}`}>{interviewerToDelete.name}</span>?
               <br />
-              <span className="text-rose-500 font-semibold">Their session will immediately end, and they will lose access.</span>
+              <span className="text-rose-600 dark:text-rose-400 font-semibold">Their session will immediately end, and they will lose access.</span>
             </p>
 
-            <div className="flex justify-end gap-3">
+            <div className="flex justify-end gap-2.5">
               <button
                 onClick={() => setInterviewerToDelete(null)}
-                className="px-4 py-2.5 text-xs font-bold text-slate-400 hover:text-white transition-colors"
+                className="px-4 py-2 text-xs font-semibold opacity-70 hover:opacity-100 rounded-md transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteInterviewer}
-                className="px-6 py-2.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition-all"
+                className="px-5 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-md text-xs font-bold transition-all shadow-sm"
               >
                 Delete Interviewer
               </button>
