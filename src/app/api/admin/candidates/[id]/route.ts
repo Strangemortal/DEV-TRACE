@@ -32,15 +32,18 @@ export async function PATCH(
     // Toggle or explicitly set active status
     const newActive = typeof body.active === "boolean" ? body.active : !candidate.active;
     db.candidates[candidateIndex].active = newActive;
+    db.candidates[candidateIndex].status = newActive ? "active" : "paused";
 
-    // If stopping the test, invalidate active candidate sessions immediately
-    if (!newActive) {
-      const candidateUserId = candidate.userId;
-      Object.keys(db.sessions).forEach((token) => {
-        if (db.sessions[token].candidateId === id || db.sessions[token].userId === candidateUserId) {
-          delete db.sessions[token];
-        }
-      });
+    // Update session statuses in place so candidate automatically locks/unlocks
+    const candidateUserId = candidate.userId;
+    Object.keys(db.sessions).forEach((token) => {
+      if (db.sessions[token].candidateId === id || db.sessions[token].userId === candidateUserId) {
+        db.sessions[token].status = newActive ? "active" : "paused";
+      }
+    });
+
+    if (db.liveTelemetry && db.liveTelemetry[id]) {
+      db.liveTelemetry[id].status = newActive ? "active" : "paused";
     }
 
     await writeDb(db);
@@ -48,7 +51,8 @@ export async function PATCH(
     return NextResponse.json({
       success: true,
       active: newActive,
-      message: newActive ? "Candidate test resumed." : "Candidate test stopped. Active IDE sessions terminated.",
+      status: newActive ? "active" : "paused",
+      message: newActive ? "Candidate assessment test resumed." : "Candidate assessment test paused.",
       candidate: db.candidates[candidateIndex],
     });
   } catch (error) {

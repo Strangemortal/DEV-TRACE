@@ -19,6 +19,8 @@ export interface AuthenticatedUser {
   candidateId?: string;
   name: string;
   assignedRepoId?: string;
+  active?: boolean;
+  status?: "active" | "paused" | "completed";
 }
 
 export async function getSession(): Promise<AuthenticatedUser | null> {
@@ -45,6 +47,8 @@ export async function getSession(): Promise<AuthenticatedUser | null> {
         userId: session.userId,
         role: "admin",
         name: "Administrator",
+        active: true,
+        status: "active",
       };
     } else if (session.role === "interviewer") {
       const interviewer = db.interviewers?.find((i) => i.userId === session.userId);
@@ -57,14 +61,16 @@ export async function getSession(): Promise<AuthenticatedUser | null> {
         userId: session.userId,
         role: "interviewer",
         name: interviewer.name,
+        active: true,
+        status: "active",
       };
     } else {
       // Find the candidate
       const candidate = db.candidates.find(
-        (c) => c.id === session.candidateId && c.active
+        (c) => c.id === session.candidateId || c.userId === session.userId
       );
       if (!candidate) {
-        // Candidate deactivated or deleted
+        // Candidate was deleted from roster
         delete db.sessions[token];
         await writeDb(db);
         return null;
@@ -72,9 +78,11 @@ export async function getSession(): Promise<AuthenticatedUser | null> {
       return {
         userId: session.userId,
         role: "candidate",
-        candidateId: session.candidateId,
+        candidateId: candidate.id,
         name: candidate.name,
         assignedRepoId: candidate.assignedRepoId,
+        active: candidate.active,
+        status: candidate.active ? "active" : "paused",
       };
     }
   } catch (error) {

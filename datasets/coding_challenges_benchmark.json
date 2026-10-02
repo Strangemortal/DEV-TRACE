@@ -1,0 +1,79 @@
+[
+  {
+    "id": "humaneval-001-separate-paren-groups",
+    "source": "OpenAI HumanEval",
+    "title": "Separate Parenthesis Groups",
+    "category": "python",
+    "difficulty": "Intermediate",
+    "problem": "Separate balanced parentheses groups from an input string without spaces.",
+    "testCasesCount": 5,
+    "canonicalComplexity": "O(N) time, O(N) space",
+    "framework": "none"
+  },
+  {
+    "id": "humaneval-032-poly-roots",
+    "source": "OpenAI HumanEval",
+    "title": "Evaluate Polynomial Roots",
+    "category": "python",
+    "difficulty": "Advanced",
+    "problem": "Find zero point x where poly(x) = 0 using bisection or Newton-Raphson.",
+    "testCasesCount": 6,
+    "canonicalComplexity": "O(log(1/eps)) time, O(1) space",
+    "framework": "none"
+  },
+  {
+    "id": "mbpp-102-snake-to-camel",
+    "source": "Google Research MBPP",
+    "title": "Snake Case to Camel Case Conversion",
+    "category": "python",
+    "difficulty": "Beginner",
+    "problem": "Convert snake_case identifiers to camelCase following PEP-8 conventions.",
+    "testCasesCount": 4,
+    "canonicalComplexity": "O(N) time, O(N) space",
+    "framework": "none"
+  },
+  {
+    "id": "swe-bench-django-orm-nplusone",
+    "source": "Princeton SWE-bench",
+    "title": "Django ORM Deadlock & N+1 Optimization",
+    "category": "python",
+    "difficulty": "Advanced",
+    "problem": "Optimize Order.items retrieval using select_related/prefetch_related and F() expression.",
+    "testCasesCount": 8,
+    "canonicalComplexity": "1 SQL query vs N+1 queries",
+    "framework": "django"
+  },
+  {
+    "id": "swe-bench-fastapi-async-pool",
+    "source": "Princeton SWE-bench",
+    "title": "FastAPI Async Connection Pool Starvation",
+    "category": "python",
+    "difficulty": "Intermediate",
+    "problem": "Fix async generator resource cleanup in database session dependency.",
+    "testCasesCount": 5,
+    "canonicalComplexity": "O(1) pool checkout",
+    "framework": "fastapi"
+  },
+  {
+    "id": "devtrace-spring-boot-isolation",
+    "source": "DEV-TRACE Microservice Suite",
+    "title": "Spring Boot Transactional Isolation Conflict",
+    "category": "java",
+    "difficulty": "Advanced",
+    "problem": "Resolve dirty read and non-repeatable read anomalies under concurrent order debit.",
+    "testCasesCount": 7,
+    "canonicalComplexity": "SERIALIZABLE / REPEATABLE_READ isolation",
+    "framework": "spring-boot"
+  },
+  {
+    "id": "devtrace-payment-idempotency",
+    "source": "DEV-TRACE Microservice Suite",
+    "title": "Distributed Idempotency & Float Precision",
+    "category": "node",
+    "difficulty": "Advanced",
+    "problem": "Fix Redis distributed lock race condition and IEEE-754 currency roundoff.",
+    "testCasesCount": 10,
+    "canonicalComplexity": "Atomic SETNX with TTL",
+    "framework": "express"
+  }
+]

@@ -1,7 +1,8 @@
 "use client";
 
-import { FileText, FileCode2, FileJson, BookOpen, FolderOpen, ChevronRight, Database, Settings, ShieldCheck, PlayCircle } from "lucide-react";
+import { FileText, FileCode2, FileJson, BookOpen, FolderOpen, ChevronRight, Database, Settings, ShieldCheck, PlayCircle, Lock } from "lucide-react";
 import { useThemeStore } from "@/store/themeStore";
+import { isReadOnlyFile } from "@/data/brokenRepo";
 
 const FILE_ICONS: Record<string, React.ReactNode> = {
   "index.html": <FileCode2 size={14} className="text-amber-500" />,
@@ -40,9 +41,10 @@ interface Props {
   activeFile: string;
   onSelect: (file: string) => void;
   dirtyFiles: Set<string>;
+  repo?: any;
 }
 
-export default function FileExplorer({ files, activeFile, onSelect, dirtyFiles }: Props) {
+export default function FileExplorer({ files, activeFile, onSelect, dirtyFiles, repo }: Props) {
   const { theme } = useThemeStore();
   const isLight = theme === "light";
 
@@ -79,6 +81,7 @@ export default function FileExplorer({ files, activeFile, onSelect, dirtyFiles }
         
         {files.map((file) => {
           const isActive = activeFile === file;
+          const readOnly = isReadOnlyFile(file, repo);
           return (
             <button
               key={file}
@@ -104,9 +107,15 @@ export default function FileExplorer({ files, activeFile, onSelect, dirtyFiles }
               <span className="flex-1 truncate text-left font-mono text-xs md:text-sm">
                 {file}
               </span>
+
+              {readOnly && (
+                <span title="Read-only specification/test file" className="opacity-50 group-hover:opacity-80 flex-shrink-0">
+                  <Lock size={12} />
+                </span>
+              )}
               
-              {dirtyFiles.has(file) && (
-                <span className="w-1.5 h-1.5 rounded-sm bg-amber-500" />
+              {dirtyFiles.has(file) && !readOnly && (
+                <span className="w-1.5 h-1.5 rounded-sm bg-amber-500 flex-shrink-0" />
               )}
             </button>
           );

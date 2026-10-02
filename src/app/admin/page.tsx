@@ -25,10 +25,13 @@ import {
   Play,
   Square,
   Ban,
+  FileUp,
+  Download,
 } from "lucide-react";
 import { REPOSITORIES } from "@/data/brokenRepo";
 import { useThemeStore } from "@/store/themeStore";
 import ThemeToggle from "@/components/ThemeToggle";
+import BulkAddModal from "@/components/BulkAddModal";
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -74,6 +77,11 @@ export default function AdminDashboard() {
   const [intCreating, setIntCreating] = useState(false);
   const [interviewerToDelete, setInterviewerToDelete] = useState<any>(null);
 
+  // Bulk Add Modal state
+  const [showBulkModal, setShowBulkModal] = useState(false);
+  const [bulkCreatedList, setBulkCreatedList] = useState<any[] | null>(null);
+  const [bulkCopied, setBulkCopied] = useState(false);
+
   // Success modal details to copy credentials
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [createdDetails, setCreatedDetails] = useState<any>(null);
@@ -84,6 +92,42 @@ export default function AdminDashboard() {
 
   // Stats
   const [telemetryCount, setTelemetryCount] = useState(0);
+
+  const handleDownloadBulkCSV = () => {
+    if (!bulkCreatedList || bulkCreatedList.length === 0) return;
+    const origin = typeof window !== "undefined" ? window.location.origin : "";
+    const headers = ["Name", "User ID", "Password", "Assigned Challenge", "Login URL"];
+    const rows = bulkCreatedList.map((c) => {
+      const challengeName = REPOSITORIES.find((r) => r.id === c.assignedRepoId)?.name || c.assignedRepoId;
+      return [
+        `"${c.name.replace(/"/g, '""')}"`,
+        `"${c.userId}"`,
+        `"${c.rawPassword}"`,
+        `"${challengeName.replace(/"/g, '""')}"`,
+        `"${origin}/login"`,
+      ].join(",");
+    });
+    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `devtrace_candidates_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleCopyBulkCredentials = () => {
+    if (!bulkCreatedList) return;
+    const origin = typeof window !== "undefined" ? window.location.origin : "";
+    const lines = bulkCreatedList.map(
+      (c) =>
+        `Name: ${c.name} | User ID: ${c.userId} | Password: ${c.rawPassword} | Repo: ${c.assignedRepoId} | URL: ${origin}/login`
+    );
+    navigator.clipboard.writeText(lines.join("\n"));
+    setBulkCopied(true);
+    setTimeout(() => setBulkCopied(false), 2000);
+  };
 
   // Check auth
   useEffect(() => {
@@ -388,7 +432,7 @@ export default function AdminDashboard() {
 
   return (
     <div
-      className={`min-h-screen w-screen flex flex-col font-sans overflow-x-hidden transition-colors duration-150 ${
+      className={`min-h-screen w-full flex flex-col font-sans overflow-x-hidden transition-colors duration-150 ${
         isLight
           ? "bg-slate-50 text-slate-900"
           : isMidnight
@@ -543,13 +587,26 @@ export default function AdminDashboard() {
                 <h2 className="text-base font-bold">Candidates</h2>
                 <p className="text-xs opacity-60 mt-0.5">Manage candidates, challenge assignments, and credentials.</p>
               </div>
-              <button
-                onClick={() => setShowCreateModal(true)}
-                className="flex items-center gap-1.5 text-xs px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all shadow-sm active:scale-95"
-              >
-                <Plus size={14} />
-                <span>Add Candidate</span>
-              </button>
+              <div className="flex items-center gap-2.5">
+                <button
+                  onClick={() => setShowBulkModal(true)}
+                  className={`flex items-center gap-1.5 text-xs px-3.5 py-2 border rounded-lg font-semibold transition-all shadow-sm active:scale-95 ${
+                    isLight
+                      ? "bg-indigo-50 border-indigo-200 text-indigo-700 hover:bg-indigo-100"
+                      : "bg-indigo-600/10 border-indigo-500/30 text-indigo-400 hover:bg-indigo-600/20"
+                  }`}
+                >
+                  <FileUp size={14} />
+                  <span>Bulk Add (CSV / PDF)</span>
+                </button>
+                <button
+                  onClick={() => setShowCreateModal(true)}
+                  className="flex items-center gap-1.5 text-xs px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all shadow-sm active:scale-95"
+                >
+                  <Plus size={14} />
+                  <span>Add Candidate</span>
+                </button>
+              </div>
             </div>
 
             {/* TABLE */}
@@ -1295,6 +1352,97 @@ export default function AdminDashboard() {
                 className="px-5 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-md text-xs font-bold transition-all shadow-sm"
               >
                 Delete Interviewer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* BULK ADD CANDIDATES MODAL */}
+      <BulkAddModal
+        isOpen={showBulkModal}
+        onClose={() => setShowBulkModal(false)}
+        onSuccess={(created) => {
+          setBulkCreatedList(created);
+          fetchCandidates();
+        }}
+        isLight={isLight}
+      />
+
+      {/* BULK CREDENTIALS CREATED MODAL */}
+      {bulkCreatedList && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md animate-in fade-in duration-200 p-4">
+          <div
+            className={`border rounded-xl p-6 max-w-2xl w-full shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col max-h-[85vh] ${
+              isLight ? "bg-white border-slate-200 text-slate-800" : "bg-[#0d0e11] border-white/10 text-white"
+            }`}
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <div>
+                <h3 className={`text-base font-bold ${isLight ? "text-slate-900" : "text-white"}`}>
+                  Bulk Candidates Added Successfully!
+                </h3>
+                <p className="text-xs opacity-70 mt-0.5">
+                  {bulkCreatedList.length} candidate account(s) generated. Download the CSV roster or copy credentials.
+                </p>
+              </div>
+              <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-bold border border-emerald-500/20">
+                {bulkCreatedList.length} Accounts
+              </span>
+            </div>
+
+            {/* Candidate Credentials Table */}
+            <div className="flex-1 overflow-y-auto my-4 rounded-lg border border-white/10">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="bg-white/[0.03] border-b border-white/10 text-[10px] font-bold text-slate-400 uppercase">
+                    <th className="px-3.5 py-2.5">Name</th>
+                    <th className="px-3.5 py-2.5">User ID</th>
+                    <th className="px-3.5 py-2.5">Password</th>
+                    <th className="px-3.5 py-2.5">Assigned Challenge</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5 font-mono text-[11px]">
+                  {bulkCreatedList.map((c, i) => (
+                    <tr key={i} className="hover:bg-white/[0.02]">
+                      <td className="px-3.5 py-2 font-sans font-semibold">{c.name}</td>
+                      <td className="px-3.5 py-2 text-blue-400 font-bold">{c.userId}</td>
+                      <td className="px-3.5 py-2 text-emerald-400 font-bold">{c.rawPassword}</td>
+                      <td className="px-3.5 py-2 font-sans text-slate-300">
+                        {REPOSITORIES.find((r) => r.id === c.assignedRepoId)?.name || c.assignedRepoId}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-white/10">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleDownloadBulkCSV}
+                  className="flex items-center gap-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition-all shadow-sm active:scale-95"
+                >
+                  <Download size={14} />
+                  <span>Download CSV Roster</span>
+                </button>
+                <button
+                  onClick={handleCopyBulkCredentials}
+                  className={`flex items-center gap-1.5 px-3.5 py-2 border rounded-lg text-xs font-semibold transition-all ${
+                    isLight
+                      ? "bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-800"
+                      : "bg-white/5 hover:bg-white/10 border-white/10 text-white"
+                  }`}
+                >
+                  {bulkCopied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                  <span>{bulkCopied ? "Copied All" : "Copy All Credentials"}</span>
+                </button>
+              </div>
+
+              <button
+                onClick={() => setBulkCreatedList(null)}
+                className="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold transition-all shadow-sm"
+              >
+                Close
               </button>
             </div>
           </div>

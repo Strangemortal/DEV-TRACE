@@ -92,7 +92,7 @@ export default function LoginPage() {
 
   return (
     <div
-      className={`min-h-screen w-screen flex flex-col items-center justify-center p-4 relative font-sans transition-colors duration-150 ${
+      className={`min-h-screen w-full flex flex-col items-center justify-center p-4 relative font-sans transition-colors duration-150 ${
         isLight
           ? "bg-slate-50 text-slate-900"
           : isMidnight
@@ -182,7 +182,38 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="mt-6 pt-4 border-t border-white/5 dark:border-white/5 text-center text-xs opacity-50 flex items-center justify-center gap-1.5">
+        <div className="mt-4 pt-3 border-t border-white/10 flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={async () => {
+              setLoading(true);
+              try {
+                const res = await fetch("/api/auth/demo", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ role: "candidate", repoId: "python-challenge" }),
+                });
+                const data = await res.json();
+                if (data.redirect) router.push(data.redirect);
+              } catch (e) {
+                setLoading(false);
+              }
+            }}
+            className="w-full flex items-center justify-center gap-1.5 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded-lg text-xs font-semibold transition-all"
+          >
+            <Zap size={13} />
+            <span>1-Click Exhibition Demo Candidate</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push("/")}
+            className="text-[11px] opacity-60 hover:opacity-100 transition-opacity text-center mt-0.5"
+          >
+            ← Back to Exhibition Showcase
+          </button>
+        </div>
+
+        <div className="mt-3 pt-2 text-center text-xs opacity-50 flex items-center justify-center gap-1.5">
           <Shield size={12} className="text-blue-400" />
           <span>Secured Candidate Assessment Session</span>
         </div>

@@ -22,37 +22,23 @@ import {
   BookOpen,
   Maximize2,
   Minimize2,
-  GripHorizontal,
+  Lock,
+  Pause,
+  AlertTriangle,
+  ShieldAlert,
+  Terminal as TermIcon,
+  Eye,
+  RefreshCw,
 } from "lucide-react";
 import { useTelemetryStore } from "@/store/telemetryStore";
 import { useThemeStore } from "@/store/themeStore";
-import { REPOSITORIES } from "@/data/brokenRepo";
+import { REPOSITORIES, isReadOnlyFile } from "@/data/brokenRepo";
 import FileExplorer from "@/components/FileExplorer";
 import MockTerminal, { TerminalLine } from "@/components/MockTerminal";
 import LivePreview from "@/components/LivePreview";
 import ThemeToggle from "@/components/ThemeToggle";
 import MarkdownViewer from "@/components/MarkdownViewer";
 import Editor from "@monaco-editor/react";
-
-// ---- helpers ----------------------------------------------------------------
-function buildZip(files: Record<string, string>): Blob {
-  const lines: string[] = [];
-  for (const [name, content] of Object.entries(files)) {
-    lines.push(`// === ${name} ===`);
-    lines.push(content);
-    lines.push("");
-  }
-  return new Blob([lines.join("\n")], { type: "text/plain" });
-}
-
-function downloadBlob(blob: Blob, name: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = name;
-  a.click();
-  URL.revokeObjectURL(url);
-}
 
 function fmtElapsed(sec: number): string {
   const m = Math.floor(sec / 60)
@@ -84,11 +70,52 @@ export default function DevTraceIDEPage() {
 
   // Terminal
   const [termLines, setTermLines] = useState<TerminalLine[]>([
-    { type: "system", text: "DevTrace Assessment Environment Ready" },
+    { type: "system", text: "DevTrace Assessment Sandbox Ready" },
+    { type: "info", text: "Type 'help' in the terminal to inspect available commands." },
   ]);
   const [termOpen, setTermOpen] = useState(true);
   const [termHeight, setTermHeight] = useState<number>(240);
   const [isDraggingTerm, setIsDraggingTerm] = useState(false);
+
+  // Fullscreen & Tab Switch state
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showFullscreenPrompt, setShowFullscreenPrompt] = useState(false);
+  const [tabSwitchCount, setTabSwitchCount] = useState(0);
+  const tabSwitchCountRef = useRef(0);
+  const [showTabSwitchModal, setShowTabSwitchModal] = useState(false);
+
+  // Test Pause/Stop state (from Admin side)
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Copy/Paste blocking notification toast
+  const [pasteBlockedToast, setPasteBlockedToast] = useState<string | null>(null);
+
+  // Telemetry
+  const { logEvent, getDump, sessionStart, clearEvents } = useTelemetryStore();
+  const [stabilityScore, setStabilityScore] = useState(100);
+
+  // Keystroke batching
+  const keystrokeBuffer = useRef<{ added: number; deleted: number }>({ added: 0, deleted: 0 });
+
+  // Elapsed timer
+  const [elapsed, setElapsed] = useState(0);
+
+  // Modal state
+  const [showModal, setShowModal] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [submittingTelemetry, setSubmittingTelemetry] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  // Problem brief drawer state
+  const [showProblemBrief, setShowProblemBrief] = useState(false);
+
+  // AI Socratic Mentor & Explainer state
+  const [showAiMentor, setShowAiMentor] = useState(false);
+  const [hintLevel, setHintLevel] = useState<1 | 2 | 3>(1);
+  const [aiHint, setAiHint] = useState<any>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiExplanation, setAiExplanation] = useState<any>(null);
+  const [showAiExplainer, setShowAiExplainer] = useState(false);
 
   const handleTermMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -113,32 +140,19 @@ export default function DevTraceIDEPage() {
     window.addEventListener("mouseup", handleMouseUp);
   };
 
-  // Telemetry
-  const { logEvent, getDump, sessionStart, clearEvents } = useTelemetryStore();
-  const [stabilityScore, setStabilityScore] = useState(100);
-
-  // Keystroke batching
-  const keystrokeBuffer = useRef<{ added: number; deleted: number }>({ added: 0, deleted: 0 });
-
-  // Elapsed timer
-  const [elapsed, setElapsed] = useState(0);
-
-  // Modal state
-  const [showModal, setShowModal] = useState(false);
-  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-  const [submittingTelemetry, setSubmittingTelemetry] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-
-  // Problem brief state
-  const [showProblemBrief, setShowProblemBrief] = useState(false);
-
-  // AI Socratic Mentor & Explainer state
-  const [showAiMentor, setShowAiMentor] = useState(false);
-  const [hintLevel, setHintLevel] = useState<1 | 2 | 3>(1);
-  const [aiHint, setAiHint] = useState<any>(null);
-  const [aiLoading, setAiLoading] = useState(false);
-  const [aiExplanation, setAiExplanation] = useState<any>(null);
-  const [showAiExplainer, setShowAiExplainer] = useState(false);
+  // Fullscreen helper
+  const enterFullscreen = async () => {
+    try {
+      if (document.documentElement.requestFullscreen) {
+        await document.documentElement.requestFullscreen();
+      }
+      setIsFullscreen(true);
+      setShowFullscreenPrompt(false);
+      logEvent({ type: "FOCUS_GAINED", meta: { fullscreen: true } });
+    } catch (e) {
+      console.warn("Fullscreen request denied or not supported", e);
+    }
+  };
 
   // Check auth on mount
   useEffect(() => {
@@ -154,6 +168,10 @@ export default function DevTraceIDEPage() {
           router.replace("/interviewer");
         } else {
           setUser(data.user);
+          if (data.user.active === false || data.user.status === "paused") {
+            setIsPaused(true);
+          }
+
           const assignedId = data.user.assignedRepoId || REPOSITORIES[0].id;
           let repo = REPOSITORIES.find((r) => r.id === assignedId);
 
@@ -172,7 +190,7 @@ export default function DevTraceIDEPage() {
           setActiveRepoId(repo.id);
           setActiveRepo(repo);
           setFiles(Object.fromEntries(Object.entries(repo.files).map(([k, v]: [string, any]) => [k, v.content])));
-          setActiveFile(repo.activeFile);
+          setActiveFile(repo.activeFile || "README.md");
           setTermLines((prev) => [
             ...prev,
             { type: "info", text: "Active Challenge: " + repo.name },
@@ -181,6 +199,11 @@ export default function DevTraceIDEPage() {
           ]);
           clearEvents(); // Reset telemetry session for this run
           setAuthLoading(false);
+
+          // Check if already in fullscreen
+          if (!document.fullscreenElement) {
+            setShowFullscreenPrompt(true);
+          }
         }
       } catch (err) {
         console.error("Auth check failed:", err);
@@ -191,12 +214,160 @@ export default function DevTraceIDEPage() {
     setMounted(true);
   }, [router, clearEvents]);
 
-  // Elapsed timer handler
+  // Elapsed timer handler (runs only when not paused)
   useEffect(() => {
-    if (authLoading) return;
+    if (authLoading || isPaused) return;
     const t = setInterval(() => setElapsed((e) => e + 1), 1000);
     return () => clearInterval(t);
-  }, [authLoading]);
+  }, [authLoading, isPaused]);
+
+  // Fullscreen change listener
+  useEffect(() => {
+    const handleFsChange = () => {
+      const isFs = !!document.fullscreenElement;
+      setIsFullscreen(isFs);
+      if (!isFs && !authLoading) {
+        logEvent({
+          type: "FOCUS_LOST",
+          meta: { reason: "FULLSCREEN_EXITED", timestamp: new Date().toISOString() },
+        });
+      }
+    };
+
+    document.addEventListener("fullscreenchange", handleFsChange);
+    return () => document.removeEventListener("fullscreenchange", handleFsChange);
+  }, [authLoading, logEvent]);
+
+  // Tab switch & focus loss tracking with strike counter
+  useEffect(() => {
+    if (authLoading) return;
+    let focusLostTime: number | null = null;
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        focusLostTime = Date.now();
+        tabSwitchCountRef.current += 1;
+        const currentCount = tabSwitchCountRef.current;
+        setTabSwitchCount(currentCount);
+        logEvent({
+          type: "TAB_SWITCH",
+          meta: { strikeCount: currentCount, timestamp: new Date().toISOString() },
+        });
+        setShowTabSwitchModal(true);
+      } else {
+        const duration = focusLostTime ? Math.round((Date.now() - focusLostTime) / 1000) : 0;
+        focusLostTime = null;
+        logEvent({
+          type: "FOCUS_GAINED",
+          meta: { duration_away_seconds: duration, timestamp: new Date().toISOString() },
+        });
+      }
+    };
+
+    const handleWindowBlur = () => {
+      focusLostTime = Date.now();
+      logEvent({ type: "FOCUS_LOST", meta: { timestamp: new Date().toISOString() } });
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("blur", handleWindowBlur);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("blur", handleWindowBlur);
+    };
+  }, [authLoading, logEvent]);
+
+  // Strict Copy/Paste Prevention
+  useEffect(() => {
+    const handleBlockClipboard = (e: ClipboardEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const actionType = e.type === "paste" ? "Pasting" : "Copying";
+      setPasteBlockedToast(`${actionType} is strictly prohibited in this assessment environment. All code must be typed.`);
+      logEvent({
+        type: "PASTE_DETECTED",
+        meta: {
+          blocked: true,
+          action: e.type,
+          file: activeFile,
+          timestamp: new Date().toISOString(),
+        },
+      });
+      setTimeout(() => setPasteBlockedToast(null), 3000);
+    };
+
+    const handleKeyDownBlock = (e: KeyboardEvent) => {
+      const isCtrlOrCmd = e.ctrlKey || e.metaKey;
+      const key = e.key.toLowerCase();
+      if (isCtrlOrCmd && ["c", "v", "x", "insert"].includes(key)) {
+        e.preventDefault();
+        e.stopPropagation();
+        setPasteBlockedToast("Copy, Cut, and Paste keyboard shortcuts are strictly disabled.");
+        logEvent({
+          type: "PASTE_DETECTED",
+          meta: { blocked: true, shortcut: `Ctrl+${key.toUpperCase()}`, file: activeFile },
+        });
+        setTimeout(() => setPasteBlockedToast(null), 3000);
+      } else if (e.shiftKey && e.key === "Insert") {
+        e.preventDefault();
+        e.stopPropagation();
+        setPasteBlockedToast("Paste shortcut is strictly disabled.");
+        setTimeout(() => setPasteBlockedToast(null), 3000);
+      }
+    };
+
+    window.addEventListener("paste", handleBlockClipboard, true);
+    window.addEventListener("copy", handleBlockClipboard, true);
+    window.addEventListener("cut", handleBlockClipboard, true);
+    window.addEventListener("keydown", handleKeyDownBlock, true);
+
+    return () => {
+      window.removeEventListener("paste", handleBlockClipboard, true);
+      window.removeEventListener("copy", handleBlockClipboard, true);
+      window.removeEventListener("cut", handleBlockClipboard, true);
+      window.removeEventListener("keydown", handleKeyDownBlock, true);
+    };
+  }, [activeFile, logEvent]);
+
+  // Heartbeat & Live Telemetry Sync (Every 3 seconds)
+  useEffect(() => {
+    if (authLoading) return;
+
+    const interval = setInterval(async () => {
+      try {
+        // 1. Check heartbeat & admin pause state
+        const hbRes = await fetch("/api/telemetry/heartbeat");
+        if (hbRes.ok) {
+          const hbData = await hbRes.json();
+          if (hbData.active === false || hbData.status === "paused") {
+            setIsPaused(true);
+          } else {
+            setIsPaused(false);
+          }
+        }
+
+        // 2. Stream live telemetry to server
+        const dump = getDump();
+        await fetch("/api/telemetry/live", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            stability: stabilityScore,
+            duration: elapsed,
+            activeFile,
+            eventCount: dump.length,
+            tabSwitches: tabSwitchCount,
+            recentEvents: dump.slice(-15),
+          }),
+        });
+      } catch (err) {
+        console.warn("Live telemetry heartbeat error:", err);
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [authLoading, elapsed, stabilityScore, activeFile, tabSwitchCount, getDump]);
 
   // Stability Calculation
   useEffect(() => {
@@ -208,8 +379,11 @@ export default function DevTraceIDEPage() {
       const errors = dump.filter((e) => e.type === "EXECUTION_RESULT" && !e.meta?.passed).length;
       score -= errors * 10;
 
-      const largePastes = dump.filter((e) => e.type === "PASTE_DETECTED" && e.meta?.lines_pasted > 10).length;
-      score -= largePastes * 15;
+      const pasteAttempts = dump.filter((e) => e.type === "PASTE_DETECTED").length;
+      score -= pasteAttempts * 10;
+
+      const tabSwitches = dump.filter((e) => e.type === "TAB_SWITCH").length;
+      score -= tabSwitches * 10;
 
       const focusLosses = dump.filter((e) => e.type === "FOCUS_LOST").length;
       score -= focusLosses * 5;
@@ -218,33 +392,6 @@ export default function DevTraceIDEPage() {
     }, 2000);
     return () => clearInterval(i);
   }, [authLoading, getDump]);
-
-  // Focus tracking
-  useEffect(() => {
-    if (authLoading) return;
-    let focusLostTime: number | null = null;
-
-    const handleBlur = () => {
-      focusLostTime = Date.now();
-      logEvent({ type: "FOCUS_LOST", meta: { timestamp: new Date().toISOString() } });
-    };
-
-    const handleFocus = () => {
-      const duration = focusLostTime ? Math.round((Date.now() - focusLostTime) / 1000) : 0;
-      focusLostTime = null;
-      logEvent({
-        type: "FOCUS_GAINED",
-        meta: { duration_away_seconds: duration, timestamp: new Date().toISOString() },
-      });
-    };
-
-    window.addEventListener("blur", handleBlur);
-    window.addEventListener("focus", handleFocus);
-    return () => {
-      window.removeEventListener("blur", handleBlur);
-      window.removeEventListener("focus", handleFocus);
-    };
-  }, [authLoading, logEvent]);
 
   // Handle file select
   const handleFileSelect = (file: string) => {
@@ -255,8 +402,10 @@ export default function DevTraceIDEPage() {
     setActiveFile(file);
   };
 
+  const isCurrentFileReadOnly = isReadOnlyFile(activeFile, activeRepo);
+
   const handleEditorChange = (value: string | undefined) => {
-    if (value === undefined) return;
+    if (value === undefined || isCurrentFileReadOnly || isPaused) return;
     setFiles((prev) => ({ ...prev, [activeFile]: value }));
     setDirtyFiles((d) => new Set(d).add(activeFile));
   };
@@ -272,51 +421,10 @@ export default function DevTraceIDEPage() {
         }
       }
     });
-
-    editor.onDidPaste((e: any) => {
-      const model = editor.getModel();
-      if (!model) return;
-
-      const pastedText = model.getValueInRange(e.range);
-      const charCount = pastedText.length;
-      const wordCount = pastedText.trim().split(/\s+/).filter(Boolean).length;
-      const lineCount = e.range.endLineNumber - e.range.startLineNumber + 1;
-
-      const snippet = pastedText.length > 200
-        ? pastedText.slice(0, 200) + ` … [${pastedText.length - 200} more chars]`
-        : pastedText;
-
-      const pasteObject = {
-        file: activeFile,
-        lines_pasted: lineCount,
-        chars_pasted: charCount,
-        words_pasted: wordCount,
-        content: pastedText,
-        preview: snippet,
-        range: {
-          startLine: e.range.startLineNumber,
-          endLine: e.range.endLineNumber,
-          startCol: e.range.startColumn,
-          endCol: e.range.endColumn,
-        },
-      };
-
-      logEvent({ type: "PASTE_DETECTED", meta: pasteObject });
-
-      if (lineCount > 5) {
-        setTermLines((p) => [
-          ...p,
-          {
-            type: "warning",
-            text: `[Telemetry] Paste recorded in ${activeFile} (${lineCount} lines, ${charCount} chars)`,
-          },
-        ]);
-      }
-    });
-  }, [activeFile, logEvent]);
+  }, []);
 
   const handleSave = useCallback(async () => {
-    if (!activeRepo) return;
+    if (!activeRepo || isPaused) return;
     const ts = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
     const src = files[activeFile] ?? "";
     setDirtyFiles((d) => {
@@ -325,12 +433,15 @@ export default function DevTraceIDEPage() {
       return n;
     });
 
-    const validationLines = activeRepo.validateSave(activeFile, src, ts);
+    const validationLines = activeRepo.validateSave ? activeRepo.validateSave(activeFile, src, ts) : [];
     setTermLines((prev) => [...prev, ...validationLines, { type: "info", text: `Saved ${activeFile}`, ts }]);
 
     const isExecutionCategory = ["python", "cpp", "java", "node"].includes(activeRepo.category);
     if (isExecutionCategory) {
-      setTermLines((prev) => [...prev, { type: "system", text: "Running test suite...", ts }]);
+      setTermLines((prev) => [
+        ...prev,
+        { type: "system", text: `Executing ${activeRepo.testCommand || "test suite"}...`, ts },
+      ]);
       try {
         const res = await fetch("/api/execute", {
           method: "POST",
@@ -359,21 +470,152 @@ export default function DevTraceIDEPage() {
         setTermLines((prev) => [...prev, { type: "error", text: "Execution service unavailable.", ts }]);
       }
     }
-  }, [activeFile, files, activeRepo, logEvent]);
+  }, [activeFile, files, activeRepo, isPaused, logEvent]);
 
+  // Enhanced Terminal Command Runner
   const handleTerminalCommand = useCallback((cmd: string) => {
-    const lower = cmd.toLowerCase().trim();
-    if (lower === "clear") {
+    const raw = cmd.trim();
+    const lower = raw.toLowerCase();
+    const ts = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+
+    setTermLines((p) => [...p, { type: "system", text: `User@DevTrace:~$ ${raw}`, ts }]);
+
+    if (!raw) return;
+
+    if (lower === "clear" || lower === "cls") {
       setTermLines([]);
       return;
     }
-    setTermLines((p) => [...p, { type: "system", text: `User@DevTrace:~$ ${cmd}` }]);
-    if (lower.startsWith("git")) {
-      setTermLines((p) => [...p, { type: "info", text: "Git operations are managed by Save actions." }]);
-    } else {
-      setTermLines((p) => [...p, { type: "error", text: `Command not found: ${cmd}` }]);
+
+    if (lower === "help") {
+      setTermLines((p) => [
+        ...p,
+        { type: "info", text: "Available Terminal Commands:" },
+        { type: "system", text: "  test / run                   - Execute challenge test runner" },
+        { type: "system", text: "  python manage.py test / npm test - Execute standard test runner" },
+        { type: "system", text: "  ls / dir                     - List workspace repository files" },
+        { type: "system", text: "  cat <filename>               - View contents of a file" },
+        { type: "system", text: "  status                       - Display active test status & metrics" },
+        { type: "system", text: "  whoami                       - Display candidate identity info" },
+        { type: "system", text: "  pwd                          - Print working directory" },
+        { type: "system", text: "  reset <filename>             - Reset a file to original challenge template" },
+        { type: "system", text: "  clear                        - Clear terminal screen" },
+      ]);
+      return;
     }
-  }, []);
+
+    if (lower === "ls" || lower === "dir") {
+      const order = activeRepo?.fileOrder || Object.keys(files);
+      setTermLines((p) => [
+        ...p,
+        { type: "info", text: `Workspace Repository (${order.length} files):` },
+        ...order.map((f: string) => {
+          const isRo = isReadOnlyFile(f, activeRepo);
+          const size = (files[f] || "").length;
+          return {
+            type: "system" as const,
+            text: `  ${isRo ? "[READ-ONLY] " : "            "}${f.padEnd(24)} (${size} bytes)`,
+          };
+        }),
+      ]);
+      return;
+    }
+
+    if (lower.startsWith("cat ") || lower.startsWith("type ")) {
+      const target = raw.slice(4).trim();
+      if (!target) {
+        setTermLines((p) => [...p, { type: "error", text: "Usage: cat <filename>" }]);
+        return;
+      }
+      if (files[target] !== undefined) {
+        const lines = files[target].split("\n");
+        setTermLines((p) => [
+          ...p,
+          { type: "info", text: `--- ${target} (${lines.length} lines) ---` },
+          ...lines.slice(0, 50).map((l, idx) => ({
+            type: "system" as const,
+            text: `${(idx + 1).toString().padStart(3, " ")} | ${l}`,
+          })),
+          ...(lines.length > 50 ? [{ type: "warning" as const, text: `... (${lines.length - 50} more lines omitted)` }] : []),
+        ]);
+      } else {
+        setTermLines((p) => [...p, { type: "error", text: `File not found: ${target}` }]);
+      }
+      return;
+    }
+
+    if (lower === "pwd") {
+      setTermLines((p) => [...p, { type: "info", text: "/workspace" }]);
+      return;
+    }
+
+    if (lower === "whoami") {
+      setTermLines((p) => [
+        ...p,
+        { type: "info", text: `Candidate: ${user?.name || "Anonymous"} (${user?.userId || "N/A"})` },
+        { type: "system", text: `Role: Candidate Assessment Session | Status: ${isPaused ? "Paused" : "Active"}` },
+      ]);
+      return;
+    }
+
+    if (lower === "status") {
+      setTermLines((p) => [
+        ...p,
+        { type: "info", text: `Active Challenge: ${activeRepo?.name || "N/A"}` },
+        { type: "system", text: `Active File: ${activeFile} | Stability: ${stabilityScore}% | Elapsed: ${fmtElapsed(elapsed)}` },
+        { type: "system", text: `Tab Switches / Focus Loss: ${tabSwitchCount} | Integrity Status: ${tabSwitchCount > 2 ? "Flagged" : "Nominal"}` },
+      ]);
+      return;
+    }
+
+    if (lower.startsWith("reset")) {
+      const target = raw.slice(5).trim() || activeFile;
+      if (isReadOnlyFile(target, activeRepo)) {
+        setTermLines((p) => [...p, { type: "error", text: `Cannot reset read-only file: ${target}` }]);
+        return;
+      }
+      const initialContent = activeRepo?.files?.[target]?.content;
+      if (initialContent !== undefined) {
+        setFiles((prev) => ({ ...prev, [target]: initialContent }));
+        setDirtyFiles((d) => {
+          const next = new Set(d);
+          next.delete(target);
+          return next;
+        });
+        setTermLines((p) => [...p, { type: "success", text: `Reset ${target} to initial challenge template.` }]);
+      } else {
+        setTermLines((p) => [...p, { type: "error", text: `File not found in challenge repository: ${target}` }]);
+      }
+      return;
+    }
+
+    // Test runner triggers
+    if (
+      lower === "test" ||
+      lower === "run" ||
+      lower === "npm test" ||
+      lower.startsWith("python manage.py test") ||
+      lower.startsWith("python test_") ||
+      lower.startsWith("python test") ||
+      lower.startsWith("node test") ||
+      lower.startsWith("pytest") ||
+      lower.startsWith("javac") ||
+      lower === activeRepo?.testCommand?.toLowerCase()
+    ) {
+      handleSave();
+      return;
+    }
+
+    if (lower.startsWith("git")) {
+      setTermLines((p) => [...p, { type: "info", text: "Git operations are managed automatically by Save actions." }]);
+      return;
+    }
+
+    setTermLines((p) => [
+      ...p,
+      { type: "error", text: `Command not found: ${raw}. Type 'help' for available commands or 'test' to run assertions.` },
+    ]);
+  }, [activeRepo, activeFile, files, user, isPaused, stabilityScore, elapsed, tabSwitchCount, handleSave]);
 
   const handleRequestAiHint = async (level: 1 | 2 | 3) => {
     setHintLevel(level);
@@ -415,7 +657,7 @@ export default function DevTraceIDEPage() {
       setAiHint({
         hintLevel: level,
         title: `Step ${level}: Debugging Clue`,
-        hintText: "Network delay encountered. Check the unit test assertions in your test file for the expected values.",
+        hintText: "Review the unit test assertions in your test file for the expected values.",
         encouragement: "You're close! Check the function return values.",
       });
     } finally {
@@ -508,7 +750,7 @@ export default function DevTraceIDEPage() {
 
   return (
     <div
-      className={`h-screen w-screen flex flex-col overflow-hidden font-sans transition-colors duration-150 ${
+      className={`h-screen w-screen flex flex-col overflow-hidden font-sans transition-colors duration-150 relative ${
         isLight
           ? "bg-slate-50 text-slate-900"
           : isMidnight
@@ -516,6 +758,101 @@ export default function DevTraceIDEPage() {
           : "bg-[#0f1117] text-slate-200"
       }`}
     >
+      {/* ── PAUSE OVERLAY (Triggered when stopped by Admin) ── */}
+      {isPaused && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-6 animate-in fade-in duration-200">
+          <div className="max-w-md w-full p-8 rounded-2xl border border-amber-500/30 bg-[#0f121d] text-white text-center shadow-2xl space-y-4">
+            <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto text-amber-400 animate-pulse">
+              <Pause size={32} />
+            </div>
+            <h2 className="text-xl font-bold text-white">Assessment Paused by Invigilator</h2>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Your assessment session has been temporarily paused from the staff administrator desk. All your written code and elapsed assessment progress have been securely preserved.
+            </p>
+            <div className="p-3 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-amber-300 flex items-center justify-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+              <span>Status: Paused (Awaiting Invigilator Resume Signal)</span>
+            </div>
+            <p className="text-[11px] text-slate-500">
+              This sandbox will automatically unlock the moment the administrator or interviewer resumes your test.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ── FULLSCREEN PROMPT MODAL (Shown on start) ── */}
+      {showFullscreenPrompt && !isFullscreen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-6 animate-in fade-in duration-200">
+          <div className="max-w-md w-full p-7 rounded-2xl border border-blue-500/30 bg-[#0f121d] text-white text-center shadow-2xl space-y-4">
+            <div className="w-14 h-14 rounded-xl bg-blue-600/10 border border-blue-500/30 flex items-center justify-center mx-auto text-blue-400">
+              <Maximize2 size={28} />
+            </div>
+            <h2 className="text-lg font-bold">Enter Fullscreen Mode</h2>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              To maintain assessment integrity and prevent external distractions, this test requires fullscreen mode.
+            </p>
+            <div className="p-3 rounded-lg bg-blue-950/40 border border-blue-500/20 text-xs text-blue-300 text-left space-y-1">
+              <div className="flex items-center gap-1.5 font-semibold">
+                <ShieldAlert size={14} className="text-blue-400 flex-shrink-0" />
+                <span>Invigilation Rules Active:</span>
+              </div>
+              <ul className="text-[11px] opacity-80 list-disc pl-4 space-y-0.5">
+                <li>Exiting fullscreen will be logged on your telemetry.</li>
+                <li>Tab switching and window blur trigger integrity strikes.</li>
+                <li>Copy & paste is disabled; code must be written manually.</li>
+              </ul>
+            </div>
+            <button
+              onClick={enterFullscreen}
+              className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-blue-600/20 active:scale-95 flex items-center justify-center gap-2"
+            >
+              <Maximize2 size={15} />
+              <span>Launch Fullscreen IDE</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── TAB SWITCH WARNING MODAL (Triggered on tab change) ── */}
+      {showTabSwitchModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-150">
+          <div className="max-w-md w-full p-6 rounded-2xl border border-rose-500/40 bg-[#140b0f] text-white text-center shadow-2xl space-y-4">
+            <div className="w-14 h-14 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center mx-auto text-rose-500 animate-bounce">
+              <ShieldAlert size={30} />
+            </div>
+            <div>
+              <span className="text-[10px] uppercase font-bold tracking-widest text-rose-400 bg-rose-500/10 px-2.5 py-1 rounded-full border border-rose-500/20">
+                Security Integrity Alert
+              </span>
+              <h2 className="text-lg font-bold mt-2 text-rose-400">Tab Switch Detected!</h2>
+              <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                You switched tabs or minimized the assessment window. This violation has been recorded on your invigilator telemetry log.
+              </p>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-black/40 border border-rose-500/20 text-xs font-mono flex items-center justify-between text-slate-200">
+              <span className="opacity-70 font-sans">Recorded Tab Switches:</span>
+              <span className="text-rose-400 font-bold font-mono text-sm">Strike #{tabSwitchCount}</span>
+            </div>
+
+            <button
+              onClick={() => setShowTabSwitchModal(false)}
+              className="w-full py-2.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition-all shadow-md active:scale-95"
+            >
+              I Understand & Acknowledge
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── BLOCKED COPY/PASTE TOAST ── */}
+      {pasteBlockedToast && (
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-rose-600 text-white text-xs font-semibold shadow-2xl animate-in slide-in-from-top-3 duration-150 border border-rose-400">
+          <AlertTriangle size={15} className="flex-shrink-0" />
+          <span>{pasteBlockedToast}</span>
+        </div>
+      )}
+
       {/* ── TOP HEADER ── */}
       <header
         className={`min-h-[56px] flex flex-wrap md:flex-nowrap items-center justify-between gap-3 px-4 py-2 border-b flex-shrink-0 z-30 transition-colors ${
@@ -574,16 +911,42 @@ export default function DevTraceIDEPage() {
               isLight ? "bg-slate-50 border-slate-200 text-slate-700" : "bg-white/5 border-white/10 text-slate-300"
             }`}
           >
-            <div className="flex items-center gap-1.5 text-emerald-500 font-medium">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-semibold">Active</span>
+            <div className={`flex items-center gap-1.5 font-medium ${isPaused ? "text-amber-500" : "text-emerald-500"}`}>
+              <span className={`w-2 h-2 rounded-full ${isPaused ? "bg-amber-500" : "bg-emerald-500 animate-pulse"}`} />
+              <span className="text-xs font-semibold">{isPaused ? "Paused" : "Active"}</span>
             </div>
             <div className={`w-px h-3.5 ${isLight ? "bg-slate-300" : "bg-white/10"}`} />
             <div className="flex items-center gap-1.5">
               <Clock size={13} className="opacity-60" />
               <span className="font-mono font-bold text-xs md:text-sm">{fmtElapsed(elapsed)}</span>
             </div>
+            {tabSwitchCount > 0 && (
+              <>
+                <div className={`w-px h-3.5 ${isLight ? "bg-slate-300" : "bg-white/10"}`} />
+                <div className="flex items-center gap-1 text-rose-500 font-bold text-xs" title="Tab switch warnings logged">
+                  <ShieldAlert size={13} />
+                  <span>{tabSwitchCount} Strikes</span>
+                </div>
+              </>
+            )}
           </div>
+
+          {/* Fullscreen Toggle Button */}
+          <button
+            type="button"
+            onClick={enterFullscreen}
+            title={isFullscreen ? "Fullscreen active" : "Enter Fullscreen Mode"}
+            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-medium border transition-colors ${
+              isFullscreen
+                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500"
+                : isLight
+                ? "border-slate-300 hover:bg-slate-100 text-slate-700"
+                : "border-white/10 hover:bg-white/10 text-slate-300"
+            }`}
+          >
+            <Maximize2 size={13} />
+            <span className="hidden sm:inline">{isFullscreen ? "Fullscreen" : "Full Screen"}</span>
+          </button>
 
           {/* Problem Brief Button (Box Design) */}
           <button
@@ -640,7 +1003,8 @@ export default function DevTraceIDEPage() {
           {/* Finish Challenge Button (Box Design) */}
           <button
             onClick={handleSubmit}
-            className="flex items-center gap-1.5 text-xs md:text-sm px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-md font-semibold transition-all shadow-sm active:scale-95"
+            disabled={isPaused}
+            className="flex items-center gap-1.5 text-xs md:text-sm px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-md font-semibold transition-all shadow-sm active:scale-95 disabled:opacity-50"
           >
             <Trophy size={14} />
             <span>Finish</span>
@@ -667,6 +1031,7 @@ export default function DevTraceIDEPage() {
           activeFile={activeFile}
           onSelect={handleFileSelect}
           dirtyFiles={dirtyFiles}
+          repo={activeRepo}
         />
 
         <div className="flex-1 min-w-0 flex flex-col overflow-hidden relative">
@@ -678,6 +1043,7 @@ export default function DevTraceIDEPage() {
           >
             {activeRepo.fileOrder.map((file: string) => {
               const isActive = activeFile === file;
+              const isRo = isReadOnlyFile(file, activeRepo);
               return (
                 <button
                   key={file}
@@ -694,7 +1060,8 @@ export default function DevTraceIDEPage() {
                 >
                   {isActive && <div className="absolute top-0 left-0 right-0 h-0.5 bg-blue-500" />}
                   <span>{file}</span>
-                  {dirtyFiles.has(file) && <div className="w-2 h-2 rounded-full bg-amber-500" />}
+                  {isRo && <Lock size={11} className="opacity-50" />}
+                  {dirtyFiles.has(file) && !isRo && <div className="w-2 h-2 rounded-full bg-amber-500" />}
                 </button>
               );
             })}
@@ -704,7 +1071,8 @@ export default function DevTraceIDEPage() {
             <div className="px-3">
               <button
                 onClick={handleSave}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-md text-xs md:text-sm font-semibold transition-all shadow-sm ${
+                disabled={isPaused}
+                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-md text-xs md:text-sm font-semibold transition-all shadow-sm disabled:opacity-50 ${
                   isLight
                     ? "bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200"
                     : "bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20"
@@ -715,6 +1083,19 @@ export default function DevTraceIDEPage() {
               </button>
             </div>
           </div>
+
+          {/* READ-ONLY FILE WARNING BANNER */}
+          {isCurrentFileReadOnly && (
+            <div className="h-8 px-4 bg-amber-500/10 border-b border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs flex items-center justify-between font-medium flex-shrink-0">
+              <div className="flex items-center gap-2">
+                <Lock size={13} />
+                <span>Read-Only Specification / Test Suite ({activeFile}) — Protected against modification to ensure assessment integrity</span>
+              </div>
+              <span className="text-[10px] font-mono opacity-80 uppercase tracking-wider bg-amber-500/20 px-2 py-0.5 rounded border border-amber-500/30">
+                Locked
+              </span>
+            </div>
+          )}
 
           <div className="flex-1 min-w-0 flex overflow-hidden relative">
             {/* Monaco Editor Container */}
@@ -746,6 +1127,9 @@ export default function DevTraceIDEPage() {
                     smoothScrolling: true,
                     cursorBlinking: "smooth",
                     bracketPairColorization: { enabled: true },
+                    readOnly: isCurrentFileReadOnly || isPaused,
+                    contextmenu: false, // Disables right-click paste/copy menu
+                    copyWithSyntaxHighlighting: false,
                   }}
                 />
               )}
@@ -803,21 +1187,25 @@ export default function DevTraceIDEPage() {
                   <div className="space-y-1.5">
                     <div className="text-xs font-semibold opacity-70 uppercase tracking-wider">Repository Files</div>
                     <div className="flex flex-wrap gap-1.5">
-                      {activeRepo?.fileOrder?.map((file: string) => (
-                        <button
-                          key={file}
-                          onClick={() => handleFileSelect(file)}
-                          className={`px-2.5 py-1 rounded-md text-xs font-mono border transition-all ${
-                            activeFile === file
-                              ? "bg-sky-600 border-sky-500 text-white font-bold shadow-sm"
-                              : isLight
-                              ? "bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200"
-                              : "bg-black/30 border-white/10 text-slate-300 hover:bg-white/10"
-                          }`}
-                        >
-                          {file}
-                        </button>
-                      ))}
+                      {activeRepo?.fileOrder?.map((file: string) => {
+                        const isRo = isReadOnlyFile(file, activeRepo);
+                        return (
+                          <button
+                            key={file}
+                            onClick={() => handleFileSelect(file)}
+                            className={`px-2.5 py-1 rounded-md text-xs font-mono border transition-all flex items-center gap-1.5 ${
+                              activeFile === file
+                                ? "bg-sky-600 border-sky-500 text-white font-bold shadow-sm"
+                                : isLight
+                                ? "bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200"
+                                : "bg-black/30 border-white/10 text-slate-300 hover:bg-white/10"
+                            }`}
+                          >
+                            <span>{file}</span>
+                            {isRo && <Lock size={10} className="opacity-60" />}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
 
@@ -972,7 +1360,7 @@ export default function DevTraceIDEPage() {
                 onClick={() => setTermOpen(!termOpen)}
               >
                 <span className="text-xs uppercase font-bold tracking-wider opacity-70">
-                  Terminal & Test Output
+                  Terminal & Test Console
                 </span>
                 {termOpen ? <ChevronDown size={14} className="opacity-60" /> : <ChevronUp size={14} className="opacity-60" />}
               </div>
@@ -1140,7 +1528,7 @@ export default function DevTraceIDEPage() {
               </div>
               <h2 className="text-xl font-bold">Assessment Submitted!</h2>
               <p className="text-sm opacity-75 mt-1.5">
-                Your code submission has been recorded and submitted for evaluation.
+                Your code submission and telemetry stream have been securely recorded.
               </p>
             </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Terminal, Trash2, Sparkles } from "lucide-react";
 import { useThemeStore } from "@/store/themeStore";
 
@@ -31,6 +31,9 @@ export default function MockTerminal({ lines, onCommand, onClear, onExplainError
   const { theme } = useThemeStore();
   const isLight = theme === "light";
 
+  const [cmdHistory, setCmdHistory] = useState<string[]>([]);
+  const [historyIndex, setHistoryIndex] = useState<number>(-1);
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [lines]);
@@ -39,8 +42,29 @@ export default function MockTerminal({ lines, onCommand, onClear, onExplainError
     if (e.key === "Enter") {
       const cmd = e.currentTarget.value.trim();
       if (cmd) {
+        setCmdHistory((prev) => [...prev, cmd]);
+        setHistoryIndex(-1);
         onCommand?.(cmd);
         e.currentTarget.value = "";
+      }
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (cmdHistory.length === 0) return;
+      const nextIndex = historyIndex === -1 ? cmdHistory.length - 1 : Math.max(0, historyIndex - 1);
+      setHistoryIndex(nextIndex);
+      if (inputRef.current) {
+        inputRef.current.value = cmdHistory[nextIndex] || "";
+      }
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (historyIndex === -1) return;
+      const nextIndex = historyIndex + 1;
+      if (nextIndex >= cmdHistory.length) {
+        setHistoryIndex(-1);
+        if (inputRef.current) inputRef.current.value = "";
+      } else {
+        setHistoryIndex(nextIndex);
+        if (inputRef.current) inputRef.current.value = cmdHistory[nextIndex] || "";
       }
     }
   };

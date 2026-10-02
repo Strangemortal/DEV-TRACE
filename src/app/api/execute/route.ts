@@ -135,8 +135,18 @@ function simulateJavaOrderTests(files: Record<string, string> | undefined, code:
   }
 }
 
+import { getSession } from "@/lib/auth";
+
 export async function POST(req: NextRequest) {
   try {
+    const session = await getSession();
+    if (session && session.role === "candidate" && (session.active === false || session.status === "paused")) {
+      return NextResponse.json(
+        { error: "Assessment session is currently paused by the administrator." },
+        { status: 403 }
+      );
+    }
+
     const { code, language = "python", framework, files, activeFile } = await req.json();
 
     if (!code && !files) {

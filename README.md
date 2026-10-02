@@ -186,6 +186,27 @@ npm test
 - `GET /api/admin/telemetry` — Retrieve session telemetry logs
 - `POST /api/execute` — Execute code inside framework-isolated sandbox (Django, Python, C++, Java)
 
+## 🎪 Exhibition & Expo Features (v2.4)
+
+DEV-TRACE features a complete **Exhibition Showcase Deck** designed for hackathons, engineering symposiums, and live judging:
+1. **Public Exhibition Hub (`/`)**: 1-click launchers for Candidate IDE, Invigilator War Room, and Live Simulation without login friction.
+2. **Interactive Anti-Cheat Laboratory**: Hands-on typing playground allowing judges to simulate human typing vs. instant LLM paste bursts.
+3. **6-Axis Behavioral Biometrics Radar**: SVG radar chart displaying Keystroke Rhythm, Paste Integrity, Focus Retention, Iterative Testing, Socratic Autonomy, and Stability Velocity.
+4. **FAANG-Grade Executive Candidate Dossier**: Printable audit report with hiring recommendations (`STRONG HIRE`, `HIRE`, `LEAN NO`, `INTEGRITY RISK`), complexity matrix, and AI-tailored technical grilling questions.
+5. **Live Candidate Simulator**: 1-click injection of live telemetry sessions into `/admin/telemetry` (Scenario A: AI Copypaster caught in real-time; Scenario B: 10x Methodical Architect).
+
+---
+
+## 📊 Benchmark Datasets & Research Directory
+
+For complete documentation on the research datasets, download links, and ML feature extraction scripts used to benchmark DEV-TRACE, see:  
+👉 [**DATASETS.md**](file:///c:/Users/BharatBK/Documents/projectss/dev/DATASETS.md)
+
+- **Real-World SWE Benchmarks**: Princeton SWE-bench, Defects4J.
+- **AI Code vs. Human Benchmarks**: OpenAI HumanEval, Google MBPP, UC Berkeley APPS, DeepMind CodeContests, HumanEval-X.
+- **Code Plagiarism & IDE Telemetry**: PAN SOCO Corpus, ProgSnap2 Standard.
+- **Native Dataset**: Local multi-framework incident repositories in [`src/data/db.json`](file:///c:/Users/BharatBK/Documents/projectss/dev/src/data/db.json).
+
 ---
 
 ## 📄 License

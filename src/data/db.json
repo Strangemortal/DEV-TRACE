@@ -1,13 +1,34 @@
 {
   "candidates": [
     {
-      "id": "203b08b1-0b1a-43c8-a9c1-18f538c2523b",
-      "name": "bharat",
-      "userId": "bharat_50",
-      "passwordHash": "HWUORPzL",
-      "assignedRepoId": "ai-fastapi-mt9x8gde",
+      "id": "1b949d68-fdeb-4646-9d4b-b510911c83d2",
+      "name": "abhay",
+      "userId": "abhay_89",
+      "passwordHash": "9zhHrXyy",
+      "assignedRepoId": "django-orm-store",
       "active": true,
-      "createdAt": 1787738329634,
+      "createdAt": 1790357028295,
+      "createdBy": "admin"
+    },
+    {
+      "id": "98c43afc-2248-4c9a-a315-7a79c1762eed",
+      "name": "gaurav",
+      "userId": "gaurav_37",
+      "passwordHash": "kmdfbART",
+      "assignedRepoId": "django-orm-store",
+      "active": true,
+      "createdAt": 1790357060159,
+      "createdBy": "admin",
+      "status": "active"
+    },
+    {
+      "id": "ef4eb71b-1f97-46e4-82ac-f064968ed257",
+      "name": "bharattt",
+      "userId": "bharattt_13",
+      "passwordHash": "IkI4DaJH",
+      "assignedRepoId": "fastapi-async-crud",
+      "active": true,
+      "createdAt": 1790357578822,
       "createdBy": "admin"
     }
   ],
@@ -22,11 +43,56 @@
       "role": "admin",
       "expiresAt": 1787846296675
     },
-    "candidate_973ce43c-33c3-44b9-85e7-0abec9bc9442": {
-      "userId": "bharat_50",
+    "admin_c39aa81a-e104-4c49-b9ad-a37241ff8f9f": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1787848536901
+    },
+    "admin_8f708491-4915-4bdd-9bef-4f87dd2fe853": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1787907367387
+    },
+    "admin_6df51a63-708a-45b5-89af-caa9ee05a0a1": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1788689738737
+    },
+    "admin_ab1104b5-c0f8-4692-b22e-98e0320570b4": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1788974373364
+    },
+    "admin_992f9362-580f-4930-b119-dda4ae13bd5e": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1788974417887
+    },
+    "admin_5ee620d4-e857-45ed-a16d-783e55c4cdd2": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1789024246261
+    },
+    "admin_a479e4eb-5e53-434a-ab8b-d35e8c226f8e": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1789027539581
+    },
+    "admin_21f8c429-6c52-4569-a4b0-6a9a09cd9fea": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1790443357000
+    },
+    "admin_34962f73-0f29-40ca-bed9-9f72411b9d7e": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1790443360414
+    },
+    "candidate_b742d18c-2903-474d-9b33-529ca4681066": {
+      "userId": "bharattt_13",
       "role": "candidate",
-      "candidateId": "203b08b1-0b1a-43c8-a9c1-18f538c2523b",
-      "expiresAt": 1787846773409
+      "candidateId": "ef4eb71b-1f97-46e4-82ac-f064968ed257",
+      "expiresAt": 1790444024419
     }
   },
   "telemetry": [
@@ -1020,6 +1086,1922 @@
           "ts": "2026-08-26T10:01:07.625Z"
         }
       ]
+    },
+    {
+      "id": "ef7ee21c-5a38-404f-acaf-1ce77a5ea91d",
+      "candidateId": "da86a6fa-1c9b-4f59-8cbd-a13db147685a",
+      "candidateName": "likhith",
+      "repoId": "ai-spring-mtabg7q7",
+      "submittedAt": 1787762356948,
+      "sessionStart": 1787762098885,
+      "duration": 87,
+      "stability": 85,
+      "events": [
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-08-26T16:37:49.721Z"
+          },
+          "ts": "2026-08-26T16:37:49.721Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 0,
+            "timestamp": "2026-08-26T16:37:50.009Z"
+          },
+          "ts": "2026-08-26T16:37:50.009Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "models.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-08-26T16:37:57.321Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "views.py",
+            "previous_file": "models.py"
+          },
+          "ts": "2026-08-26T16:37:57.753Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "tests.py",
+            "previous_file": "views.py"
+          },
+          "ts": "2026-08-26T16:37:58.299Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "settings.py",
+            "previous_file": "tests.py"
+          },
+          "ts": "2026-08-26T16:37:58.809Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "manage.py",
+            "previous_file": "settings.py"
+          },
+          "ts": "2026-08-26T16:37:59.273Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "README.md",
+            "previous_file": "manage.py"
+          },
+          "ts": "2026-08-26T16:38:06.673Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "models.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-08-26T16:38:09.121Z"
+        },
+        {
+          "type": "AI_HINT_REQUESTED",
+          "meta": {
+            "level": 1,
+            "activeFile": "models.py"
+          },
+          "ts": "2026-08-26T16:38:17.339Z"
+        },
+        {
+          "type": "AI_HINT_REQUESTED",
+          "meta": {
+            "level": 1,
+            "activeFile": "models.py"
+          },
+          "ts": "2026-08-26T16:38:18.005Z"
+        },
+        {
+          "type": "AI_HINT_REQUESTED",
+          "meta": {
+            "level": 2,
+            "activeFile": "models.py"
+          },
+          "ts": "2026-08-26T16:38:19.850Z"
+        },
+        {
+          "type": "AI_HINT_REQUESTED",
+          "meta": {
+            "level": 3,
+            "activeFile": "models.py"
+          },
+          "ts": "2026-08-26T16:38:32.358Z"
+        },
+        {
+          "type": "AI_HINT_REQUESTED",
+          "meta": {
+            "level": 2,
+            "activeFile": "models.py"
+          },
+          "ts": "2026-08-26T16:38:34.296Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "Django test assertions failed. Check models and calculations."
+          },
+          "ts": "2026-08-26T16:38:49.116Z"
+        },
+        {
+          "type": "AI_EXPLAIN_ERROR",
+          "meta": {
+            "length": 3312
+          },
+          "ts": "2026-08-26T16:38:51.136Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "tests.py",
+            "previous_file": "models.py"
+          },
+          "ts": "2026-08-26T16:39:04.794Z"
+        }
+      ]
+    },
+    {
+      "id": "6d554aa3-c3cd-4802-94e7-f1bf40cefede",
+      "candidateId": "b2c44eb7-8588-49e3-9130-13d018d98549",
+      "candidateName": "akarsh",
+      "repoId": "cpp-array-reversal",
+      "submittedAt": 1787821061972,
+      "sessionStart": 1787821020855,
+      "duration": 40,
+      "stability": 75,
+      "events": [
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 0,
+            "timestamp": "2026-08-27T08:57:03.806Z"
+          },
+          "ts": "2026-08-27T08:57:03.806Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "main.cpp",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-08-27T08:57:09.051Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "README.md",
+            "previous_file": "main.cpp"
+          },
+          "ts": "2026-08-27T08:57:20.278Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-08-27T08:57:21.570Z"
+          },
+          "ts": "2026-08-27T08:57:21.570Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 3,
+            "timestamp": "2026-08-27T08:57:24.147Z"
+          },
+          "ts": "2026-08-27T08:57:24.147Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "main.cpp",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-08-27T08:57:26.299Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "Expected '5 4 3 2 1'."
+          },
+          "ts": "2026-08-27T08:57:33.146Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "Expected '5 4 3 2 1'."
+          },
+          "ts": "2026-08-27T08:57:36.512Z"
+        }
+      ]
+    },
+    {
+      "id": "6494c8ed-a71b-42a5-b776-be76119b06b2",
+      "candidateId": "56e61971-3ca4-4c1e-9173-7d483067cf12",
+      "candidateName": "chiru",
+      "repoId": "django-orm-store",
+      "submittedAt": 1787821135877,
+      "sessionStart": 1787821046097,
+      "duration": 85,
+      "stability": 90,
+      "events": [
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-08-27T08:57:28.037Z"
+          },
+          "ts": "2026-08-27T08:57:28.037Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 1,
+            "timestamp": "2026-08-27T08:57:29.154Z"
+          },
+          "ts": "2026-08-27T08:57:29.154Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-08-27T08:57:38.897Z"
+          },
+          "ts": "2026-08-27T08:57:38.897Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 4,
+            "timestamp": "2026-08-27T08:57:42.955Z"
+          },
+          "ts": "2026-08-27T08:57:42.955Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "tests.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-08-27T08:58:03.992Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "models.py",
+            "previous_file": "tests.py"
+          },
+          "ts": "2026-08-27T08:58:07.178Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "manage.py",
+            "previous_file": "models.py"
+          },
+          "ts": "2026-08-27T08:58:22.130Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "settings.py",
+            "previous_file": "manage.py"
+          },
+          "ts": "2026-08-27T08:58:23.572Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "tests.py",
+            "previous_file": "settings.py"
+          },
+          "ts": "2026-08-27T08:58:26.619Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "models.py",
+            "previous_file": "tests.py"
+          },
+          "ts": "2026-08-27T08:58:45.505Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "settings.py",
+            "previous_file": "models.py"
+          },
+          "ts": "2026-08-27T08:58:46.553Z"
+        }
+      ]
+    },
+    {
+      "id": "80564271-fb46-4ea4-86ec-772312c25696",
+      "candidateId": "95340dab-2f78-4b70-8919-72c852c29932",
+      "candidateName": "Chiru",
+      "repoId": "cpp-array-reversal",
+      "submittedAt": 1787821573688,
+      "sessionStart": 1787821348458,
+      "duration": 223,
+      "stability": 60,
+      "events": [
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-08-27T09:02:30.344Z"
+          },
+          "ts": "2026-08-27T09:02:30.344Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 0,
+            "timestamp": "2026-08-27T09:02:30.782Z"
+          },
+          "ts": "2026-08-27T09:02:30.782Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "main.cpp",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-08-27T09:02:32.922Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-08-27T09:02:58.416Z"
+          },
+          "ts": "2026-08-27T09:02:58.416Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 45,
+            "timestamp": "2026-08-27T09:03:43.143Z"
+          },
+          "ts": "2026-08-27T09:03:43.143Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-08-27T09:04:00.411Z"
+          },
+          "ts": "2026-08-27T09:04:00.411Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 1,
+            "timestamp": "2026-08-27T09:04:01.217Z"
+          },
+          "ts": "2026-08-27T09:04:01.217Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-08-27T09:04:02.056Z"
+          },
+          "ts": "2026-08-27T09:04:02.056Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 21,
+            "timestamp": "2026-08-27T09:04:22.889Z"
+          },
+          "ts": "2026-08-27T09:04:22.889Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "Expected '5 4 3 2 1'."
+          },
+          "ts": "2026-08-27T09:04:43.624Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-08-27T09:04:55.498Z"
+          },
+          "ts": "2026-08-27T09:04:55.498Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 1,
+            "timestamp": "2026-08-27T09:04:56.450Z"
+          },
+          "ts": "2026-08-27T09:04:56.450Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-08-27T09:04:58.509Z"
+          },
+          "ts": "2026-08-27T09:04:58.509Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 56,
+            "timestamp": "2026-08-27T09:05:54.679Z"
+          },
+          "ts": "2026-08-27T09:05:54.679Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": true,
+            "summary": "Perfect! Array reversed correctly."
+          },
+          "ts": "2026-08-27T09:06:08.047Z"
+        }
+      ]
+    },
+    {
+      "id": "3f16856b-ab8a-4f05-a71e-3f6011b4bb12",
+      "candidateId": "203b08b1-0b1a-43c8-a9c1-18f538c2523b",
+      "candidateName": "bharat",
+      "repoId": "ai-fastapi-mt9x8gde",
+      "submittedAt": 1788603406468,
+      "sessionStart": 1788603362918,
+      "duration": 42,
+      "stability": 80,
+      "events": [
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-05T10:16:04.755Z"
+          },
+          "ts": "2026-09-05T10:16:04.756Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 0,
+            "timestamp": "2026-09-05T10:16:05.184Z"
+          },
+          "ts": "2026-09-05T10:16:05.184Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-05T10:16:06.083Z"
+          },
+          "ts": "2026-09-05T10:16:06.083Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 10,
+            "timestamp": "2026-09-05T10:16:16.050Z"
+          },
+          "ts": "2026-09-05T10:16:16.050Z"
+        },
+        {
+          "type": "AI_HINT_REQUESTED",
+          "meta": {
+            "level": 1,
+            "activeFile": "models.py"
+          },
+          "ts": "2026-09-05T10:16:25.909Z"
+        },
+        {
+          "type": "AI_HINT_REQUESTED",
+          "meta": {
+            "level": 1,
+            "activeFile": "models.py"
+          },
+          "ts": "2026-09-05T10:16:25.918Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "Django test assertions failed. Check models and calculations."
+          },
+          "ts": "2026-09-05T10:16:35.533Z"
+        },
+        {
+          "type": "AI_EXPLAIN_ERROR",
+          "meta": {
+            "length": 3312
+          },
+          "ts": "2026-09-05T10:16:40.357Z"
+        }
+      ]
+    },
+    {
+      "id": "f647676c-31fe-471c-91a5-3305198394f9",
+      "candidateId": "9915e055-5e01-4ae3-8411-379b1aaefa8e",
+      "candidateName": "guuu",
+      "repoId": "django-orm-store",
+      "submittedAt": 1788888120254,
+      "sessionStart": 1788888118321,
+      "duration": 1,
+      "stability": 100,
+      "events": []
+    },
+    {
+      "id": "a7d56baf-43ac-4ce3-99fe-8f6f9adc9238",
+      "candidateId": "b8b067fb-d2c4-41dd-a05f-c877b5912a73",
+      "candidateName": "bbk",
+      "repoId": "python-challenge",
+      "submittedAt": 1788888871709,
+      "sessionStart": 1788888662770,
+      "duration": 208,
+      "stability": 10,
+      "events": [
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 0,
+            "timestamp": "2026-09-08T17:31:13.767Z"
+          },
+          "ts": "2026-09-08T17:31:13.767Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-08T17:31:14.616Z"
+          },
+          "ts": "2026-09-08T17:31:14.616Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 1,
+            "timestamp": "2026-09-08T17:31:15.364Z"
+          },
+          "ts": "2026-09-08T17:31:15.364Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-08T17:31:16.129Z"
+          },
+          "ts": "2026-09-08T17:31:16.129Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 1,
+            "timestamp": "2026-09-08T17:31:16.651Z"
+          },
+          "ts": "2026-09-08T17:31:16.651Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-08T17:31:17.674Z"
+          },
+          "ts": "2026-09-08T17:31:17.674Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 1,
+            "timestamp": "2026-09-08T17:31:18.299Z"
+          },
+          "ts": "2026-09-08T17:31:18.299Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "main.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-09-08T17:31:19.376Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "README.md",
+            "previous_file": "main.py"
+          },
+          "ts": "2026-09-08T17:31:20.535Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-08T17:31:23.265Z"
+          },
+          "ts": "2026-09-08T17:31:23.265Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 39,
+            "timestamp": "2026-09-08T17:32:01.841Z"
+          },
+          "ts": "2026-09-08T17:32:01.841Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-08T17:32:02.411Z"
+          },
+          "ts": "2026-09-08T17:32:02.411Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 34,
+            "timestamp": "2026-09-08T17:32:36.496Z"
+          },
+          "ts": "2026-09-08T17:32:36.496Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-08T17:32:38.137Z"
+          },
+          "ts": "2026-09-08T17:32:38.137Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 1,
+            "timestamp": "2026-09-08T17:32:39.252Z"
+          },
+          "ts": "2026-09-08T17:32:39.252Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "main.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-09-08T17:32:40.335Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "README.md",
+            "previous_file": "main.py"
+          },
+          "ts": "2026-09-08T17:32:41.303Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "main.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-09-08T17:32:41.735Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-08T17:32:55.185Z"
+          },
+          "ts": "2026-09-08T17:32:55.185Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 1,
+            "timestamp": "2026-09-08T17:32:55.825Z"
+          },
+          "ts": "2026-09-08T17:32:55.825Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-08T17:32:59.937Z"
+          },
+          "ts": "2026-09-08T17:32:59.937Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 0,
+            "timestamp": "2026-09-08T17:33:00.015Z"
+          },
+          "ts": "2026-09-08T17:33:00.015Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-08T17:33:01.274Z"
+          },
+          "ts": "2026-09-08T17:33:01.274Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 0,
+            "timestamp": "2026-09-08T17:33:01.343Z"
+          },
+          "ts": "2026-09-08T17:33:01.343Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "The output doesn't match the expected reversed strings."
+          },
+          "ts": "2026-09-08T17:33:02.840Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-08T17:33:23.425Z"
+          },
+          "ts": "2026-09-08T17:33:23.425Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 0,
+            "timestamp": "2026-09-08T17:33:23.464Z"
+          },
+          "ts": "2026-09-08T17:33:23.464Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-08T17:33:24.407Z"
+          },
+          "ts": "2026-09-08T17:33:24.407Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 3,
+            "timestamp": "2026-09-08T17:33:27.719Z"
+          },
+          "ts": "2026-09-08T17:33:27.719Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-08T17:33:29.457Z"
+          },
+          "ts": "2026-09-08T17:33:29.457Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 29,
+            "timestamp": "2026-09-08T17:33:58.272Z"
+          },
+          "ts": "2026-09-08T17:33:58.272Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-08T17:34:14.985Z"
+          },
+          "ts": "2026-09-08T17:34:14.985Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 2,
+            "timestamp": "2026-09-08T17:34:17.246Z"
+          },
+          "ts": "2026-09-08T17:34:17.246Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "file": "README.md",
+            "lines_pasted": 1,
+            "chars_pasted": 9,
+            "words_pasted": 5,
+            "content": "5 4 3 2 1",
+            "preview": "5 4 3 2 1",
+            "range": {
+              "startLine": 8,
+              "endLine": 8,
+              "startCol": 3,
+              "endCol": 12
+            }
+          },
+          "ts": "2026-09-08T17:34:21.110Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-08T17:34:22.218Z"
+          },
+          "ts": "2026-09-08T17:34:22.218Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 1,
+            "timestamp": "2026-09-08T17:34:23.380Z"
+          },
+          "ts": "2026-09-08T17:34:23.380Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "README.md",
+            "previous_file": "main.py"
+          },
+          "ts": "2026-09-08T17:34:24.655Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "main.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-09-08T17:34:25.255Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-08T17:34:25.978Z"
+          },
+          "ts": "2026-09-08T17:34:25.978Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 0,
+            "timestamp": "2026-09-08T17:34:26.043Z"
+          },
+          "ts": "2026-09-08T17:34:26.043Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "The output doesn't match the expected reversed strings."
+          },
+          "ts": "2026-09-08T17:34:27.864Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-08T17:34:29.704Z"
+          },
+          "ts": "2026-09-08T17:34:29.704Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 0,
+            "timestamp": "2026-09-08T17:34:29.879Z"
+          },
+          "ts": "2026-09-08T17:34:29.879Z"
+        }
+      ]
+    },
+    {
+      "id": "3f398cf8-d39b-40b7-9a37-6d6639d69287",
+      "candidateId": "032c4493-25fc-4eba-85bd-a3f4f06c53b2",
+      "candidateName": "akarsh",
+      "repoId": "flask-inventory-api",
+      "submittedAt": 1788941915375,
+      "sessionStart": 1788941561214,
+      "duration": 352,
+      "stability": 10,
+      "events": [
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true
+          },
+          "ts": "2026-09-09T08:13:34.217Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-09T08:13:36.060Z"
+          },
+          "ts": "2026-09-09T08:13:36.060Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 1,
+            "timestamp": "2026-09-09T08:13:36.189Z"
+          },
+          "ts": "2026-09-09T08:13:36.189Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 1,
+            "timestamp": "2026-09-09T08:13:36.195Z"
+          },
+          "ts": "2026-09-09T08:13:36.195Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 1,
+            "timestamp": "2026-09-09T08:13:36.913Z"
+          },
+          "ts": "2026-09-09T08:13:36.913Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "app.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-09-09T08:15:51.522Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "README.md",
+            "previous_file": "app.py"
+          },
+          "ts": "2026-09-09T08:15:54.714Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "test_app.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-09-09T08:15:56.387Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "app.py",
+            "previous_file": "test_app.py"
+          },
+          "ts": "2026-09-09T08:15:58.842Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+C",
+            "file": "app.py"
+          },
+          "ts": "2026-09-09T08:16:02.632Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "routes.py",
+            "previous_file": "app.py"
+          },
+          "ts": "2026-09-09T08:16:03.514Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+V",
+            "file": "routes.py"
+          },
+          "ts": "2026-09-09T08:16:05.256Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+V",
+            "file": "routes.py"
+          },
+          "ts": "2026-09-09T08:16:05.433Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "test_app.py",
+            "previous_file": "routes.py"
+          },
+          "ts": "2026-09-09T08:16:09.314Z"
+        },
+        {
+          "type": "AI_HINT_REQUESTED",
+          "meta": {
+            "level": 1,
+            "activeFile": "test_app.py"
+          },
+          "ts": "2026-09-09T08:16:17.033Z"
+        },
+        {
+          "type": "AI_HINT_REQUESTED",
+          "meta": {
+            "level": 1,
+            "activeFile": "test_app.py"
+          },
+          "ts": "2026-09-09T08:16:17.045Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-09T08:16:25.916Z"
+          },
+          "ts": "2026-09-09T08:16:25.916Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_EXITED",
+            "timestamp": "2026-09-09T08:16:25.932Z"
+          },
+          "ts": "2026-09-09T08:16:25.932Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 2,
+            "timestamp": "2026-09-09T08:16:25.981Z"
+          },
+          "ts": "2026-09-09T08:16:25.981Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 2,
+            "timestamp": "2026-09-09T08:16:25.981Z"
+          },
+          "ts": "2026-09-09T08:16:25.981Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 6,
+            "timestamp": "2026-09-09T08:16:32.306Z"
+          },
+          "ts": "2026-09-09T08:16:32.306Z"
+        },
+        {
+          "type": "AI_HINT_REQUESTED",
+          "meta": {
+            "level": 3,
+            "activeFile": "test_app.py"
+          },
+          "ts": "2026-09-09T08:17:00.451Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "Flask test assertions failed. Check stock depletion and status codes."
+          },
+          "ts": "2026-09-09T08:17:04.522Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-09T08:17:07.134Z"
+          },
+          "ts": "2026-09-09T08:17:07.134Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 3,
+            "timestamp": "2026-09-09T08:17:07.247Z"
+          },
+          "ts": "2026-09-09T08:17:07.247Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 3,
+            "timestamp": "2026-09-09T08:17:07.247Z"
+          },
+          "ts": "2026-09-09T08:17:07.247Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 1,
+            "timestamp": "2026-09-09T08:17:08.217Z"
+          },
+          "ts": "2026-09-09T08:17:08.217Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "Flask test assertions failed. Check stock depletion and status codes."
+          },
+          "ts": "2026-09-09T08:17:48.443Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "routes.py",
+            "previous_file": "test_app.py"
+          },
+          "ts": "2026-09-09T08:17:51.714Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "Flask test assertions failed. Check stock depletion and status codes."
+          },
+          "ts": "2026-09-09T08:17:53.663Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "Flask test assertions failed. Check stock depletion and status codes."
+          },
+          "ts": "2026-09-09T08:18:26.502Z"
+        }
+      ]
+    },
+    {
+      "id": "e4fd3be0-1aaf-4465-8800-8f1996bc40d6",
+      "candidateId": "6dee7c9b-c474-4414-b6ff-0f2d45676479",
+      "candidateName": "chirnjeevi",
+      "repoId": "django-orm-store",
+      "submittedAt": 1788941984785,
+      "sessionStart": 1788941788738,
+      "duration": 149,
+      "stability": 45,
+      "events": [
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true
+          },
+          "ts": "2026-09-09T08:17:02.741Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "models.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-09-09T08:18:55.142Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+C",
+            "file": "models.py"
+          },
+          "ts": "2026-09-09T08:18:57.223Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+V",
+            "file": "models.py"
+          },
+          "ts": "2026-09-09T08:18:57.677Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+V",
+            "file": "models.py"
+          },
+          "ts": "2026-09-09T08:18:57.860Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-09T08:18:58.629Z"
+          },
+          "ts": "2026-09-09T08:18:58.629Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 1,
+            "timestamp": "2026-09-09T08:18:58.804Z"
+          },
+          "ts": "2026-09-09T08:18:58.804Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 1,
+            "timestamp": "2026-09-09T08:18:58.805Z"
+          },
+          "ts": "2026-09-09T08:18:58.805Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 1,
+            "timestamp": "2026-09-09T08:18:59.327Z"
+          },
+          "ts": "2026-09-09T08:18:59.327Z"
+        }
+      ]
+    },
+    {
+      "id": "c20d2780-e90e-41b1-af5a-39784f5f5f62",
+      "candidateId": "6dee7c9b-c474-4414-b6ff-0f2d45676479",
+      "candidateName": "chirnjeevi",
+      "repoId": "django-orm-store",
+      "submittedAt": 1788941995035,
+      "sessionStart": 1788941788738,
+      "duration": 158,
+      "stability": 45,
+      "events": [
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true
+          },
+          "ts": "2026-09-09T08:17:02.741Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "models.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-09-09T08:18:55.142Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+C",
+            "file": "models.py"
+          },
+          "ts": "2026-09-09T08:18:57.223Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+V",
+            "file": "models.py"
+          },
+          "ts": "2026-09-09T08:18:57.677Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+V",
+            "file": "models.py"
+          },
+          "ts": "2026-09-09T08:18:57.860Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-09T08:18:58.629Z"
+          },
+          "ts": "2026-09-09T08:18:58.629Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 1,
+            "timestamp": "2026-09-09T08:18:58.804Z"
+          },
+          "ts": "2026-09-09T08:18:58.804Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 1,
+            "timestamp": "2026-09-09T08:18:58.805Z"
+          },
+          "ts": "2026-09-09T08:18:58.805Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 1,
+            "timestamp": "2026-09-09T08:18:59.327Z"
+          },
+          "ts": "2026-09-09T08:18:59.327Z"
+        }
+      ]
+    },
+    {
+      "id": "7e355ef8-31bc-4802-bf2a-55a6271886c3",
+      "candidateId": "fd3b564b-3510-4157-8376-68b4a045d108",
+      "candidateName": "amit",
+      "repoId": "spring-boot-order-service",
+      "submittedAt": 1788942017994,
+      "sessionStart": 1788941533594,
+      "duration": 375,
+      "stability": 10,
+      "events": [
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-09T08:12:16.924Z"
+          },
+          "ts": "2026-09-09T08:12:16.924Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true
+          },
+          "ts": "2026-09-09T08:12:18.672Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_EXITED",
+            "timestamp": "2026-09-09T08:12:21.835Z"
+          },
+          "ts": "2026-09-09T08:12:21.835Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "OrderService.java",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-09-09T08:12:29.293Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-09T08:12:38.224Z"
+          },
+          "ts": "2026-09-09T08:12:38.224Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 1,
+            "timestamp": "2026-09-09T08:12:38.302Z"
+          },
+          "ts": "2026-09-09T08:12:38.302Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 1,
+            "timestamp": "2026-09-09T08:12:38.308Z"
+          },
+          "ts": "2026-09-09T08:12:38.308Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 173,
+            "timestamp": "2026-09-09T08:15:31.362Z"
+          },
+          "ts": "2026-09-09T08:15:31.362Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+V",
+            "file": "OrderService.java"
+          },
+          "ts": "2026-09-09T08:19:30.888Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+C",
+            "file": "OrderService.java"
+          },
+          "ts": "2026-09-09T08:19:32.313Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+C",
+            "file": "OrderService.java"
+          },
+          "ts": "2026-09-09T08:19:32.620Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+V",
+            "file": "OrderService.java"
+          },
+          "ts": "2026-09-09T08:19:33.231Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+V",
+            "file": "OrderService.java"
+          },
+          "ts": "2026-09-09T08:19:33.520Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+V",
+            "file": "OrderService.java"
+          },
+          "ts": "2026-09-09T08:19:33.801Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+V",
+            "file": "OrderService.java"
+          },
+          "ts": "2026-09-09T08:19:34.037Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+C",
+            "file": "OrderService.java"
+          },
+          "ts": "2026-09-09T08:19:34.580Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+C",
+            "file": "OrderService.java"
+          },
+          "ts": "2026-09-09T08:19:34.815Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+C",
+            "file": "OrderService.java"
+          },
+          "ts": "2026-09-09T08:19:35.082Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+V",
+            "file": "OrderService.java"
+          },
+          "ts": "2026-09-09T08:19:37.741Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+V",
+            "file": "OrderService.java"
+          },
+          "ts": "2026-09-09T08:19:38.365Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-09T08:19:43.780Z"
+          },
+          "ts": "2026-09-09T08:19:43.780Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 2,
+            "timestamp": "2026-09-09T08:19:43.835Z"
+          },
+          "ts": "2026-09-09T08:19:43.835Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 2,
+            "timestamp": "2026-09-09T08:19:43.836Z"
+          },
+          "ts": "2026-09-09T08:19:43.836Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-09T08:19:44.602Z"
+          },
+          "ts": "2026-09-09T08:19:44.602Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 1,
+            "timestamp": "2026-09-09T08:19:45.554Z"
+          },
+          "ts": "2026-09-09T08:19:45.554Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 3,
+            "timestamp": "2026-09-09T08:19:45.600Z"
+          },
+          "ts": "2026-09-09T08:19:45.600Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 3,
+            "timestamp": "2026-09-09T08:19:45.600Z"
+          },
+          "ts": "2026-09-09T08:19:45.600Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 1,
+            "timestamp": "2026-09-09T08:19:46.332Z"
+          },
+          "ts": "2026-09-09T08:19:46.332Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 4,
+            "timestamp": "2026-09-09T08:19:47.230Z"
+          },
+          "ts": "2026-09-09T08:19:47.230Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 4,
+            "timestamp": "2026-09-09T08:19:47.230Z"
+          },
+          "ts": "2026-09-09T08:19:47.230Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-09T08:19:47.981Z"
+          },
+          "ts": "2026-09-09T08:19:47.981Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 0,
+            "timestamp": "2026-09-09T08:19:48.021Z"
+          },
+          "ts": "2026-09-09T08:19:48.024Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 5,
+            "timestamp": "2026-09-09T08:19:48.131Z"
+          },
+          "ts": "2026-09-09T08:19:48.131Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 5,
+            "timestamp": "2026-09-09T08:19:48.131Z"
+          },
+          "ts": "2026-09-09T08:19:48.131Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 0,
+            "timestamp": "2026-09-09T08:19:48.162Z"
+          },
+          "ts": "2026-09-09T08:19:48.162Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 6,
+            "timestamp": "2026-09-09T08:19:50.884Z"
+          },
+          "ts": "2026-09-09T08:19:50.884Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 6,
+            "timestamp": "2026-09-09T08:19:50.884Z"
+          },
+          "ts": "2026-09-09T08:19:50.884Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 3,
+            "timestamp": "2026-09-09T08:19:53.703Z"
+          },
+          "ts": "2026-09-09T08:19:53.703Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true
+          },
+          "ts": "2026-09-09T08:20:10.159Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_EXITED",
+            "timestamp": "2026-09-09T08:20:12.362Z"
+          },
+          "ts": "2026-09-09T08:20:12.362Z"
+        }
+      ]
+    },
+    {
+      "id": "8889a649-4514-415d-8cbf-2fd910f9d344",
+      "candidateId": "98c43afc-2248-4c9a-a315-7a79c1762eed",
+      "candidateName": "gaurav",
+      "repoId": "django-orm-store",
+      "submittedAt": 1790357311077,
+      "sessionStart": 1790357131823,
+      "duration": 175,
+      "stability": 10,
+      "events": [
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true
+          },
+          "ts": "2026-09-25T17:25:34.553Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_EXITED",
+            "timestamp": "2026-09-25T17:25:38.035Z"
+          },
+          "ts": "2026-09-25T17:25:38.035Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "models.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-09-25T17:25:41.754Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "README.md",
+            "previous_file": "models.py"
+          },
+          "ts": "2026-09-25T17:25:43.370Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "models.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-09-25T17:25:46.874Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "README.md",
+            "previous_file": "models.py"
+          },
+          "ts": "2026-09-25T17:25:48.354Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+C",
+            "file": "README.md"
+          },
+          "ts": "2026-09-25T17:25:50.116Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+C",
+            "file": "README.md"
+          },
+          "ts": "2026-09-25T17:25:50.284Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-25T17:25:52.820Z"
+          },
+          "ts": "2026-09-25T17:25:52.820Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 1,
+            "timestamp": "2026-09-25T17:25:52.841Z"
+          },
+          "ts": "2026-09-25T17:25:52.841Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 11,
+            "timestamp": "2026-09-25T17:26:04.089Z"
+          },
+          "ts": "2026-09-25T17:26:04.090Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "models.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-09-25T17:26:11.067Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-25T17:26:24.820Z"
+          },
+          "ts": "2026-09-25T17:26:24.820Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "views.py",
+            "previous_file": "models.py"
+          },
+          "ts": "2026-09-25T17:26:27.420Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "models.py",
+            "previous_file": "views.py"
+          },
+          "ts": "2026-09-25T17:26:28.059Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-25T17:26:49.286Z"
+          },
+          "ts": "2026-09-25T17:26:49.286Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "Django test assertions failed. Check models and calculations."
+          },
+          "ts": "2026-09-25T17:26:54.537Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "Django test assertions failed. Check models and calculations."
+          },
+          "ts": "2026-09-25T17:27:08.974Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "views.py",
+            "previous_file": "models.py"
+          },
+          "ts": "2026-09-25T17:27:17.518Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-25T17:27:31.495Z"
+          },
+          "ts": "2026-09-25T17:27:31.495Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 2,
+            "timestamp": "2026-09-25T17:27:31.525Z"
+          },
+          "ts": "2026-09-25T17:27:31.525Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 0,
+            "timestamp": "2026-09-25T17:27:31.890Z"
+          },
+          "ts": "2026-09-25T17:27:31.890Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-25T17:27:37.855Z"
+          },
+          "ts": "2026-09-25T17:27:37.855Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-25T17:27:42.056Z"
+          },
+          "ts": "2026-09-25T17:27:42.056Z"
+        }
+      ]
+    },
+    {
+      "id": "ab631afb-bc7e-4443-a808-eadc74873dd6",
+      "candidateId": "1b949d68-fdeb-4646-9d4b-b510911c83d2",
+      "candidateName": "abhay",
+      "repoId": "django-orm-store",
+      "submittedAt": 1790357320238,
+      "sessionStart": 1790357243030,
+      "duration": 75,
+      "stability": 70,
+      "events": [
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true
+          },
+          "ts": "2026-09-25T17:27:25.282Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-25T17:27:42.193Z"
+          },
+          "ts": "2026-09-25T17:27:42.193Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-25T17:28:06.196Z"
+          },
+          "ts": "2026-09-25T17:28:06.196Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 1,
+            "timestamp": "2026-09-25T17:28:06.607Z"
+          },
+          "ts": "2026-09-25T17:28:06.607Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 3,
+            "timestamp": "2026-09-25T17:28:09.824Z"
+          },
+          "ts": "2026-09-25T17:28:09.824Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-25T17:28:16.175Z"
+          },
+          "ts": "2026-09-25T17:28:16.175Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "views.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-09-25T17:28:30.105Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_EXITED",
+            "timestamp": "2026-09-25T17:28:34.338Z"
+          },
+          "ts": "2026-09-25T17:28:34.338Z"
+        }
+      ]
     }
   ],
   "interviewers": [],
@@ -1062,6 +3044,316 @@
           "content": "import time\nfrom limiter import TokenBucket\n\ndef run_tests():\n    # Test 1: Initial capacity burst\n    tb = TokenBucket(capacity=5, refill_rate=1.0)\n    for _ in range(5):\n        assert tb.consume(1) is True, \"Should allow up to capacity\"\n\n    # Test 2: Reject when empty\n    assert tb.consume(1) is False, \"Should reject when tokens exhausted\"\n\n    # Test 3: Replenishment over time\n    time.sleep(1.1)\n    assert tb.consume(1) is True, \"Should replenish at least 1 token after 1.1 seconds\"\n\n    print(\"ALL FASTAPI RATE LIMITER TESTS PASSED (OK)\")\n\nif __name__ == \"__main__\":\n    run_tests()\n"
         }
       }
+    },
+    {
+      "id": "ai-spring-mtabg7q7",
+      "name": "SPRING: make calculator with some minor ",
+      "category": "python",
+      "framework": "spring",
+      "environmentLabel": "SPRING High-Availability Sandbox",
+      "testCommand": "npm test",
+      "difficulty": "advanced",
+      "estimatedTime": "25m",
+      "activeFile": "README.md",
+      "fileOrder": [
+        "README.md",
+        "service.js",
+        "tests.js"
+      ],
+      "files": {
+        "README.md": {
+          "name": "README.md",
+          "language": "markdown",
+          "content": "# 🚨 make calculator with some minor issues\n\n## 📌 Context\nDuring microservice stress testing, unexpected state anomalies and boundary errors were detected in the transactional pipeline.\n\n## 🎯 Acceptance Criteria\n1. Fix the calculation and boundary validation logic in `service.js`.\n2. Ensure idempotent handling of duplicate events.\n3. Pass all automated test assertions.\n"
+        },
+        "service.js": {
+          "name": "service.js",
+          "language": "javascript",
+          "content": "class TransactionService {\n  constructor() {\n    this.processedKeys = new Set();\n  }\n\n  processTransaction(idempotencyKey, amount) {\n    // BUG: Missing idempotency check and boundary validation\n    if (amount <= 0) {\n      return { success: false, error: \"Invalid amount\" };\n    }\n    this.processedKeys.add(idempotencyKey);\n    return { success: true, processedAmount: amount };\n  }\n}\n\nmodule.exports = { TransactionService };\n"
+        },
+        "tests.js": {
+          "name": "tests.js",
+          "language": "javascript",
+          "content": "const { TransactionService } = require('./service');\nconst assert = require('assert');\n\nconst svc = new TransactionService();\nconst res1 = svc.processTransaction(\"tx-1\", 100);\nassert.strictEqual(res1.success, true);\n\nconst res2 = svc.processTransaction(\"tx-1\", 100);\nassert.strictEqual(res2.success, false, \"Duplicate key must be rejected\");\n\nconsole.log(\"ALL TESTS PASSED (OK)\");\n"
+        }
+      }
     }
-  ]
+  ],
+  "liveTelemetry": {
+    "fd3b564b-3510-4157-8376-68b4a045d108": {
+      "candidateId": "fd3b564b-3510-4157-8376-68b4a045d108",
+      "candidateName": "amit",
+      "repoId": "spring-boot-order-service",
+      "lastActive": 1788941732238,
+      "stability": 10,
+      "duration": 375,
+      "activeFile": "OrderService.java",
+      "eventCount": 8,
+      "tabSwitches": 1,
+      "recentEvents": [
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-09T08:12:16.924Z"
+          },
+          "ts": "2026-09-09T08:12:16.924Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true
+          },
+          "ts": "2026-09-09T08:12:18.672Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_EXITED",
+            "timestamp": "2026-09-09T08:12:21.835Z"
+          },
+          "ts": "2026-09-09T08:12:21.835Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "OrderService.java",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-09-09T08:12:29.293Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-09T08:12:38.224Z"
+          },
+          "ts": "2026-09-09T08:12:38.224Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 1,
+            "timestamp": "2026-09-09T08:12:38.302Z"
+          },
+          "ts": "2026-09-09T08:12:38.302Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 1,
+            "timestamp": "2026-09-09T08:12:38.308Z"
+          },
+          "ts": "2026-09-09T08:12:38.308Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 173,
+            "timestamp": "2026-09-09T08:15:31.362Z"
+          },
+          "ts": "2026-09-09T08:15:31.362Z"
+        }
+      ],
+      "status": "completed"
+    },
+    "sim-alex-mercer": {
+      "candidateId": "sim-alex-mercer",
+      "candidateName": "Alex Mercer (Simulation: LLM Ingestion)",
+      "repoId": "django-orm-store",
+      "lastActive": 1790357556682,
+      "stability": 52,
+      "duration": 195,
+      "activeFile": "store/services/order_service.py",
+      "eventCount": 42,
+      "tabSwitches": 3,
+      "status": "active",
+      "recentEvents": [
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "store/services/order_service.py"
+          },
+          "ts": "2026-09-25T17:30:36.682Z"
+        },
+        {
+          "type": "KEYSTROKE_BATCH",
+          "meta": {
+            "added": 18,
+            "deleted": 2
+          },
+          "ts": "2026-09-25T17:31:06.682Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "window_blur",
+            "durationSec": 14
+          },
+          "ts": "2026-09-25T17:31:36.682Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "pasted_length": 245,
+            "durationMs": 14,
+            "file": "store/services/order_service.py",
+            "suspicion": "High LLM Ingestion Pattern"
+          },
+          "ts": "2026-09-25T17:31:51.682Z"
+        },
+        {
+          "type": "EXECUTION_RUN",
+          "meta": {
+            "command": "python manage.py test",
+            "passed": false
+          },
+          "ts": "2026-09-25T17:32:16.682Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "target": "external_browser"
+          },
+          "ts": "2026-09-25T17:32:28.682Z"
+        }
+      ]
+    },
+    "sim-sarah-chen": {
+      "candidateId": "sim-sarah-chen",
+      "candidateName": "Sarah Chen (Simulation: 10x Architect)",
+      "repoId": "python-challenge",
+      "lastActive": 1790357681314,
+      "stability": 98,
+      "duration": 240,
+      "activeFile": "solution.py",
+      "eventCount": 168,
+      "tabSwitches": 0,
+      "status": "active",
+      "recentEvents": [
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "solution.py"
+          },
+          "ts": "2026-09-25T17:31:21.314Z"
+        },
+        {
+          "type": "KEYSTROKE_BATCH",
+          "meta": {
+            "added": 45,
+            "deleted": 8
+          },
+          "ts": "2026-09-25T17:32:21.314Z"
+        },
+        {
+          "type": "EXECUTION_RUN",
+          "meta": {
+            "command": "pytest",
+            "passed": false,
+            "failedTests": 2
+          },
+          "ts": "2026-09-25T17:33:11.314Z"
+        },
+        {
+          "type": "KEYSTROKE_BATCH",
+          "meta": {
+            "added": 32,
+            "deleted": 5
+          },
+          "ts": "2026-09-25T17:33:51.314Z"
+        },
+        {
+          "type": "EXECUTION_RUN",
+          "meta": {
+            "command": "pytest",
+            "passed": true,
+            "passedTests": 5
+          },
+          "ts": "2026-09-25T17:34:26.314Z"
+        }
+      ]
+    },
+    "ef4eb71b-1f97-46e4-82ac-f064968ed257": {
+      "candidateId": "ef4eb71b-1f97-46e4-82ac-f064968ed257",
+      "candidateName": "bharattt",
+      "repoId": "fastapi-async-crud",
+      "lastActive": 1790358394725,
+      "stability": 50,
+      "duration": 350,
+      "activeFile": "main.py",
+      "eventCount": 9,
+      "tabSwitches": 1,
+      "recentEvents": [
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true
+          },
+          "ts": "2026-09-25T17:33:45.536Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_EXITED",
+            "timestamp": "2026-09-25T17:33:46.989Z"
+          },
+          "ts": "2026-09-25T17:33:46.989Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "main.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-09-25T17:33:53.503Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-25T17:34:41.062Z"
+          },
+          "ts": "2026-09-25T17:34:41.062Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "FastAPI tests failed. Check Pydantic validation and 404 status."
+          },
+          "ts": "2026-09-25T17:36:03.309Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-25T17:36:05.005Z"
+          },
+          "ts": "2026-09-25T17:36:05.005Z"
+        },
+        {
+          "type": "PASTE_DETECTED",
+          "meta": {
+            "blocked": true,
+            "shortcut": "Ctrl+V",
+            "file": "main.py"
+          },
+          "ts": "2026-09-25T17:37:30.766Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-09-25T17:37:32.513Z"
+          },
+          "ts": "2026-09-25T17:37:32.513Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 1,
+            "timestamp": "2026-09-25T17:38:27.310Z"
+          },
+          "ts": "2026-09-25T17:38:27.310Z"
+        }
+      ],
+      "status": "active"
+    }
+  }
 }

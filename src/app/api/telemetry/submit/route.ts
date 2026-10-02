@@ -34,6 +34,13 @@ export async function POST(req: NextRequest) {
     };
 
     db.telemetry.push(newRecord);
+
+    if (db.liveTelemetry && session.candidateId && db.liveTelemetry[session.candidateId]) {
+      db.liveTelemetry[session.candidateId].status = "completed";
+      db.liveTelemetry[session.candidateId].stability = newRecord.stability;
+      db.liveTelemetry[session.candidateId].duration = newRecord.duration;
+    }
+
     await writeDb(db);
 
     return NextResponse.json({ success: true, message: "Session results recorded successfully." });

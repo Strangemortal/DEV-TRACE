@@ -7,9 +7,10 @@ export interface Candidate {
   id: string;
   name: string;
   userId: string;
-  passwordHash: string; // we will just store plaintext password as requested or hash if simple, let's keep it simple or plaintext
+  passwordHash: string; // plain text for direct admin visibility & candidate login
   assignedRepoId: string;
   active: boolean;
+  status?: "active" | "paused" | "completed";
   createdAt: number;
   createdBy?: string; // "admin" or interviewer username
 }
@@ -26,6 +27,7 @@ export interface Session {
   userId: string;
   role: "admin" | "candidate" | "interviewer";
   candidateId?: string;
+  status?: "active" | "paused" | "completed";
   expiresAt: number;
 }
 
@@ -41,11 +43,26 @@ export interface TelemetryRecord {
   events: any[];
 }
 
+export interface LiveTelemetryState {
+  candidateId: string;
+  candidateName: string;
+  repoId: string;
+  lastActive: number;
+  stability: number;
+  duration: number;
+  activeFile: string;
+  eventCount: number;
+  tabSwitches: number;
+  recentEvents: any[];
+  status: "active" | "paused" | "completed";
+}
+
 export interface DatabaseSchema {
   candidates: Candidate[];
   interviewers: Interviewer[];
   sessions: Record<string, Session>;
   telemetry: TelemetryRecord[];
+  liveTelemetry?: Record<string, LiveTelemetryState>;
   customChallenges?: any[];
 }
 
@@ -70,6 +87,9 @@ export async function readDb(): Promise<DatabaseSchema> {
   const data = JSON.parse(content);
   if (!data.interviewers) {
     data.interviewers = [];
+  }
+  if (!data.liveTelemetry) {
+    data.liveTelemetry = {};
   }
   return data;
 }

@@ -4,6 +4,7 @@ export interface FileData {
   name: string;
   language: string;
   content: string;
+  readOnly?: boolean;
 }
 
 export interface ExecutionResult {
@@ -22,9 +23,37 @@ export interface Repository {
   estimatedTime: string;
   activeFile: string;
   fileOrder: string[];
+  readOnlyFiles?: string[];
   files: Record<string, FileData>;
   validateSave: (filename: string, src: string, ts: string) => TerminalLine[];
   checkExecution?: (stdout: string, stderr: string) => ExecutionResult;
+}
+
+export function isReadOnlyFile(filename: string, repo?: any): boolean {
+  if (!filename) return false;
+  if (filename === "README.md" || filename.endsWith(".md")) return true;
+  if (repo?.readOnlyFiles && Array.isArray(repo.readOnlyFiles) && repo.readOnlyFiles.includes(filename)) return true;
+  if (repo?.files?.[filename]?.readOnly) return true;
+  
+  // Read-only test files and runner infrastructure
+  const lower = filename.toLowerCase();
+  if (
+    lower.startsWith("test_") ||
+    lower.endsWith("_test.py") ||
+    lower.endsWith(".test.ts") ||
+    lower.endsWith(".test.js") ||
+    lower === "tests.py" ||
+    lower === "test.js" ||
+    lower === "test_actions.js" ||
+    lower === "test_main.py" ||
+    lower === "test_app.py" ||
+    lower === "orderapplicationtests.java" ||
+    lower === "manage.py" ||
+    lower === "settings.py"
+  ) {
+    return true;
+  }
+  return false;
 }
 
 export const REPOSITORIES: Repository[] = [
