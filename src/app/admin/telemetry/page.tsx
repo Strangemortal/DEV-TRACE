@@ -689,19 +689,24 @@ function TelemetryDashboardContent() {
 
                     {/* Fullscreen & Tab Switches */}
                     <div className={`p-4 rounded-xl border ${isLight ? "bg-slate-50 border-slate-200" : "bg-black/20 border-white/10"}`}>
-                      <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">Tab Switch Warnings</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">Security Integrity Strikes</span>
                       <div className="flex items-center gap-2 mt-1.5">
                         <ShieldAlert
                           size={18}
-                          className={(selectedLiveSession.tabSwitches || 0) > 0 ? "text-rose-500" : "text-emerald-500"}
+                          className={((selectedLiveSession.tabSwitches || 0) + (selectedLiveSession.fullscreenEscapes || 0)) > 0 ? "text-rose-500" : "text-emerald-500"}
                         />
                         <span
                           className={`text-lg font-black ${
-                            (selectedLiveSession.tabSwitches || 0) > 0 ? "text-rose-500" : "text-emerald-500"
+                            ((selectedLiveSession.tabSwitches || 0) + (selectedLiveSession.fullscreenEscapes || 0)) > 0 ? "text-rose-500" : "text-emerald-500"
                           }`}
                         >
-                          {selectedLiveSession.tabSwitches || 0} strikes
+                          {(selectedLiveSession.tabSwitches || 0) + (selectedLiveSession.fullscreenEscapes || 0)} strikes
                         </span>
+                      </div>
+                      <div className="text-[10px] opacity-70 mt-1 flex items-center gap-2 font-mono">
+                        <span>Tabs: {selectedLiveSession.tabSwitches || 0}</span>
+                        <span>•</span>
+                        <span>FS Escapes: {selectedLiveSession.fullscreenEscapes || 0}</span>
                       </div>
                     </div>
 

@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { stability, duration, activeFile, eventCount, tabSwitches, recentEvents } = body;
+    const { stability, duration, activeFile, eventCount, tabSwitches, fullscreenEscapes, recentEvents } = body;
 
     const db = await readDb();
     if (!db.liveTelemetry) {
@@ -67,6 +67,7 @@ export async function POST(req: NextRequest) {
       activeFile: activeFile || "README.md",
       eventCount: typeof eventCount === "number" ? eventCount : 0,
       tabSwitches: typeof tabSwitches === "number" ? tabSwitches : 0,
+      fullscreenEscapes: typeof fullscreenEscapes === "number" ? fullscreenEscapes : 0,
       recentEvents: Array.isArray(recentEvents) ? recentEvents.slice(-20) : [],
       status: isCandidateActive ? "active" : "paused",
     };

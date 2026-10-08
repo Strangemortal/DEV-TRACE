@@ -1,6 +1,17 @@
 {
   "candidates": [
     {
+      "id": "11ea1bf2-755a-49b6-8e65-0d0d86c2b4c7",
+      "name": "Demo Candidate (Exhibition)",
+      "userId": "demo_candidate",
+      "passwordHash": "demo123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791448416250,
+      "createdBy": "admin"
+    },
+    {
       "id": "1b949d68-fdeb-4646-9d4b-b510911c83d2",
       "name": "abhay",
       "userId": "abhay_89",
@@ -29,6 +40,556 @@
       "assignedRepoId": "fastapi-async-crud",
       "active": true,
       "createdAt": 1790357578822,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_001",
+      "name": "Aarav Sharma",
+      "userId": "user_001",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_002",
+      "name": "Priya Patel",
+      "userId": "user_002",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_003",
+      "name": "Vikram Malhotra",
+      "userId": "user_003",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_004",
+      "name": "Ananya Iyer",
+      "userId": "user_004",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_005",
+      "name": "Rohan Verma",
+      "userId": "user_005",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_006",
+      "name": "Sneha Nair",
+      "userId": "user_006",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_007",
+      "name": "Karthik Reddy",
+      "userId": "user_007",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_008",
+      "name": "Meera Joshi",
+      "userId": "user_008",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_009",
+      "name": "Aditya Roy",
+      "userId": "user_009",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_010",
+      "name": "Pooja Hegde",
+      "userId": "user_010",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_011",
+      "name": "Siddharth Rao",
+      "userId": "user_011",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_012",
+      "name": "Divya Kapoor",
+      "userId": "user_012",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_013",
+      "name": "Rahul Deshmukh",
+      "userId": "user_013",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_014",
+      "name": "Tanvi Saxena",
+      "userId": "user_014",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_015",
+      "name": "Varun Gupta",
+      "userId": "user_015",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_016",
+      "name": "Neha Kulkarni",
+      "userId": "user_016",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_017",
+      "name": "Gaurav Sen",
+      "userId": "user_017",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_018",
+      "name": "Ishita Bose",
+      "userId": "user_018",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_019",
+      "name": "Manish Chawla",
+      "userId": "user_019",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_020",
+      "name": "Swati Mishra",
+      "userId": "user_020",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_021",
+      "name": "Nikhil Menon",
+      "userId": "user_021",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_022",
+      "name": "Ritika Sethi",
+      "userId": "user_022",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_023",
+      "name": "Akash Bansal",
+      "userId": "user_023",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_024",
+      "name": "Pallavi Ghosh",
+      "userId": "user_024",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_025",
+      "name": "Deepak Soni",
+      "userId": "user_025",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_026",
+      "name": "Anjali Dubey",
+      "userId": "user_026",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_027",
+      "name": "Suresh Pillai",
+      "userId": "user_027",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_028",
+      "name": "Kavita Rathi",
+      "userId": "user_028",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_029",
+      "name": "Abhishek Jain",
+      "userId": "user_029",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_030",
+      "name": "Preeti Bhatt",
+      "userId": "user_030",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_031",
+      "name": "Tushar Singhania",
+      "userId": "user_031",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_032",
+      "name": "Shreya Agarwal",
+      "userId": "user_032",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_033",
+      "name": "Harsh Vardhan",
+      "userId": "user_033",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_034",
+      "name": "Komal Bajaj",
+      "userId": "user_034",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_035",
+      "name": "Prateek Yadav",
+      "userId": "user_035",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_036",
+      "name": "Juhi Saxena",
+      "userId": "user_036",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_037",
+      "name": "Aman Tripathi",
+      "userId": "user_037",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_038",
+      "name": "Ritu Mittal",
+      "userId": "user_038",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_039",
+      "name": "Sameer Nanda",
+      "userId": "user_039",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_040",
+      "name": "Tina Dsouza",
+      "userId": "user_040",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_041",
+      "name": "Karan Joharwal",
+      "userId": "user_041",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": false,
+      "status": "locked_out",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_042",
+      "name": "Monika Sharma",
+      "userId": "user_042",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": false,
+      "status": "locked_out",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_043",
+      "name": "Rajesh Koothrappali",
+      "userId": "user_043",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_044",
+      "name": "Simran Kaur",
+      "userId": "user_044",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": false,
+      "status": "locked_out",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_045",
+      "name": "Vivek Oberoi",
+      "userId": "user_045",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": false,
+      "status": "locked_out",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_046",
+      "name": "Natasha Roy",
+      "userId": "user_046",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_047",
+      "name": "Rajat Chauhan",
+      "userId": "user_047",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": false,
+      "status": "locked_out",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_048",
+      "name": "Bhavna Negi",
+      "userId": "user_048",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": false,
+      "status": "locked_out",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_049",
+      "name": "Tarun Gill",
+      "userId": "user_049",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "createdAt": 1791479140643,
+      "createdBy": "admin"
+    },
+    {
+      "id": "cand_perf_050",
+      "name": "Zoya Akhtar",
+      "userId": "user_050",
+      "passwordHash": "loadtest123",
+      "assignedRepoId": "python-challenge",
+      "active": false,
+      "status": "locked_out",
+      "createdAt": 1791479140643,
       "createdBy": "admin"
     }
   ],
@@ -93,6 +654,549 @@
       "role": "candidate",
       "candidateId": "ef4eb71b-1f97-46e4-82ac-f064968ed257",
       "expiresAt": 1790444024419
+    },
+    "candidate_13434183-069c-4384-9b4a-0112e938ea54": {
+      "userId": "demo_candidate",
+      "role": "candidate",
+      "candidateId": "11ea1bf2-755a-49b6-8e65-0d0d86c2b4c7",
+      "expiresAt": 1791534816249
+    },
+    "admin_c9bc3b37-cd64-4eb5-bcac-a4cc0ce63cf7": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1791534816575
+    },
+    "interviewer_cc45ade6-13a5-46c1-8bbc-884d33c539a9": {
+      "userId": "demo_interviewer",
+      "role": "interviewer",
+      "expiresAt": 1791534816643
+    },
+    "candidate_b3811573-d06f-4766-aafa-bd403be70c06": {
+      "userId": "demo_candidate",
+      "role": "candidate",
+      "candidateId": "11ea1bf2-755a-49b6-8e65-0d0d86c2b4c7",
+      "expiresAt": 1791535249759
+    },
+    "admin_b7064be6-d016-476c-8b32-19a82de0204c": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1791535249801
+    },
+    "session_perf_001": {
+      "userId": "user_001",
+      "candidateId": "cand_perf_001",
+      "name": "Aarav Sharma",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_002": {
+      "userId": "user_002",
+      "candidateId": "cand_perf_002",
+      "name": "Priya Patel",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_003": {
+      "userId": "user_003",
+      "candidateId": "cand_perf_003",
+      "name": "Vikram Malhotra",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_004": {
+      "userId": "user_004",
+      "candidateId": "cand_perf_004",
+      "name": "Ananya Iyer",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_005": {
+      "userId": "user_005",
+      "candidateId": "cand_perf_005",
+      "name": "Rohan Verma",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_006": {
+      "userId": "user_006",
+      "candidateId": "cand_perf_006",
+      "name": "Sneha Nair",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_007": {
+      "userId": "user_007",
+      "candidateId": "cand_perf_007",
+      "name": "Karthik Reddy",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_008": {
+      "userId": "user_008",
+      "candidateId": "cand_perf_008",
+      "name": "Meera Joshi",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_009": {
+      "userId": "user_009",
+      "candidateId": "cand_perf_009",
+      "name": "Aditya Roy",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_010": {
+      "userId": "user_010",
+      "candidateId": "cand_perf_010",
+      "name": "Pooja Hegde",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_011": {
+      "userId": "user_011",
+      "candidateId": "cand_perf_011",
+      "name": "Siddharth Rao",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_012": {
+      "userId": "user_012",
+      "candidateId": "cand_perf_012",
+      "name": "Divya Kapoor",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_013": {
+      "userId": "user_013",
+      "candidateId": "cand_perf_013",
+      "name": "Rahul Deshmukh",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_014": {
+      "userId": "user_014",
+      "candidateId": "cand_perf_014",
+      "name": "Tanvi Saxena",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_015": {
+      "userId": "user_015",
+      "candidateId": "cand_perf_015",
+      "name": "Varun Gupta",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_016": {
+      "userId": "user_016",
+      "candidateId": "cand_perf_016",
+      "name": "Neha Kulkarni",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_017": {
+      "userId": "user_017",
+      "candidateId": "cand_perf_017",
+      "name": "Gaurav Sen",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_018": {
+      "userId": "user_018",
+      "candidateId": "cand_perf_018",
+      "name": "Ishita Bose",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_019": {
+      "userId": "user_019",
+      "candidateId": "cand_perf_019",
+      "name": "Manish Chawla",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_020": {
+      "userId": "user_020",
+      "candidateId": "cand_perf_020",
+      "name": "Swati Mishra",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_021": {
+      "userId": "user_021",
+      "candidateId": "cand_perf_021",
+      "name": "Nikhil Menon",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_022": {
+      "userId": "user_022",
+      "candidateId": "cand_perf_022",
+      "name": "Ritika Sethi",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_023": {
+      "userId": "user_023",
+      "candidateId": "cand_perf_023",
+      "name": "Akash Bansal",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_024": {
+      "userId": "user_024",
+      "candidateId": "cand_perf_024",
+      "name": "Pallavi Ghosh",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_025": {
+      "userId": "user_025",
+      "candidateId": "cand_perf_025",
+      "name": "Deepak Soni",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_026": {
+      "userId": "user_026",
+      "candidateId": "cand_perf_026",
+      "name": "Anjali Dubey",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_027": {
+      "userId": "user_027",
+      "candidateId": "cand_perf_027",
+      "name": "Suresh Pillai",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_028": {
+      "userId": "user_028",
+      "candidateId": "cand_perf_028",
+      "name": "Kavita Rathi",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_029": {
+      "userId": "user_029",
+      "candidateId": "cand_perf_029",
+      "name": "Abhishek Jain",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_030": {
+      "userId": "user_030",
+      "candidateId": "cand_perf_030",
+      "name": "Preeti Bhatt",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_031": {
+      "userId": "user_031",
+      "candidateId": "cand_perf_031",
+      "name": "Tushar Singhania",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_032": {
+      "userId": "user_032",
+      "candidateId": "cand_perf_032",
+      "name": "Shreya Agarwal",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_033": {
+      "userId": "user_033",
+      "candidateId": "cand_perf_033",
+      "name": "Harsh Vardhan",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_034": {
+      "userId": "user_034",
+      "candidateId": "cand_perf_034",
+      "name": "Komal Bajaj",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_035": {
+      "userId": "user_035",
+      "candidateId": "cand_perf_035",
+      "name": "Prateek Yadav",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_036": {
+      "userId": "user_036",
+      "candidateId": "cand_perf_036",
+      "name": "Juhi Saxena",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_037": {
+      "userId": "user_037",
+      "candidateId": "cand_perf_037",
+      "name": "Aman Tripathi",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_038": {
+      "userId": "user_038",
+      "candidateId": "cand_perf_038",
+      "name": "Ritu Mittal",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_039": {
+      "userId": "user_039",
+      "candidateId": "cand_perf_039",
+      "name": "Sameer Nanda",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_040": {
+      "userId": "user_040",
+      "candidateId": "cand_perf_040",
+      "name": "Tina Dsouza",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_041": {
+      "userId": "user_041",
+      "candidateId": "cand_perf_041",
+      "name": "Karan Joharwal",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": false,
+      "status": "locked_out",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_042": {
+      "userId": "user_042",
+      "candidateId": "cand_perf_042",
+      "name": "Monika Sharma",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": false,
+      "status": "locked_out",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_043": {
+      "userId": "user_043",
+      "candidateId": "cand_perf_043",
+      "name": "Rajesh Koothrappali",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_044": {
+      "userId": "user_044",
+      "candidateId": "cand_perf_044",
+      "name": "Simran Kaur",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": false,
+      "status": "locked_out",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_045": {
+      "userId": "user_045",
+      "candidateId": "cand_perf_045",
+      "name": "Vivek Oberoi",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": false,
+      "status": "locked_out",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_046": {
+      "userId": "user_046",
+      "candidateId": "cand_perf_046",
+      "name": "Natasha Roy",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_047": {
+      "userId": "user_047",
+      "candidateId": "cand_perf_047",
+      "name": "Rajat Chauhan",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": false,
+      "status": "locked_out",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_048": {
+      "userId": "user_048",
+      "candidateId": "cand_perf_048",
+      "name": "Bhavna Negi",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": false,
+      "status": "locked_out",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_049": {
+      "userId": "user_049",
+      "candidateId": "cand_perf_049",
+      "name": "Tarun Gill",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": true,
+      "status": "active",
+      "expiresAt": 1791565540643
+    },
+    "session_perf_050": {
+      "userId": "user_050",
+      "candidateId": "cand_perf_050",
+      "name": "Zoya Akhtar",
+      "role": "candidate",
+      "assignedRepoId": "python-challenge",
+      "active": false,
+      "status": "locked_out",
+      "expiresAt": 1791565540643
+    },
+    "candidate_06d34c3e-a04f-4349-952f-0aa5a25c9805": {
+      "userId": "demo_candidate",
+      "role": "candidate",
+      "candidateId": "11ea1bf2-755a-49b6-8e65-0d0d86c2b4c7",
+      "expiresAt": 1791538574514
+    },
+    "admin_4c390def-f7c0-46ad-b695-6c37fafb42e9": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1791538586399
+    },
+    "admin_a56c2752-c317-4ba9-925b-61f72117df07": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1791565596433
     }
   },
   "telemetry": [
@@ -3002,9 +4106,1132 @@
           "ts": "2026-09-25T17:28:34.338Z"
         }
       ]
+    },
+    {
+      "id": "27e16df0-086a-4c33-9e40-0251e0898180",
+      "candidateId": "cand_perf_032",
+      "candidateName": "Shreya Agarwal",
+      "repoId": "python-challenge",
+      "submittedAt": 1791451961029,
+      "sessionStart": 1791450160210,
+      "duration": 1800,
+      "stability": 45,
+      "events": [
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.359Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.374Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Space",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.389Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.404Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.419Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.434Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.449Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.464Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.479Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.494Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.509Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.524Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.539Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.554Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.569Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.584Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "a",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.599Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.614Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.629Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.644Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.659Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.674Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.689Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.704Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Enter",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.719Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "d",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.734Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Space",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.749Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.764Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.779Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Space",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.794Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Enter",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.809Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.824Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.839Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.854Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "d",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.869Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.884Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "a",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.899Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.914Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.929Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.944Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.959Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.974Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:35.989Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:36.004Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Space",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:36.019Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Enter",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:36.034Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:36.049Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:36.064Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Enter",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:36.079Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "d",
+          "flightTime": 15,
+          "ts": "2026-10-08T09:02:36.094Z"
+        },
+        {
+          "type": "paste",
+          "textLength": 380,
+          "severity": "High",
+          "ts": "2026-10-08T09:02:41.094Z"
+        },
+        {
+          "type": "paste",
+          "textLength": 432,
+          "severity": "High",
+          "ts": "2026-10-08T09:02:46.094Z"
+        },
+        {
+          "type": "paste",
+          "textLength": 502,
+          "severity": "High",
+          "ts": "2026-10-08T09:02:51.094Z"
+        },
+        {
+          "type": "paste",
+          "textLength": 549,
+          "severity": "High",
+          "ts": "2026-10-08T09:02:56.094Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T09:03:08.094Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T09:03:20.094Z"
+        },
+        {
+          "type": "fullscreen_escape_strike",
+          "strike": 1,
+          "maxStrikes": 3,
+          "ts": "2026-10-08T09:03:40.094Z"
+        }
+      ]
+    },
+    {
+      "id": "ad9e47c4-3042-42b3-95b3-5b88a219917f",
+      "candidateId": "cand_perf_049",
+      "candidateName": "Tarun Gill",
+      "repoId": "python-challenge",
+      "submittedAt": 1791451961974,
+      "sessionStart": 1791450161861,
+      "duration": 1800,
+      "stability": 45,
+      "events": [
+        {
+          "type": "keystroke",
+          "key": "a",
+          "flightTime": 159,
+          "ts": "2026-10-08T09:02:35.509Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "a",
+          "flightTime": 119,
+          "ts": "2026-10-08T09:02:35.628Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "d",
+          "flightTime": 143,
+          "ts": "2026-10-08T09:02:35.771Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 119,
+          "ts": "2026-10-08T09:02:35.890Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 99,
+          "ts": "2026-10-08T09:02:35.989Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Space",
+          "flightTime": 151,
+          "ts": "2026-10-08T09:02:36.140Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 106,
+          "ts": "2026-10-08T09:02:36.246Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 116,
+          "ts": "2026-10-08T09:02:36.362Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 115,
+          "ts": "2026-10-08T09:02:36.477Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Space",
+          "flightTime": 138,
+          "ts": "2026-10-08T09:02:36.615Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "d",
+          "flightTime": 130,
+          "ts": "2026-10-08T09:02:36.745Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "a",
+          "flightTime": 132,
+          "ts": "2026-10-08T09:02:36.877Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Enter",
+          "flightTime": 135,
+          "ts": "2026-10-08T09:02:37.012Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 148,
+          "ts": "2026-10-08T09:02:37.160Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 97,
+          "ts": "2026-10-08T09:02:37.257Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 94,
+          "ts": "2026-10-08T09:02:37.351Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Space",
+          "flightTime": 115,
+          "ts": "2026-10-08T09:02:37.466Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 150,
+          "ts": "2026-10-08T09:02:37.616Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 112,
+          "ts": "2026-10-08T09:02:37.728Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 150,
+          "ts": "2026-10-08T09:02:37.878Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 134,
+          "ts": "2026-10-08T09:02:38.012Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 121,
+          "ts": "2026-10-08T09:02:38.133Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 112,
+          "ts": "2026-10-08T09:02:38.245Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Space",
+          "flightTime": 117,
+          "ts": "2026-10-08T09:02:38.362Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 152,
+          "ts": "2026-10-08T09:02:38.514Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 96,
+          "ts": "2026-10-08T09:02:38.610Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "a",
+          "flightTime": 128,
+          "ts": "2026-10-08T09:02:38.738Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 148,
+          "ts": "2026-10-08T09:02:38.886Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 93,
+          "ts": "2026-10-08T09:02:38.979Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 124,
+          "ts": "2026-10-08T09:02:39.103Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "a",
+          "flightTime": 151,
+          "ts": "2026-10-08T09:02:39.254Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Space",
+          "flightTime": 109,
+          "ts": "2026-10-08T09:02:39.363Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 139,
+          "ts": "2026-10-08T09:02:39.502Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "d",
+          "flightTime": 150,
+          "ts": "2026-10-08T09:02:39.652Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "a",
+          "flightTime": 164,
+          "ts": "2026-10-08T09:02:39.816Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "a",
+          "flightTime": 145,
+          "ts": "2026-10-08T09:02:39.961Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Space",
+          "flightTime": 97,
+          "ts": "2026-10-08T09:02:40.058Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "d",
+          "flightTime": 145,
+          "ts": "2026-10-08T09:02:40.203Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 132,
+          "ts": "2026-10-08T09:02:40.335Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 104,
+          "ts": "2026-10-08T09:02:40.439Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Enter",
+          "flightTime": 117,
+          "ts": "2026-10-08T09:02:40.556Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 105,
+          "ts": "2026-10-08T09:02:40.661Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 139,
+          "ts": "2026-10-08T09:02:40.800Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "d",
+          "flightTime": 92,
+          "ts": "2026-10-08T09:02:40.892Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 128,
+          "ts": "2026-10-08T09:02:41.020Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 163,
+          "ts": "2026-10-08T09:02:41.183Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 168,
+          "ts": "2026-10-08T09:02:41.351Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 148,
+          "ts": "2026-10-08T09:02:41.499Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Space",
+          "flightTime": 155,
+          "ts": "2026-10-08T09:02:41.654Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 95,
+          "ts": "2026-10-08T09:02:41.749Z"
+        },
+        {
+          "type": "paste",
+          "textLength": 422,
+          "severity": "High",
+          "ts": "2026-10-08T09:02:46.749Z"
+        },
+        {
+          "type": "paste",
+          "textLength": 418,
+          "severity": "High",
+          "ts": "2026-10-08T09:02:51.749Z"
+        },
+        {
+          "type": "paste",
+          "textLength": 385,
+          "severity": "High",
+          "ts": "2026-10-08T09:02:56.749Z"
+        },
+        {
+          "type": "paste",
+          "textLength": 443,
+          "severity": "High",
+          "ts": "2026-10-08T09:03:01.749Z"
+        },
+        {
+          "type": "paste",
+          "textLength": 435,
+          "severity": "High",
+          "ts": "2026-10-08T09:03:06.749Z"
+        },
+        {
+          "type": "paste",
+          "textLength": 392,
+          "severity": "High",
+          "ts": "2026-10-08T09:03:11.749Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T09:03:23.749Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T09:03:35.749Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T09:03:47.749Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T09:03:59.749Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T09:04:11.749Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T09:04:23.749Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T09:04:35.749Z"
+        },
+        {
+          "type": "fullscreen_escape_strike",
+          "strike": 1,
+          "maxStrikes": 3,
+          "ts": "2026-10-08T09:04:55.749Z"
+        },
+        {
+          "type": "fullscreen_escape_strike",
+          "strike": 2,
+          "maxStrikes": 3,
+          "ts": "2026-10-08T09:05:15.749Z"
+        }
+      ]
+    },
+    {
+      "id": "c3b6e3de-a7fd-4633-b4f0-1548700eee3d",
+      "candidateId": "cand_perf_037",
+      "candidateName": "Aman Tripathi",
+      "repoId": "python-challenge",
+      "submittedAt": 1791479150119,
+      "sessionStart": 1791477349181,
+      "duration": 1800,
+      "stability": 45,
+      "events": [
+        {
+          "type": "keystroke",
+          "key": "d",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:40.731Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "d",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:40.746Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:40.761Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:40.776Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Space",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:40.791Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:40.806Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "a",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:40.821Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:40.836Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Space",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:40.851Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:40.866Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:40.881Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Enter",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:40.896Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:40.911Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:40.926Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:40.941Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:40.956Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:40.971Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "a",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:40.986Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Enter",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.001Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.016Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.031Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.046Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.061Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.076Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "d",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.091Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.106Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.121Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "a",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.136Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.151Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.166Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Enter",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.181Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.196Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Enter",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.211Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.226Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.241Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.256Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "a",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.271Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.286Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.301Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "a",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.316Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "e",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.331Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.346Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.361Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "a",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.376Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.391Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.406Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.421Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.436Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.451Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "d",
+          "flightTime": 15,
+          "ts": "2026-10-08T16:35:41.466Z"
+        },
+        {
+          "type": "paste",
+          "textLength": 417,
+          "severity": "High",
+          "ts": "2026-10-08T16:35:46.466Z"
+        },
+        {
+          "type": "paste",
+          "textLength": 385,
+          "severity": "High",
+          "ts": "2026-10-08T16:35:51.466Z"
+        },
+        {
+          "type": "paste",
+          "textLength": 510,
+          "severity": "High",
+          "ts": "2026-10-08T16:35:56.466Z"
+        },
+        {
+          "type": "paste",
+          "textLength": 386,
+          "severity": "High",
+          "ts": "2026-10-08T16:36:01.466Z"
+        },
+        {
+          "type": "paste",
+          "textLength": 476,
+          "severity": "High",
+          "ts": "2026-10-08T16:36:06.466Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T16:36:18.466Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T16:36:30.466Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T16:36:42.466Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T16:36:54.466Z"
+        },
+        {
+          "type": "fullscreen_escape_strike",
+          "strike": 1,
+          "maxStrikes": 3,
+          "ts": "2026-10-08T16:37:14.466Z"
+        }
+      ]
     }
   ],
-  "interviewers": [],
+  "interviewers": [
+    {
+      "id": "dee03616-3da7-4bba-916b-a737bc11ffd5",
+      "name": "Demo Interviewer",
+      "userId": "demo_interviewer",
+      "passwordHash": "demo123",
+      "createdAt": 1791448416643
+    }
+  ],
   "customChallenges": [
     {
       "id": "ai-fastapi-mt9x8gde",
@@ -3351,6 +5578,149 @@
             "timestamp": "2026-09-25T17:38:27.310Z"
           },
           "ts": "2026-09-25T17:38:27.310Z"
+        }
+      ],
+      "status": "active"
+    },
+    "cand_perf_041": {
+      "candidateId": "cand_perf_041",
+      "candidateName": "Karan Joharwal",
+      "repoId": "python-challenge",
+      "lastActive": 1791451956378,
+      "stability": 15,
+      "duration": 1800,
+      "activeFile": "main.py",
+      "eventCount": 67,
+      "tabSwitches": 8,
+      "fullscreenEscapes": 3,
+      "recentEvents": [
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T09:03:36.235Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T09:03:48.235Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T09:04:00.235Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T09:04:12.235Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T09:04:24.235Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T09:04:36.235Z"
+        },
+        {
+          "type": "blur",
+          "reason": "Window focus lost to external application",
+          "ts": "2026-10-08T09:04:48.235Z"
+        },
+        {
+          "type": "fullscreen_escape_strike",
+          "strike": 1,
+          "maxStrikes": 3,
+          "ts": "2026-10-08T09:05:08.235Z"
+        },
+        {
+          "type": "fullscreen_escape_strike",
+          "strike": 2,
+          "maxStrikes": 3,
+          "ts": "2026-10-08T09:05:28.235Z"
+        },
+        {
+          "type": "fullscreen_escape_strike",
+          "strike": 3,
+          "maxStrikes": 3,
+          "ts": "2026-10-08T09:05:48.235Z"
+        }
+      ],
+      "status": "paused"
+    },
+    "cand_perf_002": {
+      "candidateId": "cand_perf_002",
+      "candidateName": "Priya Patel",
+      "repoId": "python-challenge",
+      "lastActive": 1791479143717,
+      "stability": 98,
+      "duration": 1800,
+      "activeFile": "main.py",
+      "eventCount": 50,
+      "tabSwitches": 0,
+      "fullscreenEscapes": 0,
+      "recentEvents": [
+        {
+          "type": "keystroke",
+          "key": "Enter",
+          "flightTime": 108,
+          "ts": "2026-10-08T16:35:45.982Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "c",
+          "flightTime": 106,
+          "ts": "2026-10-08T16:35:46.088Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "Backspace",
+          "flightTime": 121,
+          "ts": "2026-10-08T16:35:46.209Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "a",
+          "flightTime": 145,
+          "ts": "2026-10-08T16:35:46.354Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "b",
+          "flightTime": 92,
+          "ts": "2026-10-08T16:35:46.446Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 130,
+          "ts": "2026-10-08T16:35:46.576Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 106,
+          "ts": "2026-10-08T16:35:46.682Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 109,
+          "ts": "2026-10-08T16:35:46.791Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 139,
+          "ts": "2026-10-08T16:35:46.930Z"
+        },
+        {
+          "type": "keystroke",
+          "key": "f",
+          "flightTime": 152,
+          "ts": "2026-10-08T16:35:47.082Z"
         }
       ],
       "status": "active"

@@ -57,7 +57,11 @@ When a candidate starts a challenge, the platform spins up an environment tailor
 ├── next.config.js                       # Next.js 15 application configuration
 ├── tailwind.config.js                   # Tailwind CSS styling and theme configuration
 ├── README.md                            # Complete platform overview and operational guide
-├── CONTEXT.md                           # Detailed file map and architectural context
+├── docs/                                # Project documentation, research reports, and datasets
+│   ├── CONTEXT.md                       # Detailed file map and architectural context
+│   ├── DATASETS.md                      # Academic benchmarks & dataset specifications
+│   ├── RESEARCH_AND_BENCHMARKS.md       # Empirical benchmark and concurrency report
+│   └── deep-research-report.md          # Behavioral ML design and research report
 │
 ├── src/                                 # Next.js Source Code
 │   ├── app/
@@ -200,7 +204,7 @@ DEV-TRACE features a complete **Exhibition Showcase Deck** designed for hackatho
 ## 📊 Benchmark Datasets & Research Directory
 
 For complete documentation on the research datasets, download links, and ML feature extraction scripts used to benchmark DEV-TRACE, see:  
-👉 [**DATASETS.md**](file:///c:/Users/BharatBK/Documents/projectss/dev/DATASETS.md)
+👉 [**docs/DATASETS.md**](file:///c:/Users/BharatBK/Documents/projectss/dev/docs/DATASETS.md)
 
 - **Real-World SWE Benchmarks**: Princeton SWE-bench, Defects4J.
 - **AI Code vs. Human Benchmarks**: OpenAI HumanEval, Google MBPP, UC Berkeley APPS, DeepMind CodeContests, HumanEval-X.

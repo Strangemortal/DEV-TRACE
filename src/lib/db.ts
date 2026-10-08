@@ -53,6 +53,7 @@ export interface LiveTelemetryState {
   activeFile: string;
   eventCount: number;
   tabSwitches: number;
+  fullscreenEscapes?: number;
   recentEvents: any[];
   status: "active" | "paused" | "completed";
 }
@@ -94,7 +95,17 @@ export async function readDb(): Promise<DatabaseSchema> {
   return data;
 }
 
+let writeQueue = Promise.resolve();
+
 export async function writeDb(data: DatabaseSchema): Promise<void> {
   await ensureDbFile();
-  await fs.writeFile(DB_PATH, JSON.stringify(data, null, 2), "utf-8");
+  writeQueue = writeQueue.then(async () => {
+    const tempPath = `${DB_PATH}.tmp`;
+    await fs.writeFile(tempPath, JSON.stringify(data, null, 2), "utf-8");
+    await fs.rename(tempPath, DB_PATH);
+  }).catch((err) => {
+    console.error("writeDb atomic write error:", err);
+  });
+  return writeQueue;
 }
+

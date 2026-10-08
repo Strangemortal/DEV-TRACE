@@ -15,6 +15,8 @@ export type EventType =
   | "FOCUS_DURATION"
   | "IDLE_DETECTED"
   | "TAB_SWITCH"
+  | "FULLSCREEN_EXIT"
+  | "AUTO_LOGOUT"
   | "GIT_COMMAND"
   | "EXECUTION_RESULT"
   | "AI_HINT_REQUESTED"

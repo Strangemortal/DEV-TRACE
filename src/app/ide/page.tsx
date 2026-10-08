@@ -80,6 +80,12 @@ export default function DevTraceIDEPage() {
   // Fullscreen & Tab Switch state
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showFullscreenPrompt, setShowFullscreenPrompt] = useState(false);
+  const [showFullscreenWarning, setShowFullscreenWarning] = useState(false);
+  const [fullscreenEscapeCount, setFullscreenEscapeCount] = useState(0);
+  const fullscreenEscapeCountRef = useRef(0);
+  const [fullscreenCountdown, setFullscreenCountdown] = useState(15);
+  const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const hasStartedAssessmentRef = useRef(false);
   const [tabSwitchCount, setTabSwitchCount] = useState(0);
   const tabSwitchCountRef = useRef(0);
   const [showTabSwitchModal, setShowTabSwitchModal] = useState(false);
@@ -148,11 +154,76 @@ export default function DevTraceIDEPage() {
       }
       setIsFullscreen(true);
       setShowFullscreenPrompt(false);
+      setShowFullscreenWarning(false);
+      hasStartedAssessmentRef.current = true;
+      try {
+        sessionStorage.setItem("devtrace_fs_active", "true");
+      } catch (_) {}
+
+      // Clear any running countdown timer
+      if (countdownIntervalRef.current) {
+        clearInterval(countdownIntervalRef.current);
+        countdownIntervalRef.current = null;
+      }
+      setFullscreenCountdown(15);
+
       logEvent({ type: "FOCUS_GAINED", meta: { fullscreen: true } });
     } catch (e) {
       console.warn("Fullscreen request denied or not supported", e);
     }
   };
+
+  // Automatic logout when grace period expires outside fullscreen
+  const handleTimeoutAutoLogout = useCallback(async () => {
+    if (countdownIntervalRef.current) {
+      clearInterval(countdownIntervalRef.current);
+      countdownIntervalRef.current = null;
+    }
+
+    logEvent({
+      type: "FOCUS_LOST",
+      meta: {
+        reason: "FULLSCREEN_TIMEOUT_LOGOUT",
+        strikeCount: fullscreenEscapeCountRef.current,
+        timestamp: new Date().toISOString(),
+      },
+    });
+
+    try {
+      const dump = getDump();
+      await fetch("/api/telemetry/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionStart,
+          duration: elapsed,
+          stability: Math.max(10, stabilityScore - 30),
+          events: [
+            ...dump,
+            {
+              type: "AUTO_LOGOUT",
+              ts: Date.now(),
+              meta: { reason: "FULLSCREEN_TIMEOUT", duration: elapsed },
+            },
+          ],
+        }),
+      });
+    } catch (e) {
+      console.warn("Telemetry submission error on auto-logout", e);
+    }
+
+    try {
+      sessionStorage.removeItem("devtrace_fs_active");
+    } catch (_) {}
+
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch (e) {
+      console.error("Logout error", e);
+    }
+
+    router.replace("/login?reason=fullscreen_timeout");
+  }, [elapsed, getDump, logEvent, router, sessionStart, stabilityScore]);
 
   // Check auth on mount
   useEffect(() => {
@@ -200,9 +271,36 @@ export default function DevTraceIDEPage() {
           clearEvents(); // Reset telemetry session for this run
           setAuthLoading(false);
 
-          // Check if already in fullscreen
+          // Check if already in fullscreen or resuming active session
+          const wasActive = typeof window !== "undefined" && sessionStorage.getItem("devtrace_fs_active") === "true";
           if (!document.fullscreenElement) {
-            setShowFullscreenPrompt(true);
+            if (wasActive) {
+              hasStartedAssessmentRef.current = true;
+              fullscreenEscapeCountRef.current += 1;
+              setFullscreenEscapeCount(fullscreenEscapeCountRef.current);
+              setShowFullscreenWarning(true);
+              setFullscreenCountdown(15);
+              let remaining = 15;
+              countdownIntervalRef.current = setInterval(() => {
+                remaining -= 1;
+                setFullscreenCountdown(remaining);
+                if (remaining <= 0) {
+                  if (countdownIntervalRef.current) {
+                    clearInterval(countdownIntervalRef.current);
+                    countdownIntervalRef.current = null;
+                  }
+                  handleTimeoutAutoLogout();
+                }
+              }, 1000);
+            } else {
+              setShowFullscreenPrompt(true);
+            }
+          } else {
+            setIsFullscreen(true);
+            hasStartedAssessmentRef.current = true;
+            try {
+              sessionStorage.setItem("devtrace_fs_active", "true");
+            } catch (_) {}
           }
         }
       } catch (err) {
@@ -212,7 +310,7 @@ export default function DevTraceIDEPage() {
     }
     checkAuth();
     setMounted(true);
-  }, [router, clearEvents]);
+  }, [router, clearEvents, handleTimeoutAutoLogout]);
 
   // Elapsed timer handler (runs only when not paused)
   useEffect(() => {
@@ -221,22 +319,77 @@ export default function DevTraceIDEPage() {
     return () => clearInterval(t);
   }, [authLoading, isPaused]);
 
-  // Fullscreen change listener
+  // Fullscreen change listener with strike recording & countdown
   useEffect(() => {
     const handleFsChange = () => {
       const isFs = !!document.fullscreenElement;
       setIsFullscreen(isFs);
-      if (!isFs && !authLoading) {
+
+      if (!isFs) {
+        // Exited fullscreen!
+        const wasStarted =
+          hasStartedAssessmentRef.current ||
+          (typeof window !== "undefined" && sessionStorage.getItem("devtrace_fs_active") === "true");
+
+        if (wasStarted && !authLoading) {
+          fullscreenEscapeCountRef.current += 1;
+          const currentStrikes = fullscreenEscapeCountRef.current;
+          setFullscreenEscapeCount(currentStrikes);
+          setShowFullscreenWarning(true);
+          setShowFullscreenPrompt(false);
+
+          logEvent({
+            type: "FULLSCREEN_EXIT",
+            meta: {
+              reason: "FULLSCREEN_ESCAPED",
+              strikeCount: currentStrikes,
+              gracePeriodSeconds: 15,
+              timestamp: new Date().toISOString(),
+            },
+          });
+
+          // Start 15s countdown to auto-logout
+          setFullscreenCountdown(15);
+          if (countdownIntervalRef.current) {
+            clearInterval(countdownIntervalRef.current);
+          }
+
+          let remaining = 15;
+          countdownIntervalRef.current = setInterval(() => {
+            remaining -= 1;
+            setFullscreenCountdown(remaining);
+            if (remaining <= 0) {
+              if (countdownIntervalRef.current) {
+                clearInterval(countdownIntervalRef.current);
+                countdownIntervalRef.current = null;
+              }
+              handleTimeoutAutoLogout();
+            }
+          }, 1000);
+        }
+      } else {
+        // Re-entered fullscreen!
+        setShowFullscreenWarning(false);
+        if (countdownIntervalRef.current) {
+          clearInterval(countdownIntervalRef.current);
+          countdownIntervalRef.current = null;
+        }
+        setFullscreenCountdown(15);
         logEvent({
-          type: "FOCUS_LOST",
-          meta: { reason: "FULLSCREEN_EXITED", timestamp: new Date().toISOString() },
+          type: "FOCUS_GAINED",
+          meta: { fullscreen: true, recovered: true, timestamp: new Date().toISOString() },
         });
       }
     };
 
     document.addEventListener("fullscreenchange", handleFsChange);
-    return () => document.removeEventListener("fullscreenchange", handleFsChange);
-  }, [authLoading, logEvent]);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFsChange);
+      if (countdownIntervalRef.current) {
+        clearInterval(countdownIntervalRef.current);
+      }
+    };
+  }, [authLoading, handleTimeoutAutoLogout, logEvent]);
 
   // Tab switch & focus loss tracking with strike counter
   useEffect(() => {
@@ -298,6 +451,17 @@ export default function DevTraceIDEPage() {
     };
 
     const handleKeyDownBlock = (e: KeyboardEvent) => {
+      // If outside fullscreen during assessment, block all code typing
+      if (!isFullscreen && hasStartedAssessmentRef.current) {
+        if (e.key !== "F11" && !e.altKey && e.key !== "Tab") {
+          e.preventDefault();
+          e.stopPropagation();
+          setPasteBlockedToast("Fullscreen required. Code typing is locked until you return to fullscreen mode.");
+          setTimeout(() => setPasteBlockedToast(null), 3000);
+          return;
+        }
+      }
+
       const isCtrlOrCmd = e.ctrlKey || e.metaKey;
       const key = e.key.toLowerCase();
       if (isCtrlOrCmd && ["c", "v", "x", "insert"].includes(key)) {
@@ -328,7 +492,7 @@ export default function DevTraceIDEPage() {
       window.removeEventListener("cut", handleBlockClipboard, true);
       window.removeEventListener("keydown", handleKeyDownBlock, true);
     };
-  }, [activeFile, logEvent]);
+  }, [activeFile, logEvent, isFullscreen]);
 
   // Heartbeat & Live Telemetry Sync (Every 3 seconds)
   useEffect(() => {
@@ -358,6 +522,7 @@ export default function DevTraceIDEPage() {
             activeFile,
             eventCount: dump.length,
             tabSwitches: tabSwitchCount,
+            fullscreenEscapes: fullscreenEscapeCount,
             recentEvents: dump.slice(-15),
           }),
         });
@@ -367,7 +532,7 @@ export default function DevTraceIDEPage() {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [authLoading, elapsed, stabilityScore, activeFile, tabSwitchCount, getDump]);
+  }, [authLoading, elapsed, stabilityScore, activeFile, tabSwitchCount, fullscreenEscapeCount, getDump]);
 
   // Stability Calculation
   useEffect(() => {
@@ -384,6 +549,9 @@ export default function DevTraceIDEPage() {
 
       const tabSwitches = dump.filter((e) => e.type === "TAB_SWITCH").length;
       score -= tabSwitches * 10;
+
+      const fullscreenEscapes = dump.filter((e) => e.type === "FULLSCREEN_EXIT").length;
+      score -= fullscreenEscapes * 15;
 
       const focusLosses = dump.filter((e) => e.type === "FOCUS_LOST").length;
       score -= focusLosses * 5;
@@ -405,7 +573,7 @@ export default function DevTraceIDEPage() {
   const isCurrentFileReadOnly = isReadOnlyFile(activeFile, activeRepo);
 
   const handleEditorChange = (value: string | undefined) => {
-    if (value === undefined || isCurrentFileReadOnly || isPaused) return;
+    if (value === undefined || isCurrentFileReadOnly || isPaused || !isFullscreen) return;
     setFiles((prev) => ({ ...prev, [activeFile]: value }));
     setDirtyFiles((d) => new Set(d).add(activeFile));
   };
@@ -424,7 +592,7 @@ export default function DevTraceIDEPage() {
   }, []);
 
   const handleSave = useCallback(async () => {
-    if (!activeRepo || isPaused) return;
+    if (!activeRepo || isPaused || !isFullscreen) return;
     const ts = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
     const src = files[activeFile] ?? "";
     setDirtyFiles((d) => {
@@ -694,6 +862,13 @@ export default function DevTraceIDEPage() {
   };
 
   const handleSubmit = async () => {
+    try {
+      sessionStorage.removeItem("devtrace_fs_active");
+    } catch (_) {}
+    if (countdownIntervalRef.current) {
+      clearInterval(countdownIntervalRef.current);
+      countdownIntervalRef.current = null;
+    }
     setSubmittingTelemetry(true);
     const dump = getDump();
     const telemetryPayload = {
@@ -723,6 +898,13 @@ export default function DevTraceIDEPage() {
   };
 
   const handleLogout = async () => {
+    try {
+      sessionStorage.removeItem("devtrace_fs_active");
+    } catch (_) {}
+    if (countdownIntervalRef.current) {
+      clearInterval(countdownIntervalRef.current);
+      countdownIntervalRef.current = null;
+    }
     await fetch("/api/auth/logout", { method: "POST" });
     router.replace("/login");
   };
@@ -808,6 +990,69 @@ export default function DevTraceIDEPage() {
             >
               <Maximize2 size={15} />
               <span>Launch Fullscreen IDE</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── FULLSCREEN ESCAPE WARNING MODAL (Triggered on escape or exiting fullscreen) ── */}
+      {showFullscreenWarning && !isFullscreen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-150">
+          <div className="max-w-md w-full p-6 sm:p-7 rounded-2xl border-2 border-rose-500/50 bg-[#140b0f] text-white text-center shadow-2xl space-y-4 shadow-rose-950/50">
+            {/* Alert Icon & Badge */}
+            <div className="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center mx-auto text-rose-500 animate-bounce">
+              <ShieldAlert size={34} />
+            </div>
+
+            <div>
+              <span className="text-[10px] uppercase font-bold tracking-widest text-rose-400 bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/20">
+                Security Integrity Alert
+              </span>
+              <h2 className="text-xl font-bold mt-2 text-rose-400">Fullscreen Mode Exited!</h2>
+              <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
+                You escaped fullscreen mode. In accordance with examination invigilation rules, fullscreen is mandatory. Code typing has been locked.
+              </p>
+            </div>
+
+            {/* Violation Details & Status */}
+            <div className="grid grid-cols-2 gap-2 text-left">
+              <div className="p-3 rounded-xl bg-black/40 border border-rose-500/20">
+                <span className="text-[10px] text-slate-400 uppercase font-semibold block">Violation</span>
+                <span className="text-rose-400 font-mono font-bold text-sm">Strike #{fullscreenEscapeCount}</span>
+              </div>
+              <div className="p-3 rounded-xl bg-black/40 border border-rose-500/20">
+                <span className="text-[10px] text-slate-400 uppercase font-semibold block">Editor Status</span>
+                <span className="text-amber-400 font-mono font-bold text-xs">Locked (No Typing)</span>
+              </div>
+            </div>
+
+            {/* Live Countdown Timer Card */}
+            <div className="p-4 rounded-xl bg-rose-950/30 border border-rose-500/30 text-center space-y-2">
+              <div className="text-[11px] text-rose-300 font-semibold uppercase tracking-wider">
+                Automatic Session Termination In
+              </div>
+              <div className="text-3xl font-black font-mono text-rose-400 tracking-wider animate-pulse">
+                00:{fullscreenCountdown < 10 ? `0${fullscreenCountdown}` : fullscreenCountdown}
+              </div>
+              {/* Visual Progress Bar */}
+              <div className="w-full bg-black/50 h-2 rounded-full overflow-hidden border border-rose-500/20">
+                <div
+                  className="h-full bg-gradient-to-r from-amber-500 to-rose-500 transition-all duration-1000 ease-linear"
+                  style={{ width: `${Math.max(0, Math.min(100, (fullscreenCountdown / 15) * 100))}%` }}
+                />
+              </div>
+              <p className="text-[10px] text-slate-400 leading-tight">
+                If you do not return to fullscreen before the timer expires, your test will be automatically submitted and you will be logged out.
+              </p>
+            </div>
+
+            {/* Re-enter Fullscreen Button */}
+            <button
+              onClick={enterFullscreen}
+              className="w-full py-3.5 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-rose-900/40 active:scale-95 flex items-center justify-center gap-2"
+            >
+              <Maximize2 size={16} />
+              <span>Return to Fullscreen Now</span>
             </button>
           </div>
         </div>
@@ -920,12 +1165,12 @@ export default function DevTraceIDEPage() {
               <Clock size={13} className="opacity-60" />
               <span className="font-mono font-bold text-xs md:text-sm">{fmtElapsed(elapsed)}</span>
             </div>
-            {tabSwitchCount > 0 && (
+            {(tabSwitchCount > 0 || fullscreenEscapeCount > 0) && (
               <>
                 <div className={`w-px h-3.5 ${isLight ? "bg-slate-300" : "bg-white/10"}`} />
-                <div className="flex items-center gap-1 text-rose-500 font-bold text-xs" title="Tab switch warnings logged">
+                <div className="flex items-center gap-1.5 text-rose-500 font-bold text-xs" title="Integrity strikes logged">
                   <ShieldAlert size={13} />
-                  <span>{tabSwitchCount} Strikes</span>
+                  <span>{tabSwitchCount + fullscreenEscapeCount} Strikes</span>
                 </div>
               </>
             )}
@@ -1003,7 +1248,7 @@ export default function DevTraceIDEPage() {
           {/* Finish Challenge Button (Box Design) */}
           <button
             onClick={handleSubmit}
-            disabled={isPaused}
+            disabled={isPaused || !isFullscreen}
             className="flex items-center gap-1.5 text-xs md:text-sm px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-md font-semibold transition-all shadow-sm active:scale-95 disabled:opacity-50"
           >
             <Trophy size={14} />
@@ -1071,7 +1316,7 @@ export default function DevTraceIDEPage() {
             <div className="px-3">
               <button
                 onClick={handleSave}
-                disabled={isPaused}
+                disabled={isPaused || !isFullscreen}
                 className={`flex items-center gap-2 px-3.5 py-1.5 rounded-md text-xs md:text-sm font-semibold transition-all shadow-sm disabled:opacity-50 ${
                   isLight
                     ? "bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200"
@@ -1104,6 +1349,25 @@ export default function DevTraceIDEPage() {
                 isLight ? "bg-white" : isMidnight ? "bg-[#0b0f19]" : "bg-[#0f1117]"
               }`}
             >
+              {!isFullscreen && (
+                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[2px] p-4 text-center pointer-events-auto select-none">
+                  <div className="p-5 rounded-2xl bg-[#140b0f] border border-rose-500/40 text-rose-400 max-w-sm flex flex-col items-center gap-2.5 shadow-2xl">
+                    <ShieldAlert size={32} className="text-rose-500 animate-pulse" />
+                    <div className="text-sm font-bold text-rose-300">Editor Locked</div>
+                    <p className="text-xs text-slate-300">
+                      Typing and code editing are strictly disabled outside fullscreen mode. Return to fullscreen to resume writing code.
+                    </p>
+                    <button
+                      onClick={enterFullscreen}
+                      className="mt-2 px-5 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 flex items-center gap-2"
+                    >
+                      <Maximize2 size={14} />
+                      <span>Return to Fullscreen</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {!mounted ? (
                 <div className="absolute inset-0 flex items-center justify-center text-sm opacity-60 animate-pulse">
                   Loading Workspace...
@@ -1127,7 +1391,7 @@ export default function DevTraceIDEPage() {
                     smoothScrolling: true,
                     cursorBlinking: "smooth",
                     bracketPairColorization: { enabled: true },
-                    readOnly: isCurrentFileReadOnly || isPaused,
+                    readOnly: isCurrentFileReadOnly || isPaused || !isFullscreen,
                     contextmenu: false, // Disables right-click paste/copy menu
                     copyWithSyntaxHighlighting: false,
                   }}

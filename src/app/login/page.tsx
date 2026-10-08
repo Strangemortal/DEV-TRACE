@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Zap, Shield, Key, AlertCircle, ArrowRight } from "lucide-react";
+import { Zap, Shield, Key, AlertCircle, ArrowRight, ShieldAlert } from "lucide-react";
 import { useThemeStore } from "@/store/themeStore";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -17,6 +17,17 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [initialChecking, setInitialChecking] = useState(true);
+  const [logoutReason, setLogoutReason] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const reason = params.get("reason");
+      if (reason === "fullscreen_timeout") {
+        setLogoutReason("fullscreen_timeout");
+      }
+    }
+  }, []);
 
   useEffect(() => {
     async function checkAuth() {
@@ -121,6 +132,18 @@ export default function LoginPage() {
           <h1 className="text-xl font-bold tracking-tight">Candidate Login</h1>
           <p className="text-xs opacity-60 mt-1">Enter your credentials to begin your assessment</p>
         </div>
+
+        {logoutReason === "fullscreen_timeout" && (
+          <div className="mb-4 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-start gap-2.5 text-rose-500 text-xs">
+            <ShieldAlert size={18} className="flex-shrink-0 mt-0.5 text-rose-500" />
+            <div>
+              <div className="font-bold text-rose-400">Assessment Terminated</div>
+              <div className="mt-0.5 text-slate-300 dark:text-slate-300 leading-relaxed">
+                You were automatically logged out because you exited fullscreen mode and did not return within the permitted grace period (15s). Your assessment state has been recorded.
+              </div>
+            </div>
+          </div>
+        )}
 
         {error && (
           <div className="mb-4 p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-start gap-2.5 text-rose-500 text-xs font-medium">

@@ -1,0 +1,142 @@
+{
+  "functional": [
+    {
+      "testId": "FT-01",
+      "testName": "Vulnerability & Security Flaw Detection",
+      "model": "llama3.1:8b",
+      "passed": true,
+      "latencyMs": 17736,
+      "details": "Detected SQL Injection (High)"
+    },
+    {
+      "testId": "FT-01",
+      "testName": "Vulnerability & Security Flaw Detection",
+      "model": "qwen2.5:3b",
+      "passed": true,
+      "latencyMs": 7196,
+      "details": "Detected SQL Injection (High)"
+    },
+    {
+      "testId": "FT-02",
+      "testName": "Algorithmic Complexity & Optimality Grading",
+      "model": "llama3.1:8b",
+      "passed": true,
+      "latencyMs": 9708,
+      "details": "Identified O(n), Score: 85/100"
+    },
+    {
+      "testId": "FT-02",
+      "testName": "Algorithmic Complexity & Optimality Grading",
+      "model": "qwen2.5:3b",
+      "passed": true,
+      "latencyMs": 4834,
+      "details": "Identified O(n), Score: 100/100"
+    },
+    {
+      "testId": "FT-03",
+      "testName": "Socratic Pedagogy & Non-Leaking Hint Logic",
+      "model": "llama3.1:8b",
+      "passed": true,
+      "latencyMs": 12329,
+      "details": "Generated pedagocial guide: \"What happens when you set `low` to `mid` instead o...\""
+    },
+    {
+      "testId": "FT-03",
+      "testName": "Socratic Pedagogy & Non-Leaking Hint Logic",
+      "model": "qwen2.5:3b",
+      "passed": true,
+      "latencyMs": 5995,
+      "details": "Generated pedagocial guide: \"When adjusting the search range, did you notice th...\""
+    }
+  ],
+  "integration": [
+    {
+      "testId": "IT-01",
+      "testName": "DEV-TRACE Ingestion Schema & Type Adherence",
+      "model": "llama3.1:8b",
+      "passed": true,
+      "latencyMs": 29502,
+      "details": "Strict conformity with all 7 root schema keys"
+    },
+    {
+      "testId": "IT-01",
+      "testName": "DEV-TRACE Ingestion Schema & Type Adherence",
+      "model": "qwen2.5:3b",
+      "passed": true,
+      "latencyMs": 11266,
+      "details": "Strict conformity with all 7 root schema keys"
+    },
+    {
+      "testId": "IT-02",
+      "testName": "Biometric Feature Vector & ML Pipeline Fusion",
+      "model": "llama3.1:8b",
+      "passed": true,
+      "latencyMs": 9106,
+      "details": "Anomaly flagged with confidence 80%: Unusually uniform keystroke pattern"
+    },
+    {
+      "testId": "IT-02",
+      "testName": "Biometric Feature Vector & ML Pipeline Fusion",
+      "model": "qwen2.5:3b",
+      "passed": true,
+      "latencyMs": 4806,
+      "details": "Anomaly flagged with confidence 95%: Unusually uniform keystroke pattern and low backspace ratio suggest potential bot activity."
+    }
+  ],
+  "system": [
+    {
+      "testId": "ST-01",
+      "testName": "Full Session End-to-End Lifecycle Evaluation",
+      "model": "llama3.1:8b",
+      "passed": true,
+      "latencyMs": 13135,
+      "details": "Verdict: HIRE, Integrity: CLEAN, Score: 85/100"
+    },
+    {
+      "testId": "ST-01",
+      "testName": "Full Session End-to-End Lifecycle Evaluation",
+      "model": "qwen2.5:3b",
+      "passed": true,
+      "latencyMs": 6336,
+      "details": "Verdict: HIRE, Integrity: CLEAN, Score: 92/100"
+    },
+    {
+      "testId": "ST-02",
+      "testName": "Security Strike Protocol & Automated Incident Lockdown",
+      "model": "llama3.1:8b",
+      "passed": true,
+      "latencyMs": 11371,
+      "details": "Escalated to SESSION_AUTO_LOCKOUT (Critical)"
+    },
+    {
+      "testId": "ST-02",
+      "testName": "Security Strike Protocol & Automated Incident Lockdown",
+      "model": "qwen2.5:3b",
+      "passed": true,
+      "latencyMs": 5142,
+      "details": "Escalated to SESSION_AUTO_LOCKOUT (Critical)"
+    }
+  ],
+  "performance": [
+    {
+      "model": "llama3.1:8b",
+      "totalLatencyMs": 14035,
+      "evalDurationMs": 4022,
+      "promptEvalDurationMs": 474,
+      "evalTokens": 58,
+      "promptTokens": 151,
+      "tokensPerSec": 14.4,
+      "validJson": true
+    },
+    {
+      "model": "qwen2.5:3b",
+      "totalLatencyMs": 6296,
+      "evalDurationMs": 1193,
+      "promptEvalDurationMs": 151,
+      "evalTokens": 76,
+      "promptTokens": 149,
+      "tokensPerSec": 63.7,
+      "validJson": true
+    }
+  ]
+}

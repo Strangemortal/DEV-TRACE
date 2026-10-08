@@ -15,16 +15,12 @@ export function middleware(req: NextRequest) {
     }
   }
 
-  // 1. Root route "/" (Public Exhibition Showcase)
+  // 1. Root route "/" (Redirect to role workspace or login)
   if (pathname === "/") {
-    // If user explicitly asks for role redirect via query param ?direct=true
-    if (req.nextUrl.searchParams.get("direct") === "true") {
-      if (role === "admin") return NextResponse.redirect(new URL("/admin", req.url));
-      if (role === "interviewer") return NextResponse.redirect(new URL("/interviewer", req.url));
-      if (role === "candidate") return NextResponse.redirect(new URL("/ide", req.url));
-    }
-    // Allow root page to render the interactive Exhibition Showcase Hub
-    return NextResponse.next();
+    if (role === "admin") return NextResponse.redirect(new URL("/admin", req.url));
+    if (role === "interviewer") return NextResponse.redirect(new URL("/interviewer", req.url));
+    if (role === "candidate") return NextResponse.redirect(new URL("/ide", req.url));
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
   // 2. Dedicated Staff gateway "/staff"
