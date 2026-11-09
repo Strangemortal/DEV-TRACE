@@ -367,7 +367,7 @@ function TelemetryDashboardContent() {
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 text-amber-300 border border-amber-500/30 text-xs font-bold transition-all shadow-sm active:scale-95"
             >
               <Sparkles size={13} className="text-amber-400" />
-              <span>{simulating ? "Injecting Sim..." : "🎭 Exhibition Simulator"}</span>
+              <span>{simulating ? "Generating Telemetry..." : "⚡ Telemetry Generator"}</span>
             </button>
 
             {showSimMenu && (
@@ -377,7 +377,7 @@ function TelemetryDashboardContent() {
                 }`}
               >
                 <span className="text-[10px] font-mono uppercase tracking-wider opacity-60 font-bold px-2 py-1 block">
-                  1-Click Live Simulation Scenarios:
+                  Synthetic Evaluation Scenarios:
                 </span>
                 <button
                   onClick={() => triggerSimulation("ai-cheater")}

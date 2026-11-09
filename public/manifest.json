@@ -1,7 +1,7 @@
 {
-  "name": "DevTrace Candidate Assessment",
+  "name": "DevTrace Enterprise Assessment Platform",
   "short_name": "DevTrace",
-  "description": "Student & Candidate Behavioral Assessment Coding Platform",
+  "description": "Enterprise Behavioral Telemetry & Technical Evaluation IDE",
   "start_url": "/login",
   "display": "standalone",
   "background_color": "#0f1117",

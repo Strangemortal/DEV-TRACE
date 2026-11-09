@@ -1,68 +1,14 @@
 {
   "candidates": [
     {
-      "id": "11ea1bf2-755a-49b6-8e65-0d0d86c2b4c7",
-      "name": "Demo Candidate (Exhibition)",
+      "id": "b00c977a-e971-483a-aea0-84093f87a4ad",
+      "name": "Assessment Candidate",
       "userId": "demo_candidate",
       "passwordHash": "demo123",
       "assignedRepoId": "python-challenge",
       "active": true,
       "status": "active",
-      "createdAt": 1791448416250,
-      "createdBy": "admin"
-    },
-    {
-      "id": "1b949d68-fdeb-4646-9d4b-b510911c83d2",
-      "name": "abhay",
-      "userId": "abhay_89",
-      "passwordHash": "9zhHrXyy",
-      "assignedRepoId": "django-orm-store",
-      "active": false,
-      "createdAt": 1790357028295,
-      "createdBy": "admin",
-      "status": "paused"
-    },
-    {
-      "id": "98c43afc-2248-4c9a-a315-7a79c1762eed",
-      "name": "gaurav",
-      "userId": "gaurav_37",
-      "passwordHash": "kmdfbART",
-      "assignedRepoId": "django-orm-store",
-      "active": true,
-      "createdAt": 1790357060159,
-      "createdBy": "admin",
-      "status": "active"
-    },
-    {
-      "id": "ef4eb71b-1f97-46e4-82ac-f064968ed257",
-      "name": "bharattt",
-      "userId": "bharattt_13",
-      "passwordHash": "IkI4DaJH",
-      "assignedRepoId": "fastapi-async-crud",
-      "active": true,
-      "createdAt": 1790357578822,
-      "createdBy": "admin"
-    },
-    {
-      "id": "cand_perf_001",
-      "name": "Aarav Sharma",
-      "userId": "user_001",
-      "passwordHash": "loadtest123",
-      "assignedRepoId": "python-challenge",
-      "active": true,
-      "status": "active",
-      "createdAt": 1791479140643,
-      "createdBy": "admin"
-    },
-    {
-      "id": "cand_perf_002",
-      "name": "Priya Patel",
-      "userId": "user_002",
-      "passwordHash": "loadtest123",
-      "assignedRepoId": "python-challenge",
-      "active": true,
-      "status": "active",
-      "createdAt": 1791479140643,
+      "createdAt": 1794249804591,
       "createdBy": "admin"
     },
     {
@@ -592,6 +538,47 @@
       "status": "locked_out",
       "createdAt": 1791479140643,
       "createdBy": "admin"
+    },
+    {
+      "id": "2937bbe5-fb09-4373-88c0-1ec10b0aa130",
+      "name": "BHARAT",
+      "userId": "bharat_68",
+      "passwordHash": "u5L88Mur",
+      "assignedRepoId": "cpp-array-reversal",
+      "active": true,
+      "createdAt": 1794249036060,
+      "createdBy": "admin"
+    },
+    {
+      "id": "863dfce0-92c0-4e38-8d9d-6c6ce5124507",
+      "name": "aditya",
+      "userId": "aditya_99",
+      "passwordHash": "QyTHGTdQ",
+      "assignedRepoId": "django-orm-store",
+      "active": true,
+      "createdAt": 1794249399781,
+      "createdBy": "admin"
+    },
+    {
+      "id": "fe00765a-f39b-42cc-8f46-82c1d15f92f4",
+      "name": "aditya_lap",
+      "userId": "aditya_lap_93",
+      "passwordHash": "Auppmki8",
+      "assignedRepoId": "django-orm-store",
+      "active": true,
+      "createdAt": 1794249430604,
+      "createdBy": "admin",
+      "status": "active"
+    },
+    {
+      "id": "f29b52da-c70c-4ad4-82bc-31ce03b39426",
+      "name": "bbk_phone",
+      "userId": "bbk_phone_81",
+      "passwordHash": "QDxtPalq",
+      "assignedRepoId": "django-orm-store",
+      "active": true,
+      "createdAt": 1794249468234,
+      "createdBy": "admin"
     }
   ],
   "sessions": {
@@ -650,19 +637,6 @@
       "role": "admin",
       "expiresAt": 1790443360414
     },
-    "candidate_b742d18c-2903-474d-9b33-529ca4681066": {
-      "userId": "bharattt_13",
-      "role": "candidate",
-      "candidateId": "ef4eb71b-1f97-46e4-82ac-f064968ed257",
-      "expiresAt": 1790444024419
-    },
-    "candidate_13434183-069c-4384-9b4a-0112e938ea54": {
-      "userId": "demo_candidate",
-      "role": "candidate",
-      "candidateId": "11ea1bf2-755a-49b6-8e65-0d0d86c2b4c7",
-      "expiresAt": 1791534816249,
-      "status": "paused"
-    },
     "admin_c9bc3b37-cd64-4eb5-bcac-a4cc0ce63cf7": {
       "userId": "admin",
       "role": "admin",
@@ -673,37 +647,10 @@
       "role": "interviewer",
       "expiresAt": 1791534816643
     },
-    "candidate_b3811573-d06f-4766-aafa-bd403be70c06": {
-      "userId": "demo_candidate",
-      "role": "candidate",
-      "candidateId": "11ea1bf2-755a-49b6-8e65-0d0d86c2b4c7",
-      "expiresAt": 1791535249759,
-      "status": "paused"
-    },
     "admin_b7064be6-d016-476c-8b32-19a82de0204c": {
       "userId": "admin",
       "role": "admin",
       "expiresAt": 1791535249801
-    },
-    "session_perf_001": {
-      "userId": "user_001",
-      "candidateId": "cand_perf_001",
-      "name": "Aarav Sharma",
-      "role": "candidate",
-      "assignedRepoId": "python-challenge",
-      "active": true,
-      "status": "active",
-      "expiresAt": 1791565540643
-    },
-    "session_perf_002": {
-      "userId": "user_002",
-      "candidateId": "cand_perf_002",
-      "name": "Priya Patel",
-      "role": "candidate",
-      "assignedRepoId": "python-challenge",
-      "active": true,
-      "status": "active",
-      "expiresAt": 1791565540643
     },
     "session_perf_003": {
       "userId": "user_003",
@@ -1185,13 +1132,6 @@
       "status": "locked_out",
       "expiresAt": 1791565540643
     },
-    "candidate_06d34c3e-a04f-4349-952f-0aa5a25c9805": {
-      "userId": "demo_candidate",
-      "role": "candidate",
-      "candidateId": "11ea1bf2-755a-49b6-8e65-0d0d86c2b4c7",
-      "expiresAt": 1791538574514,
-      "status": "paused"
-    },
     "admin_4c390def-f7c0-46ad-b695-6c37fafb42e9": {
       "userId": "admin",
       "role": "admin",
@@ -1201,6 +1141,23 @@
       "userId": "admin",
       "role": "admin",
       "expiresAt": 1791565596433
+    },
+    "candidate_c25a0c98-adaa-4471-8fb2-56a94fa266e7": {
+      "userId": "demo_candidate",
+      "role": "candidate",
+      "candidateId": "b00c977a-e971-483a-aea0-84093f87a4ad",
+      "expiresAt": 1794336204591
+    },
+    "admin_53990c5a-a27e-4258-8d2e-999d84e96c63": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1794336303936
+    },
+    "candidate_4c123e18-ad19-493f-8417-fa7f76257354": {
+      "userId": "bharat_68",
+      "role": "candidate",
+      "candidateId": "2937bbe5-fb09-4373-88c0-1ec10b0aa130",
+      "expiresAt": 1794336365584
     }
   },
   "telemetry": [
@@ -5225,12 +5182,813 @@
           "ts": "2026-10-08T16:37:14.466Z"
         }
       ]
+    },
+    {
+      "id": "af155f18-a877-4265-8237-ff3b7bf12c3d",
+      "candidateId": "11ea1bf2-755a-49b6-8e65-0d0d86c2b4c7",
+      "candidateName": "Assessment Candidate",
+      "repoId": "python-challenge",
+      "submittedAt": 1794248918919,
+      "sessionStart": 1794248890795,
+      "duration": 27,
+      "stability": 100,
+      "events": []
+    },
+    {
+      "id": "9aee4e2a-a9de-4137-ba0b-37ef874a9f7b",
+      "candidateId": "2937bbe5-fb09-4373-88c0-1ec10b0aa130",
+      "candidateName": "BHARAT",
+      "repoId": "cpp-array-reversal",
+      "submittedAt": 1794249091144,
+      "sessionStart": 1794249057804,
+      "duration": 14,
+      "stability": 65,
+      "events": [
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 4,
+            "timestamp": "2026-11-09T18:31:28.002Z"
+          },
+          "ts": "2026-11-09T18:31:28.004Z"
+        },
+        {
+          "type": "AUTO_LOGOUT",
+          "ts": 1794249088004,
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT",
+            "duration": 14
+          }
+        }
+      ]
+    },
+    {
+      "id": "2d3e3007-2749-499e-8e78-6982598370ec",
+      "candidateId": "2937bbe5-fb09-4373-88c0-1ec10b0aa130",
+      "candidateName": "BHARAT",
+      "repoId": "cpp-array-reversal",
+      "submittedAt": 1794249091224,
+      "sessionStart": 1794249057804,
+      "duration": 14,
+      "stability": 65,
+      "events": [
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 4,
+            "timestamp": "2026-11-09T18:31:29.009Z"
+          },
+          "ts": "2026-11-09T18:31:29.009Z"
+        },
+        {
+          "type": "AUTO_LOGOUT",
+          "ts": 1794249089009,
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT",
+            "duration": 14
+          }
+        }
+      ]
+    },
+    {
+      "id": "4f0e67c7-0f53-40ba-9042-6b650c97e2c6",
+      "candidateId": "fe00765a-f39b-42cc-8f46-82c1d15f92f4",
+      "candidateName": "aditya_lap",
+      "repoId": "django-orm-store",
+      "submittedAt": 1794249766025,
+      "sessionStart": 1794249754405,
+      "duration": 7,
+      "stability": 100,
+      "events": []
+    },
+    {
+      "id": "2e3f4bce-5ed5-4e72-be60-bd914ed02c1b",
+      "candidateId": "863dfce0-92c0-4e38-8d9d-6c6ce5124507",
+      "candidateName": "aditya",
+      "repoId": "django-orm-store",
+      "submittedAt": 1794249957631,
+      "sessionStart": 1794249741546,
+      "duration": 51,
+      "stability": 70,
+      "events": [
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:53.999Z"
+          },
+          "ts": "2026-11-09T18:45:53.999Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.081Z"
+          },
+          "ts": "2026-11-09T18:45:54.081Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.121Z"
+          },
+          "ts": "2026-11-09T18:45:54.121Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.244Z"
+          },
+          "ts": "2026-11-09T18:45:54.244Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.295Z"
+          },
+          "ts": "2026-11-09T18:45:54.295Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.342Z"
+          },
+          "ts": "2026-11-09T18:45:54.342Z"
+        },
+        {
+          "type": "AUTO_LOGOUT",
+          "ts": 1794249954343,
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT",
+            "duration": 51
+          }
+        }
+      ]
+    },
+    {
+      "id": "054d126d-8d5f-4083-b219-dc7d4577bdf7",
+      "candidateId": "863dfce0-92c0-4e38-8d9d-6c6ce5124507",
+      "candidateName": "aditya",
+      "repoId": "django-orm-store",
+      "submittedAt": 1794249957981,
+      "sessionStart": 1794249741546,
+      "duration": 55,
+      "stability": 70,
+      "events": [
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:53.999Z"
+          },
+          "ts": "2026-11-09T18:45:53.999Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.081Z"
+          },
+          "ts": "2026-11-09T18:45:54.081Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.121Z"
+          },
+          "ts": "2026-11-09T18:45:54.121Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.244Z"
+          },
+          "ts": "2026-11-09T18:45:54.244Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.295Z"
+          },
+          "ts": "2026-11-09T18:45:54.295Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.342Z"
+          },
+          "ts": "2026-11-09T18:45:54.342Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.461Z"
+          },
+          "ts": "2026-11-09T18:45:54.461Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.554Z"
+          },
+          "ts": "2026-11-09T18:45:54.554Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.622Z"
+          },
+          "ts": "2026-11-09T18:45:54.622Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.687Z"
+          },
+          "ts": "2026-11-09T18:45:54.687Z"
+        },
+        {
+          "type": "AUTO_LOGOUT",
+          "ts": 1794249954687,
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT",
+            "duration": 55
+          }
+        }
+      ]
+    },
+    {
+      "id": "e588e5dd-e7ee-46db-84a4-615d8301b80e",
+      "candidateId": "863dfce0-92c0-4e38-8d9d-6c6ce5124507",
+      "candidateName": "aditya",
+      "repoId": "django-orm-store",
+      "submittedAt": 1794249958705,
+      "sessionStart": 1794249741546,
+      "duration": 61,
+      "stability": 70,
+      "events": [
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:53.999Z"
+          },
+          "ts": "2026-11-09T18:45:53.999Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.081Z"
+          },
+          "ts": "2026-11-09T18:45:54.081Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.121Z"
+          },
+          "ts": "2026-11-09T18:45:54.121Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.244Z"
+          },
+          "ts": "2026-11-09T18:45:54.244Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.295Z"
+          },
+          "ts": "2026-11-09T18:45:54.295Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.342Z"
+          },
+          "ts": "2026-11-09T18:45:54.342Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.461Z"
+          },
+          "ts": "2026-11-09T18:45:54.461Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.554Z"
+          },
+          "ts": "2026-11-09T18:45:54.554Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.622Z"
+          },
+          "ts": "2026-11-09T18:45:54.622Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.687Z"
+          },
+          "ts": "2026-11-09T18:45:54.687Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.784Z"
+          },
+          "ts": "2026-11-09T18:45:54.784Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.823Z"
+          },
+          "ts": "2026-11-09T18:45:54.823Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.863Z"
+          },
+          "ts": "2026-11-09T18:45:54.863Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.927Z"
+          },
+          "ts": "2026-11-09T18:45:54.927Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.967Z"
+          },
+          "ts": "2026-11-09T18:45:54.967Z"
+        },
+        {
+          "type": "AUTO_LOGOUT",
+          "ts": 1794249954967,
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT",
+            "duration": 61
+          }
+        }
+      ]
+    },
+    {
+      "id": "6fea5072-8232-480d-a8a7-59abd6bab9ed",
+      "candidateId": "863dfce0-92c0-4e38-8d9d-6c6ce5124507",
+      "candidateName": "aditya",
+      "repoId": "django-orm-store",
+      "submittedAt": 1794249958755,
+      "sessionStart": 1794249741546,
+      "duration": 62,
+      "stability": 70,
+      "events": [
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:53.999Z"
+          },
+          "ts": "2026-11-09T18:45:53.999Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.081Z"
+          },
+          "ts": "2026-11-09T18:45:54.081Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.121Z"
+          },
+          "ts": "2026-11-09T18:45:54.121Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.244Z"
+          },
+          "ts": "2026-11-09T18:45:54.244Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.295Z"
+          },
+          "ts": "2026-11-09T18:45:54.295Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.342Z"
+          },
+          "ts": "2026-11-09T18:45:54.342Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.461Z"
+          },
+          "ts": "2026-11-09T18:45:54.461Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.554Z"
+          },
+          "ts": "2026-11-09T18:45:54.554Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.622Z"
+          },
+          "ts": "2026-11-09T18:45:54.622Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.687Z"
+          },
+          "ts": "2026-11-09T18:45:54.687Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.784Z"
+          },
+          "ts": "2026-11-09T18:45:54.784Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.823Z"
+          },
+          "ts": "2026-11-09T18:45:54.823Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.863Z"
+          },
+          "ts": "2026-11-09T18:45:54.863Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.927Z"
+          },
+          "ts": "2026-11-09T18:45:54.927Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.967Z"
+          },
+          "ts": "2026-11-09T18:45:54.967Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.993Z"
+          },
+          "ts": "2026-11-09T18:45:54.993Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:55.019Z"
+          },
+          "ts": "2026-11-09T18:45:55.019Z"
+        },
+        {
+          "type": "AUTO_LOGOUT",
+          "ts": 1794249955019,
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT",
+            "duration": 62
+          }
+        }
+      ]
+    },
+    {
+      "id": "e8672cd1-5454-4a6b-83db-94ac2bb754e9",
+      "candidateId": "863dfce0-92c0-4e38-8d9d-6c6ce5124507",
+      "candidateName": "aditya",
+      "repoId": "django-orm-store",
+      "submittedAt": 1794249959327,
+      "sessionStart": 1794249741546,
+      "duration": 48,
+      "stability": 70,
+      "events": [
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:53.999Z"
+          },
+          "ts": "2026-11-09T18:45:53.999Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.081Z"
+          },
+          "ts": "2026-11-09T18:45:54.081Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.121Z"
+          },
+          "ts": "2026-11-09T18:45:54.121Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.244Z"
+          },
+          "ts": "2026-11-09T18:45:54.244Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.295Z"
+          },
+          "ts": "2026-11-09T18:45:54.295Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.342Z"
+          },
+          "ts": "2026-11-09T18:45:54.342Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.461Z"
+          },
+          "ts": "2026-11-09T18:45:54.461Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.554Z"
+          },
+          "ts": "2026-11-09T18:45:54.554Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.622Z"
+          },
+          "ts": "2026-11-09T18:45:54.622Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.687Z"
+          },
+          "ts": "2026-11-09T18:45:54.687Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.784Z"
+          },
+          "ts": "2026-11-09T18:45:54.784Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.823Z"
+          },
+          "ts": "2026-11-09T18:45:54.823Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.863Z"
+          },
+          "ts": "2026-11-09T18:45:54.863Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.927Z"
+          },
+          "ts": "2026-11-09T18:45:54.927Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.967Z"
+          },
+          "ts": "2026-11-09T18:45:54.967Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:54.993Z"
+          },
+          "ts": "2026-11-09T18:45:54.993Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:55.019Z"
+          },
+          "ts": "2026-11-09T18:45:55.019Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:55.045Z"
+          },
+          "ts": "2026-11-09T18:45:55.045Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:55.076Z"
+          },
+          "ts": "2026-11-09T18:45:55.076Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:55.101Z"
+          },
+          "ts": "2026-11-09T18:45:55.101Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT_LOGOUT",
+            "strikeCount": 91,
+            "timestamp": "2026-11-09T18:45:55.127Z"
+          },
+          "ts": "2026-11-09T18:45:55.127Z"
+        },
+        {
+          "type": "AUTO_LOGOUT",
+          "ts": 1794249955127,
+          "meta": {
+            "reason": "FULLSCREEN_TIMEOUT",
+            "duration": 48
+          }
+        }
+      ]
     }
   ],
   "interviewers": [
     {
       "id": "dee03616-3da7-4bba-916b-a737bc11ffd5",
-      "name": "Demo Interviewer",
+      "name": "Technical Interviewer",
       "userId": "demo_interviewer",
       "passwordHash": "demo123",
       "createdAt": 1791448416643

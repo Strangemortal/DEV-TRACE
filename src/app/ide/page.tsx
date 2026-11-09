@@ -27,7 +27,6 @@ import {
   AlertTriangle,
   ShieldAlert,
   Terminal as TermIcon,
-  Smartphone,
   Eye,
   RefreshCw,
 } from "lucide-react";
@@ -39,7 +38,6 @@ import MockTerminal, { TerminalLine } from "@/components/MockTerminal";
 import LivePreview from "@/components/LivePreview";
 import ThemeToggle from "@/components/ThemeToggle";
 import MarkdownViewer from "@/components/MarkdownViewer";
-import ConnectMobileModal from "@/components/ConnectMobileModal";
 import Editor from "@monaco-editor/react";
 
 function fmtElapsed(sec: number): string {
@@ -78,7 +76,6 @@ export default function DevTraceIDEPage() {
   const [termOpen, setTermOpen] = useState(true);
   const [termHeight, setTermHeight] = useState<number>(240);
   const [isDraggingTerm, setIsDraggingTerm] = useState(false);
-  const [showMobileConnect, setShowMobileConnect] = useState(false);
   const [isExplorerCollapsed, setIsExplorerCollapsed] = useState(false);
 
   // Fullscreen & Tab Switch state
@@ -1251,20 +1248,6 @@ export default function DevTraceIDEPage() {
           </button>
 
           {/* Theme Toggle Component */}
-          {/* Mobile Connect Button */}
-          <button
-            type="button"
-            onClick={() => setShowMobileConnect(true)}
-            title="Connect Mobile / QR Code"
-            className={`flex items-center gap-1.5 text-xs md:text-sm px-3 py-1.5 rounded-md font-medium border transition-all active:scale-95 shadow-sm ${
-              isLight
-                ? "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700"
-                : "bg-white/5 hover:bg-white/10 border-white/10 text-slate-300"
-            }`}
-          >
-            <Smartphone size={14} className="text-sky-400" />
-            <span className="hidden md:inline">Mobile</span>
-          </button>
 
           <ThemeToggle />
 
@@ -1917,12 +1900,6 @@ export default function DevTraceIDEPage() {
           </div>
         </div>
       )}
-
-      {/* ── MOBILE CONNECT MODAL ── */}
-      <ConnectMobileModal
-        isOpen={showMobileConnect}
-        onClose={() => setShowMobileConnect(false)}
-      />
     </div>
   );
 }
