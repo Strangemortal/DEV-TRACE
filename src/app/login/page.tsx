@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Zap, Shield, Key, AlertCircle, ArrowRight, ShieldAlert } from "lucide-react";
+import { Zap, Shield, Key, AlertCircle, ArrowRight, ShieldAlert, Smartphone } from "lucide-react";
 import { useThemeStore } from "@/store/themeStore";
 import ThemeToggle from "@/components/ThemeToggle";
+import ConnectMobileModal from "@/components/ConnectMobileModal";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [initialChecking, setInitialChecking] = useState(true);
   const [logoutReason, setLogoutReason] = useState<string | null>(null);
+  const [showConnectMobile, setShowConnectMobile] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -111,8 +113,20 @@ export default function LoginPage() {
           : "bg-[#0f1117] text-slate-100"
       }`}
     >
-      {/* Top right theme toggle */}
-      <div className="absolute top-6 right-6 z-20">
+      {/* Top right actions */}
+      <div className="absolute top-6 right-6 z-20 flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setShowConnectMobile(true)}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold shadow-sm transition-all active:scale-95 ${
+            isLight
+              ? "bg-white hover:bg-slate-50 border-slate-300 text-slate-700"
+              : "bg-white/5 hover:bg-white/10 border-white/10 text-slate-200"
+          }`}
+        >
+          <Smartphone size={14} className="text-sky-400" />
+          <span className="hidden sm:inline">Connect Mobile</span>
+        </button>
         <ThemeToggle />
       </div>
 
@@ -229,6 +243,14 @@ export default function LoginPage() {
           </button>
           <button
             type="button"
+            onClick={() => setShowConnectMobile(true)}
+            className="w-full flex items-center justify-center gap-1.5 py-2 bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 border border-sky-500/30 rounded-lg text-xs font-semibold transition-all mt-1"
+          >
+            <Smartphone size={13} />
+            <span>📱 Connect Mobile Phone (QR Code)</span>
+          </button>
+          <button
+            type="button"
             onClick={() => router.push("/")}
             className="text-[11px] opacity-60 hover:opacity-100 transition-opacity text-center mt-0.5"
           >
@@ -241,6 +263,11 @@ export default function LoginPage() {
           <span>Secured Candidate Assessment Session</span>
         </div>
       </div>
+
+      <ConnectMobileModal
+        isOpen={showConnectMobile}
+        onClose={() => setShowConnectMobile(false)}
+      />
     </div>
   );
 }

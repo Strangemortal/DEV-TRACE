@@ -1,6 +1,19 @@
 "use client";
 
-import { FileText, FileCode2, FileJson, BookOpen, FolderOpen, ChevronRight, Database, Settings, ShieldCheck, PlayCircle, Lock } from "lucide-react";
+import {
+  FileText,
+  FileCode2,
+  FileJson,
+  BookOpen,
+  FolderOpen,
+  ChevronRight,
+  ChevronLeft,
+  Database,
+  Settings,
+  ShieldCheck,
+  PlayCircle,
+  Lock,
+} from "lucide-react";
 import { useThemeStore } from "@/store/themeStore";
 import { isReadOnlyFile } from "@/data/brokenRepo";
 
@@ -42,15 +55,66 @@ interface Props {
   onSelect: (file: string) => void;
   dirtyFiles: Set<string>;
   repo?: any;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-export default function FileExplorer({ files, activeFile, onSelect, dirtyFiles, repo }: Props) {
+export default function FileExplorer({
+  files,
+  activeFile,
+  onSelect,
+  dirtyFiles,
+  repo,
+  isCollapsed,
+  onToggleCollapse,
+}: Props) {
   const { theme } = useThemeStore();
   const isLight = theme === "light";
 
+  if (isCollapsed) {
+    return (
+      <div
+        className={`w-12 flex-shrink-0 border-r flex flex-col items-center py-3 h-full transition-all duration-150 ${
+          isLight
+            ? "bg-slate-50 border-slate-200 text-slate-700"
+            : theme === "midnight"
+            ? "bg-[#0d121f] border-[#1f293d] text-slate-300"
+            : "bg-[#12151c] border-[#252a36] text-slate-300"
+        }`}
+      >
+        <button
+          onClick={onToggleCollapse}
+          className="p-2 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors mb-3"
+          title="Expand File Explorer"
+        >
+          <FolderOpen size={16} />
+        </button>
+        <div className="flex-1 flex flex-col gap-2 overflow-y-auto scrollbar-none">
+          {files.map((file) => {
+            const isActive = activeFile === file;
+            return (
+              <button
+                key={file}
+                onClick={() => onSelect(file)}
+                title={file}
+                className={`p-2 rounded-lg transition-all ${
+                  isActive
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "text-slate-400 hover:bg-white/10 hover:text-white"
+                }`}
+              >
+                {FILE_ICONS[file] ?? <FileJson size={14} />}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
-      className={`w-[220px] flex-shrink-0 border-r flex flex-col h-full transition-colors duration-150 ${
+      className={`w-[220px] max-w-[70vw] flex-shrink-0 border-r flex flex-col h-full transition-colors duration-150 ${
         isLight
           ? "bg-slate-50 border-slate-200 text-slate-700"
           : theme === "midnight"
@@ -69,16 +133,25 @@ export default function FileExplorer({ files, activeFile, onSelect, dirtyFiles, 
             Explorer
           </span>
         </div>
+        {onToggleCollapse && (
+          <button
+            onClick={onToggleCollapse}
+            className="p-1 rounded hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
+            title="Collapse Explorer"
+          >
+            <ChevronLeft size={14} />
+          </button>
+        )}
       </div>
-      
+
       <div className="py-2 overflow-y-auto flex-1 scrollbar-thin">
         <div className="px-2 mb-2">
-           <div className="flex items-center gap-1.5 px-2 py-1 text-[11px] opacity-60 font-medium">
-             <ChevronRight size={12} className="rotate-90" />
-             <span className="uppercase tracking-wider">workspace</span>
-           </div>
+          <div className="flex items-center gap-1.5 px-2 py-1 text-[11px] opacity-60 font-medium">
+            <ChevronRight size={12} className="rotate-90" />
+            <span className="uppercase tracking-wider">workspace</span>
+          </div>
         </div>
-        
+
         {files.map((file) => {
           const isActive = activeFile === file;
           const readOnly = isReadOnlyFile(file, repo);
@@ -99,21 +172,24 @@ export default function FileExplorer({ files, activeFile, onSelect, dirtyFiles, 
               {isActive && (
                 <div className="absolute left-0 w-1 h-3.5 bg-blue-500 rounded-sm" />
               )}
-              
+
               <span className="flex-shrink-0 transition-transform group-hover:scale-105">
                 {FILE_ICONS[file] ?? <FileJson size={15} className="opacity-60" />}
               </span>
-              
+
               <span className="flex-1 truncate text-left font-mono text-xs md:text-sm">
                 {file}
               </span>
 
               {readOnly && (
-                <span title="Read-only specification/test file" className="opacity-50 group-hover:opacity-80 flex-shrink-0">
+                <span
+                  title="Read-only specification/test file"
+                  className="opacity-50 group-hover:opacity-80 flex-shrink-0"
+                >
                   <Lock size={12} />
                 </span>
               )}
-              
+
               {dirtyFiles.has(file) && !readOnly && (
                 <span className="w-1.5 h-1.5 rounded-sm bg-amber-500 flex-shrink-0" />
               )}
@@ -121,7 +197,7 @@ export default function FileExplorer({ files, activeFile, onSelect, dirtyFiles, 
           );
         })}
       </div>
-      
+
       {/* Footer Info */}
       <div
         className={`p-3 border-t text-[10px] font-mono flex flex-col gap-1 opacity-70 ${

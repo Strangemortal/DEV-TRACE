@@ -17,9 +17,10 @@
       "userId": "abhay_89",
       "passwordHash": "9zhHrXyy",
       "assignedRepoId": "django-orm-store",
-      "active": true,
+      "active": false,
       "createdAt": 1790357028295,
-      "createdBy": "admin"
+      "createdBy": "admin",
+      "status": "paused"
     },
     {
       "id": "98c43afc-2248-4c9a-a315-7a79c1762eed",
@@ -659,7 +660,8 @@
       "userId": "demo_candidate",
       "role": "candidate",
       "candidateId": "11ea1bf2-755a-49b6-8e65-0d0d86c2b4c7",
-      "expiresAt": 1791534816249
+      "expiresAt": 1791534816249,
+      "status": "paused"
     },
     "admin_c9bc3b37-cd64-4eb5-bcac-a4cc0ce63cf7": {
       "userId": "admin",
@@ -675,7 +677,8 @@
       "userId": "demo_candidate",
       "role": "candidate",
       "candidateId": "11ea1bf2-755a-49b6-8e65-0d0d86c2b4c7",
-      "expiresAt": 1791535249759
+      "expiresAt": 1791535249759,
+      "status": "paused"
     },
     "admin_b7064be6-d016-476c-8b32-19a82de0204c": {
       "userId": "admin",
@@ -1186,7 +1189,8 @@
       "userId": "demo_candidate",
       "role": "candidate",
       "candidateId": "11ea1bf2-755a-49b6-8e65-0d0d86c2b4c7",
-      "expiresAt": 1791538574514
+      "expiresAt": 1791538574514,
+      "status": "paused"
     },
     "admin_4c390def-f7c0-46ad-b695-6c37fafb42e9": {
       "userId": "admin",
