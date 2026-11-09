@@ -20,10 +20,11 @@ export async function POST(req: NextRequest) {
     }
 
     const db = await readDb();
+    const candidateId = session.candidateId || "";
 
     const newRecord: TelemetryRecord = {
       id: crypto.randomUUID(),
-      candidateId: session.candidateId || "",
+      candidateId,
       candidateName: session.name || "Unknown",
       repoId: session.assignedRepoId || "unknown",
       submittedAt: Date.now(),
@@ -35,15 +36,45 @@ export async function POST(req: NextRequest) {
 
     db.telemetry.push(newRecord);
 
-    if (db.liveTelemetry && session.candidateId && db.liveTelemetry[session.candidateId]) {
-      db.liveTelemetry[session.candidateId].status = "completed";
-      db.liveTelemetry[session.candidateId].stability = newRecord.stability;
-      db.liveTelemetry[session.candidateId].duration = newRecord.duration;
+    // 1. Permanently mark candidate as completed and deactivate test access
+    const candidate = db.candidates.find(
+      (c) => c.id === candidateId || c.userId === session.userId
+    );
+    if (candidate) {
+      candidate.status = "completed";
+      candidate.completedAt = Date.now();
+      candidate.active = false;
+      candidate.finalStability = newRecord.stability;
+      candidate.finalDuration = newRecord.duration;
+    }
+
+    // 2. Mark live telemetry state as completed
+    if (db.liveTelemetry && candidateId && db.liveTelemetry[candidateId]) {
+      db.liveTelemetry[candidateId].status = "completed";
+      db.liveTelemetry[candidateId].stability = newRecord.stability;
+      db.liveTelemetry[candidateId].duration = newRecord.duration;
+      db.liveTelemetry[candidateId].lastActive = Date.now();
+      db.liveTelemetry[candidateId].completedAt = Date.now();
+    }
+
+    // 3. Invalidate candidate active sessions in database
+    for (const [token, sess] of Object.entries(db.sessions)) {
+      if (sess.userId === session.userId || sess.candidateId === candidateId) {
+        delete db.sessions[token];
+      }
     }
 
     await writeDb(db);
 
-    return NextResponse.json({ success: true, message: "Session results recorded successfully." });
+    const res = NextResponse.json({
+      success: true,
+      message: "Assessment concluded. Test submitted successfully and session has been closed.",
+    });
+
+    // 4. Expire cookie so browser cannot send stale session
+    res.cookies.delete("devtrace_session");
+
+    return res;
   } catch (error) {
     console.error("Telemetry submit error:", error);
     return NextResponse.json(

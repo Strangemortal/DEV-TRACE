@@ -117,8 +117,8 @@ function TelemetryDashboardContent() {
       const data = await res.json();
       if (res.ok && data.liveTelemetry) {
         const list = Object.values(data.liveTelemetry) as any[];
-        // Sort by lastUpdate descending
-        list.sort((a, b) => (b.lastUpdate || 0) - (a.lastUpdate || 0));
+        // Sort by lastActive descending
+        list.sort((a, b) => (b.lastActive || b.lastUpdate || 0) - (a.lastActive || a.lastUpdate || 0));
         setLiveSessions(list);
         setLastLivePoll(new Date());
 

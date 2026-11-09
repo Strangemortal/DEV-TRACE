@@ -25,6 +25,7 @@ import {
   Play,
   Square,
   Ban,
+  Lock,
   FileUp,
   Download,
 } from "lucide-react";
@@ -660,12 +661,18 @@ export default function AdminDashboard() {
                           <td className="px-6 py-4">
                             <span
                               className={`text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full border ${
-                                c.active
+                                c.status === "completed" || c.completedAt
+                                  ? "bg-blue-500/15 text-blue-400 border-blue-500/30"
+                                  : c.active
                                   ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                                   : "bg-amber-500/10 text-amber-400 border-amber-500/20"
                               }`}
                             >
-                              {c.active ? "In Progress" : "Test Stopped"}
+                              {c.status === "completed" || c.completedAt
+                                ? "Completed (Over)"
+                                : c.active
+                                ? "In Progress"
+                                : "Test Stopped"}
                             </span>
                           </td>
                           <td className="px-6 py-4 flex items-center gap-2">
@@ -679,17 +686,26 @@ export default function AdminDashboard() {
                             </button>
 
                             {/* Stop / Resume Test Button */}
-                            <button
-                              title={c.active ? "Stop Test (Locks candidate IDE session)" : "Resume Test"}
-                              onClick={() => handleToggleCandidateStatus(c)}
-                              className={`p-1.5 rounded-lg border transition-all ${
-                                c.active
-                                  ? "hover:bg-amber-500/10 border-transparent hover:border-amber-500/20 text-slate-400 hover:text-amber-400"
-                                  : "hover:bg-emerald-500/10 border-transparent hover:border-emerald-500/20 text-slate-400 hover:text-emerald-400"
-                              }`}
-                            >
-                              {c.active ? <Square size={14} fill="currentColor" /> : <Play size={14} fill="currentColor" />}
-                            </button>
+                            {c.status === "completed" || c.completedAt ? (
+                              <span
+                                title="Assessment concluded and locked"
+                                className="p-1.5 text-blue-400/60 opacity-60 cursor-not-allowed"
+                              >
+                                <Lock size={14} />
+                              </span>
+                            ) : (
+                              <button
+                                title={c.active ? "Stop Test (Locks candidate IDE session)" : "Resume Test"}
+                                onClick={() => handleToggleCandidateStatus(c)}
+                                className={`p-1.5 rounded-lg border transition-all ${
+                                  c.active
+                                    ? "hover:bg-amber-500/10 border-transparent hover:border-amber-500/20 text-slate-400 hover:text-amber-400"
+                                    : "hover:bg-emerald-500/10 border-transparent hover:border-emerald-500/20 text-slate-400 hover:text-emerald-400"
+                                }`}
+                              >
+                                {c.active ? <Square size={14} fill="currentColor" /> : <Play size={14} fill="currentColor" />}
+                              </button>
+                            )}
 
                             {/* Delete Candidate Button */}
                             <button

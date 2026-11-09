@@ -1831,21 +1831,17 @@ export default function DevTraceIDEPage() {
               </div>
             </div>
 
-            <div className="flex justify-end gap-2.5">
-              <button
-                onClick={() => setShowModal(false)}
-                className="px-4 py-2 text-sm font-semibold opacity-70 hover:opacity-100 rounded-md transition-colors"
-              >
-                Review Code
-              </button>
-              <button
-                onClick={() => handleLogout()}
-                className="flex items-center gap-1.5 px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-semibold shadow-sm transition-all active:scale-95"
-              >
-                <LogOut size={15} />
-                <span>Exit & Sign Out</span>
-              </button>
+            <div className="p-3 rounded-md bg-amber-500/10 border border-amber-500/20 text-xs text-amber-400 mb-6 text-center leading-relaxed">
+              This examination is officially concluded. Your credentials have been permanently locked and you cannot re-enter or reopen this assessment.
             </div>
+
+            <button
+              onClick={() => handleLogout()}
+              className="w-full flex items-center justify-center gap-2 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-md text-sm font-bold shadow-md transition-all active:scale-95"
+            >
+              <LogOut size={16} />
+              <span>Exit Assessment & Conclude Session</span>
+            </button>
           </div>
         </div>
       )}

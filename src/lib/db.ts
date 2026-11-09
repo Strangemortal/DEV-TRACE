@@ -13,6 +13,9 @@ export interface Candidate {
   status?: "active" | "paused" | "completed";
   createdAt: number;
   createdBy?: string; // "admin" or interviewer username
+  completedAt?: number;
+  finalStability?: number;
+  finalDuration?: number;
 }
 
 export interface Interviewer {
@@ -56,6 +59,7 @@ export interface LiveTelemetryState {
   fullscreenEscapes?: number;
   recentEvents: any[];
   status: "active" | "paused" | "completed";
+  completedAt?: number;
 }
 
 export interface DatabaseSchema {
@@ -108,4 +112,3 @@ export async function writeDb(data: DatabaseSchema): Promise<void> {
   });
   return writeQueue;
 }
-

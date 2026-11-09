@@ -119,13 +119,32 @@ export async function POST(req: NextRequest) {
 
       // Find candidate
       const candidate = db.candidates.find(
-        (c) => c.userId.toLowerCase() === userId.toLowerCase() && c.passwordHash === password && c.active
+        (c) => c.userId.toLowerCase() === userId.toLowerCase() && c.passwordHash === password
       );
 
       if (!candidate) {
         return NextResponse.json(
-          { error: "Invalid candidate ID or access token, or account deactivated." },
+          { error: "Invalid candidate ID or access key." },
           { status: 401 }
+        );
+      }
+
+      // Check if assessment has already been finished
+      if (candidate.status === "completed" || candidate.completedAt) {
+        return NextResponse.json(
+          {
+            error: "Assessment Concluded: You have already completed and submitted this test. Re-entry is strictly prohibited.",
+            isCompleted: true,
+          },
+          { status: 403 }
+        );
+      }
+
+      // Check if account is paused / deactivated by admin
+      if (!candidate.active) {
+        return NextResponse.json(
+          { error: "Candidate assessment access has been paused or deactivated by the invigilator." },
+          { status: 403 }
         );
       }
 

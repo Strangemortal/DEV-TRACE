@@ -69,8 +69,8 @@ export async function getSession(): Promise<AuthenticatedUser | null> {
       const candidate = db.candidates.find(
         (c) => c.id === session.candidateId || c.userId === session.userId
       );
-      if (!candidate) {
-        // Candidate was deleted from roster
+      if (!candidate || candidate.status === "completed" || candidate.completedAt) {
+        // Candidate was deleted from roster or has finished the assessment
         delete db.sessions[token];
         await writeDb(db);
         return null;
