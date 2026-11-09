@@ -107,6 +107,18 @@ export default function DevTraceIDEPage() {
   // Elapsed timer
   const [elapsed, setElapsed] = useState(0);
 
+  const elapsedRef = useRef(0);
+  const stabilityScoreRef = useRef(100);
+  const hasInitializedRef = useRef(false);
+
+  useEffect(() => {
+    elapsedRef.current = elapsed;
+  }, [elapsed]);
+
+  useEffect(() => {
+    stabilityScoreRef.current = stabilityScore;
+  }, [stabilityScore]);
+
   // Modal state
   const [showModal, setShowModal] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
@@ -200,15 +212,15 @@ export default function DevTraceIDEPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          sessionStart,
-          duration: elapsed,
-          stability: Math.max(10, stabilityScore - 30),
+          sessionStart: sessionStart,
+          duration: elapsedRef.current,
+          stability: Math.max(10, stabilityScoreRef.current - 30),
           events: [
             ...dump,
             {
               type: "AUTO_LOGOUT",
               ts: Date.now(),
-              meta: { reason: "FULLSCREEN_TIMEOUT", duration: elapsed },
+              meta: { reason: "FULLSCREEN_TIMEOUT", duration: elapsedRef.current },
             },
           ],
         }),
@@ -228,10 +240,13 @@ export default function DevTraceIDEPage() {
     }
 
     router.replace("/login?reason=fullscreen_timeout");
-  }, [elapsed, getDump, logEvent, router, sessionStart, stabilityScore]);
+  }, [getDump, logEvent, router]);
 
   // Check auth on mount
   useEffect(() => {
+    if (hasInitializedRef.current) return;
+    hasInitializedRef.current = true;
+
     async function checkAuth() {
       try {
         const res = await fetch("/api/auth/me");
@@ -315,7 +330,7 @@ export default function DevTraceIDEPage() {
     }
     checkAuth();
     setMounted(true);
-  }, [router, clearEvents, handleTimeoutAutoLogout]);
+  }, []);
 
   // Elapsed timer handler (runs only when not paused)
   useEffect(() => {
