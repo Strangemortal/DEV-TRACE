@@ -1,8 +1,361 @@
 {
-  "candidates": [],
+  "candidates": [
+    {
+      "id": "af416f11-dec0-484c-b08a-1dba29934a64",
+      "name": "bharat",
+      "userId": "bharat_15",
+      "passwordHash": "VrSLOw5i",
+      "assignedRepoId": "django-orm-store",
+      "active": false,
+      "createdAt": 1794254209647,
+      "createdBy": "admin",
+      "status": "completed",
+      "completedAt": 1794255284109,
+      "finalStability": 100,
+      "finalDuration": 2
+    },
+    {
+      "id": "2c93b14c-c642-4ead-b444-33b8437d9e9a",
+      "name": "bbk",
+      "userId": "bbk_77",
+      "passwordHash": "F4fvhQcc",
+      "assignedRepoId": "django-orm-store",
+      "active": false,
+      "createdAt": 1794255267409,
+      "createdBy": "admin",
+      "status": "completed",
+      "completedAt": 1794255395417,
+      "finalStability": 70,
+      "finalDuration": 70
+    }
+  ],
   "interviewers": [],
-  "sessions": {},
-  "telemetry": [],
-  "liveTelemetry": {},
+  "sessions": {
+    "admin_1f66421b-c480-4723-b283-e27ce54797ec": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1794340599913
+    },
+    "admin_b8707033-bc4c-4f02-880a-ee022ea79eb2": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1794340935295
+    },
+    "admin_5f42a840-79ec-4cdd-b52f-317af7c8d754": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1794417455416
+    }
+  },
+  "telemetry": [
+    {
+      "id": "a62b2c18-cd6c-45cf-abfd-d46b42bed8c2",
+      "candidateId": "90e21838-92c8-49db-9ac8-f7e652fa168b",
+      "candidateName": "Aarav Patel",
+      "repoId": "python-challenge",
+      "submittedAt": 1794254536693,
+      "sessionStart": 1794254356684,
+      "duration": 180,
+      "stability": 92,
+      "events": [
+        {
+          "type": "ASSESSMENT_START",
+          "ts": 1794254356684
+        },
+        {
+          "type": "ASSESSMENT_COMPLETE",
+          "ts": 1794254536684
+        }
+      ]
+    },
+    {
+      "id": "8b9b7701-4df9-4054-92ef-e59cfa7277a9",
+      "candidateId": "af416f11-dec0-484c-b08a-1dba29934a64",
+      "candidateName": "bharat",
+      "repoId": "django-orm-store",
+      "submittedAt": 1794255284109,
+      "sessionStart": 1794255281138,
+      "duration": 2,
+      "stability": 100,
+      "events": [
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true
+          },
+          "ts": "2026-11-09T20:14:42.320Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true,
+            "recovered": true,
+            "timestamp": "2026-11-09T20:14:42.327Z"
+          },
+          "ts": "2026-11-09T20:14:42.327Z"
+        }
+      ]
+    },
+    {
+      "id": "7c01060b-8369-4823-86ed-7356a7bce73f",
+      "candidateId": "2c93b14c-c642-4ead-b444-33b8437d9e9a",
+      "candidateName": "bbk",
+      "repoId": "django-orm-store",
+      "submittedAt": 1794255395417,
+      "sessionStart": 1794255281138,
+      "duration": 70,
+      "stability": 70,
+      "events": [
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-11-09T20:15:26.504Z"
+          },
+          "ts": "2026-11-09T20:15:26.504Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "models.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-11-09T20:15:27.960Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "Django test assertions failed. Check models and calculations."
+          },
+          "ts": "2026-11-09T20:15:33.902Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "views.py",
+            "previous_file": "models.py"
+          },
+          "ts": "2026-11-09T20:15:38.120Z"
+        },
+        {
+          "type": "AI_HINT_REQUESTED",
+          "meta": {
+            "level": 1,
+            "activeFile": "views.py"
+          },
+          "ts": "2026-11-09T20:15:43.052Z"
+        },
+        {
+          "type": "AI_HINT_REQUESTED",
+          "meta": {
+            "level": 2,
+            "activeFile": "views.py"
+          },
+          "ts": "2026-11-09T20:15:43.785Z"
+        },
+        {
+          "type": "AI_HINT_REQUESTED",
+          "meta": {
+            "level": 3,
+            "activeFile": "views.py"
+          },
+          "ts": "2026-11-09T20:15:48.721Z"
+        },
+        {
+          "type": "AI_HINT_REQUESTED",
+          "meta": {
+            "level": 1,
+            "activeFile": "views.py"
+          },
+          "ts": "2026-11-09T20:15:51.459Z"
+        },
+        {
+          "type": "AI_HINT_REQUESTED",
+          "meta": {
+            "level": 2,
+            "activeFile": "views.py"
+          },
+          "ts": "2026-11-09T20:15:52.074Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true
+          },
+          "ts": "2026-11-09T20:15:58.992Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true
+          },
+          "ts": "2026-11-09T20:16:00.129Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true
+          },
+          "ts": "2026-11-09T20:16:00.304Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true
+          },
+          "ts": "2026-11-09T20:16:00.449Z"
+        },
+        {
+          "type": "AI_EXPLAIN_ERROR",
+          "meta": {
+            "length": 3312
+          },
+          "ts": "2026-11-09T20:16:14.570Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "manage.py",
+            "previous_file": "views.py"
+          },
+          "ts": "2026-11-09T20:16:19.193Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "settings.py",
+            "previous_file": "manage.py"
+          },
+          "ts": "2026-11-09T20:16:22.361Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "views.py",
+            "previous_file": "settings.py"
+          },
+          "ts": "2026-11-09T20:16:22.857Z"
+        },
+        {
+          "type": "FULLSCREEN_EXIT",
+          "meta": {
+            "reason": "FULLSCREEN_ESCAPED",
+            "strikeCount": 1,
+            "gracePeriodSeconds": 15,
+            "timestamp": "2026-11-09T20:16:27.802Z"
+          },
+          "ts": "2026-11-09T20:16:27.802Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true
+          },
+          "ts": "2026-11-09T20:16:29.834Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true,
+            "recovered": true,
+            "timestamp": "2026-11-09T20:16:29.840Z"
+          },
+          "ts": "2026-11-09T20:16:29.840Z"
+        }
+      ]
+    },
+    {
+      "id": "800ecc92-8358-4527-8727-aec5df8885c1",
+      "candidateId": "b24011de-cdc0-4ca8-ae58-26d13b568636",
+      "candidateName": "Aarav Patel",
+      "repoId": "python-challenge",
+      "submittedAt": 1794331060614,
+      "sessionStart": 1794330880603,
+      "duration": 180,
+      "stability": 92,
+      "events": [
+        {
+          "type": "ASSESSMENT_START",
+          "ts": 1794330880603
+        },
+        {
+          "type": "ASSESSMENT_COMPLETE",
+          "ts": 1794331060603
+        }
+      ]
+    }
+  ],
+  "liveTelemetry": {
+    "af416f11-dec0-484c-b08a-1dba29934a64": {
+      "candidateId": "af416f11-dec0-484c-b08a-1dba29934a64",
+      "candidateName": "bharat",
+      "repoId": "django-orm-store",
+      "lastActive": 1794255284110,
+      "stability": 100,
+      "duration": 2,
+      "activeFile": "README.md",
+      "eventCount": 1,
+      "tabSwitches": 1,
+      "fullscreenEscapes": 0,
+      "recentEvents": [
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 945,
+            "timestamp": "2026-11-09T20:14:01.185Z"
+          },
+          "ts": "2026-11-09T20:14:01.185Z"
+        }
+      ],
+      "status": "completed",
+      "completedAt": 1794255284110
+    },
+    "90e21838-92c8-49db-9ac8-f7e652fa168b": {
+      "candidateId": "90e21838-92c8-49db-9ac8-f7e652fa168b",
+      "candidateName": "Aarav Patel",
+      "repoId": "python-challenge",
+      "lastActive": 1794254536694,
+      "stability": 92,
+      "duration": 180,
+      "activeFile": "main.py",
+      "eventCount": 350,
+      "tabSwitches": 0,
+      "fullscreenEscapes": 0,
+      "recentEvents": [
+        {
+          "type": "KEYSTROKE",
+          "ts": 1794254536515,
+          "meta": {
+            "char": "x"
+          }
+        }
+      ],
+      "status": "completed",
+      "completedAt": 1794254536694
+    },
+    "b24011de-cdc0-4ca8-ae58-26d13b568636": {
+      "candidateId": "b24011de-cdc0-4ca8-ae58-26d13b568636",
+      "candidateName": "Aarav Patel",
+      "repoId": "python-challenge",
+      "lastActive": 1794331060614,
+      "stability": 92,
+      "duration": 180,
+      "activeFile": "main.py",
+      "eventCount": 350,
+      "tabSwitches": 0,
+      "fullscreenEscapes": 0,
+      "recentEvents": [
+        {
+          "type": "KEYSTROKE",
+          "ts": 1794331060396,
+          "meta": {
+            "char": "x"
+          }
+        }
+      ],
+      "status": "completed",
+      "completedAt": 1794331060614
+    }
+  },
   "customChallenges": []
 }

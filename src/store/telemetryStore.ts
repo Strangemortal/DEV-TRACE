@@ -21,6 +21,13 @@ export type EventType =
   | "EXECUTION_RESULT"
   | "AI_HINT_REQUESTED"
   | "AI_EXPLAIN_ERROR"
+  | "AI_COPILOT_REQUESTED"
+  | "AI_CODE_SUGGESTION_INSERTED"
+  | "AI_TRAP_NEUTRALIZED"
+  | "TEST_RUN"
+  | "RUN_TESTS"
+  | "CODE_EDIT"
+  | "FILE_SWITCH"
   | "SUBMISSION";
 
 export interface TelemetryEvent {

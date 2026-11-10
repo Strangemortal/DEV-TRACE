@@ -43,6 +43,7 @@ import { useThemeStore } from "@/store/themeStore";
 import ThemeToggle from "@/components/ThemeToggle";
 import BiometricRadarChart from "@/components/BiometricRadarChart";
 import ExecutiveDossierModal from "@/components/ExecutiveDossierModal";
+import FlightRecorder from "@/components/FlightRecorder";
 
 function TelemetryDashboardContent() {
   const router = useRouter();
@@ -65,8 +66,8 @@ function TelemetryDashboardContent() {
   const [selectedLiveId, setSelectedLiveId] = useState<string | null>(null);
   const [lastLivePoll, setLastLivePoll] = useState<Date>(new Date());
   
-  // View Mode for submitted: timeline vs radar vs AI Evaluation
-  const [viewMode, setViewMode] = useState<"timeline" | "radar" | "ai-evaluation">("radar");
+  // View Mode for submitted: flight-recorder vs radar vs timeline vs AI Evaluation
+  const [viewMode, setViewMode] = useState<"flight-recorder" | "radar" | "timeline" | "ai-evaluation">("flight-recorder");
   const [aiEvaluation, setAiEvaluation] = useState<any>(null);
   const [aiEvaluating, setAiEvaluating] = useState(false);
   const [showDossierModal, setShowDossierModal] = useState(false);
@@ -847,6 +848,18 @@ function TelemetryDashboardContent() {
                     {/* View Mode Toggle Buttons */}
                     <div className={`flex rounded-md border p-1 gap-1 ${isLight ? "bg-slate-200/70 border-slate-300" : "bg-black/40 border-white/10"}`}>
                       <button
+                        onClick={() => setViewMode("flight-recorder")}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-semibold transition-all ${
+                          viewMode === "flight-recorder"
+                            ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-sm font-bold"
+                            : isLight ? "text-slate-600 hover:text-slate-900" : "text-slate-400 hover:text-white"
+                        }`}
+                      >
+                        <PlayCircle size={13} />
+                        <span>Flight Recorder</span>
+                      </button>
+
+                      <button
                         onClick={() => setViewMode("radar")}
                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-semibold transition-all ${
                           viewMode === "radar"
@@ -907,8 +920,17 @@ function TelemetryDashboardContent() {
                   </div>
                 </div>
 
-                {/* VIEW 0: BIOMETRIC RADAR & ANOMALY SPECTRUM */}
-                {viewMode === "radar" ? (
+                {/* VIEW -1: INTERACTIVE FLIGHT RECORDER CODE PLAYBACK */}
+                {viewMode === "flight-recorder" ? (
+                  <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 scrollbar-thin">
+                    <FlightRecorder
+                      events={selectedRecord.events || []}
+                      durationSeconds={selectedRecord.duration}
+                      candidateName={selectedRecord.candidateName}
+                      repoId={selectedRecord.repoId}
+                    />
+                  </div>
+                ) : viewMode === "radar" ? (
                   <div className="flex-1 overflow-y-auto p-5 md:p-8 space-y-6 scrollbar-thin">
                     <div className={`p-6 md:p-8 rounded-2xl border max-w-3xl mx-auto ${
                       isLight ? "bg-slate-50 border-slate-200" : "bg-black/30 border-white/10"

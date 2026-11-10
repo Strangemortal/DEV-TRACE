@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { readDb, writeDb, LiveTelemetryState } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 // GET: Staff (Admin / Interviewer) reads active live telemetry feeds
 export async function GET(req: NextRequest) {
   try {

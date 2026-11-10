@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSocraticHintWithAI, explainErrorWithAI } from "@/lib/ai/aiService";
+import { getSocraticHintWithAI, explainErrorWithAI, generateCopilotSnippetWithTrap } from "@/lib/ai/aiService";
 import { getSession } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
@@ -38,7 +38,23 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true, hint });
     }
 
-    return NextResponse.json({ error: "Invalid action. Expected 'explain_error' or 'socratic_hint'." }, { status: 400 });
+    if (action === "copilot_snippet") {
+      const { challengeName, challengeId, framework, activeFile, code, userPrompt } = body;
+      const snippetResult = await generateCopilotSnippetWithTrap({
+        challengeId,
+        challengeName,
+        framework,
+        activeFile: activeFile || "main.py",
+        code: code || "",
+        userPrompt,
+      });
+      return NextResponse.json({ success: true, snippetResult });
+    }
+
+    return NextResponse.json(
+      { error: "Invalid action. Expected 'explain_error', 'socratic_hint', or 'copilot_snippet'." },
+      { status: 400 }
+    );
   } catch (error: any) {
     console.error("AI Assistant API error:", error);
     return NextResponse.json(

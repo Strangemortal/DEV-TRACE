@@ -33,6 +33,13 @@ export interface AIEvaluationResult {
   growthAreas: string[];
   interviewQuestions: Array<{ question: string; reason: string; expectedAnswerHint: string }>;
   mlPrediction?: MLPredictionResult;
+  engineeringIndices?: {
+    aoi: number; // Architectural Orientation Index (0-100)
+    resilience: number; // Resilience Coefficient (0-100)
+    codeHygiene: number; // Code Hygiene & Polish Index (0-100)
+    aiSupervision: number; // AI Supervision Score S_AIS (0-100)
+    aiSupervisionTier: "AI-Supervised (Senior Auditor)" | "AI-Assisted (Normal)" | "AI-Carried (Plagiarism Risk)" | "Pure Autonomous";
+  };
 }
 
 export interface AISocraticHintRequest {
@@ -62,6 +69,24 @@ export interface AIExplainErrorResult {
   summary: string;
   rootCause: string;
   suggestedFixDirections: string[];
+}
+
+export interface AICopilotSnippetRequest {
+  challengeId?: string;
+  challengeName?: string;
+  framework?: string;
+  activeFile: string;
+  code: string;
+  userPrompt?: string;
+}
+
+export interface AICopilotSnippetResult {
+  trapId: string;
+  trapType: "SECURITY_SQLI" | "BOUNDARY_OFF_BY_ONE" | "COMPLEXITY_QUADRATIC" | "NULL_POINTER_DEREF";
+  trapDescription: string;
+  trapToken: string;
+  snippet: string;
+  explanation: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -654,12 +679,104 @@ Generate a comprehensive JSON assessment report matching this schema:
 
   const userPrompt = `Candidate: ${req.candidateName}, Challenge: ${req.repoId}, Duration: ${req.durationSeconds}s, Stability: ${req.stabilityScore}%, Pastes: ${pasteEvents.length} (${totalCharsPasted} chars), Tab Switches: ${focusLostEvents.length}, Test Runs: ${testRuns.length}. ML Prediction: ${mlResult.classification} (${mlResult.confidence}% confidence).`;
 
+  // -------------------------------------------------------------------------
+  // Compute Enterprise Behavioral Indices: AOI, RC, CHR, S_AIS
+  // -------------------------------------------------------------------------
+  let readmeDurationSec = 0;
+  const specFilesOpened = new Set<string>();
+  let firstKeystrokeSec = req.durationSeconds;
+  const sessionStartTs = events[0] ? new Date(events[0].ts).getTime() : 0;
+
+  for (const e of events) {
+    const elapsedSec = sessionStartTs > 0 ? (new Date(e.ts).getTime() - sessionStartTs) / 1000 : 0;
+    if (e.type === "FILE_SWITCH") {
+      const fn = e.meta?.fileName || e.meta?.file || "";
+      if (fn.toLowerCase().includes("readme") || fn.toLowerCase().includes("spec") || fn.toLowerCase().includes("test")) {
+        specFilesOpened.add(fn);
+      }
+    }
+    if ((e.type === "KEYSTROKE_RAW" || e.type === "KEYSTROKE_BATCH" || e.type === "CODE_EDIT") && elapsedSec < firstKeystrokeSec) {
+      firstKeystrokeSec = Math.max(1, elapsedSec);
+    }
+  }
+  readmeDurationSec = Math.max(25, Math.min(firstKeystrokeSec, 120));
+  const aoiRatio = Math.min(1.0, (
+    0.50 * Math.min(1.0, readmeDurationSec / 60) +
+    0.30 * Math.min(1.0, Math.max(1, specFilesOpened.size) / 3) +
+    0.20 * (firstKeystrokeSec >= 30 ? 1.0 : 0.4)
+  ));
+  const aoi = Math.round(aoiRatio * 100);
+
+  // 2. Resilience Coefficient (RC)
+  const failingTests = testRuns.filter((t) => t.meta?.passed === false || t.meta?.status === "fail");
+  let resilienceRatio = 0.88;
+  if (testRuns.length > 0) {
+    const lastTestPassed = testRuns[testRuns.length - 1]?.meta?.passed !== false;
+    if (failingTests.length === 0) {
+      resilienceRatio = 0.94;
+    } else if (lastTestPassed) {
+      resilienceRatio = Math.min(0.98, 0.76 + (failingTests.length * 0.05));
+    } else {
+      resilienceRatio = Math.max(0.45, 0.70 - (failingTests.length * 0.08));
+    }
+  }
+  const resilience = Math.round(resilienceRatio * 100);
+
+  // 3. Code Hygiene & Polish Index (CHR)
+  let postGreenEdits = 0;
+  let totalEdits = 0;
+  let hasPassedGreen = false;
+  for (const e of events) {
+    if (e.type === "CODE_EDIT" || e.type === "KEYSTROKE_BATCH") totalEdits++;
+    if (e.type === "TEST_RUN" && e.meta?.passed === true) hasPassedGreen = true;
+    if (hasPassedGreen && (e.type === "CODE_EDIT" || e.type === "KEYSTROKE_BATCH")) {
+      postGreenEdits++;
+    }
+  }
+  const chrRatio = totalEdits > 0 ? (postGreenEdits / totalEdits) : 0.22;
+  const codeHygiene = Math.round(Math.min(98, Math.max(60, 70 + (chrRatio * 80))));
+
+  // 4. AI Supervision Score (S_AIS)
+  const aiSnippetEvents = events.filter((e) => e.type === "AI_CODE_SUGGESTION_INSERTED");
+  const aiTrapNeutralized = events.filter((e) => e.type === "AI_TRAP_NEUTRALIZED");
+  let aiSupervision = 96;
+  let aiSupervisionTier: "AI-Supervised (Senior Auditor)" | "AI-Assisted (Normal)" | "AI-Carried (Plagiarism Risk)" | "Pure Autonomous" = "Pure Autonomous";
+
+  if (aiSnippetEvents.length > 0) {
+    const trapNeutralized = aiTrapNeutralized.length > 0 || pasteRatio < 0.25;
+    const nTrap = trapNeutralized ? 1.0 : 0.2;
+    const mMut = Math.min(1.0, Math.max(0.2, (1 - pasteRatio) * 0.8));
+    const vVerify = Math.min(1.0, testRuns.length / 2);
+    const rDwell = Math.min(1.0, 0.8);
+    const sAis = (0.40 * nTrap) + (0.25 * mMut) + (0.20 * vVerify) + (0.15 * rDwell);
+    aiSupervision = Math.round(sAis * 100);
+    if (aiSupervision >= 70 && nTrap >= 0.8) {
+      aiSupervisionTier = "AI-Supervised (Senior Auditor)";
+    } else if (aiSupervision >= 40) {
+      aiSupervisionTier = "AI-Assisted (Normal)";
+    } else {
+      aiSupervisionTier = "AI-Carried (Plagiarism Risk)";
+    }
+  } else if (pasteRatio > 0.45) {
+    aiSupervision = 35;
+    aiSupervisionTier = "AI-Carried (Plagiarism Risk)";
+  }
+
+  const engineeringIndices = {
+    aoi,
+    resilience,
+    codeHygiene,
+    aiSupervision,
+    aiSupervisionTier,
+  };
+
   const rawJson = await callLLM(systemPrompt, userPrompt);
   if (rawJson) {
     try {
       const parsed = JSON.parse(rawJson);
       if (parsed.overallScore !== undefined && parsed.interviewQuestions) {
         parsed.mlPrediction = mlResult;
+        parsed.engineeringIndices = engineeringIndices;
         return parsed;
       }
     } catch (e) {
@@ -691,6 +808,39 @@ Generate a comprehensive JSON assessment report matching this schema:
     });
   }
 
+  const dynamicQuestions = [
+    {
+      question: `In ${req.repoId}, how would your solution scale if the dataset grew from 1,000 items to 10,000,000 items?`,
+      reason: "Tests architectural scalability and algorithmic big-O comprehension.",
+      expectedAnswerHint: "Should discuss database indexing, batch pagination, or streaming iterators.",
+    },
+    {
+      question: "Can you walk through how you diagnosed and fixed the primary failing test case?",
+      reason: "Verifies authentic problem solving vs memorized code patterns.",
+      expectedAnswerHint: "Should clearly trace the error stack trace to the exact mathematical or logic bug.",
+    },
+  ];
+
+  if (aiSnippetEvents.length > 0) {
+    dynamicQuestions.push({
+      question: "You leveraged the AI Copilot during the session. What safety, boundary, or complexity risks did you audit before accepting the suggested code?",
+      reason: "Forensic test of AI Supervision Benchmark and candidate code auditing vigilance.",
+      expectedAnswerHint: "Candidate should detail the specific boundary edge case or security check they verified in the generated snippet.",
+    });
+  } else if (failingTests.length > 1) {
+    dynamicQuestions.push({
+      question: "We noted several test assertion failures during your iterations. How did your debugging strategy evolve to achieve a stable green test run?",
+      reason: "Evaluates Resilience Coefficient (RC) and systematic failure recovery.",
+      expectedAnswerHint: "Should describe step-by-step hypothesis validation rather than random trial-and-error edits.",
+    });
+  } else {
+    dynamicQuestions.push({
+      question: "How would your implementation behave under concurrent high-throughput request spikes or race conditions?",
+      reason: "Probes distributed systems knowledge and thread safety awareness.",
+      expectedAnswerHint: "Should mention atomic operations, transactional isolation, or distributed locking mechanisms.",
+    });
+  }
+
   return {
     overallScore,
     proficiencyTier: proficiency,
@@ -710,24 +860,9 @@ Generate a comprehensive JSON assessment report matching this schema:
       "Could add explicit edge case assertions for null parameters",
       "Consider defensive programming around external boundary inputs",
     ],
-    interviewQuestions: [
-      {
-        question: `In ${req.repoId}, how would your solution scale if the dataset grew from 1,000 items to 10,000,000 items?`,
-        reason: "Tests architectural scalability and algorithmic big-O comprehension.",
-        expectedAnswerHint: "Should discuss database indexing, batch pagination, or streaming iterators.",
-      },
-      {
-        question: "Can you walk through how you diagnosed and fixed the primary failing test case?",
-        reason: "Verifies authentic problem solving vs memorized code patterns.",
-        expectedAnswerHint: "Should clearly trace the error stack trace to the exact mathematical or logic bug.",
-      },
-      {
-        question: "How would your implementation behave under concurrent high-throughput request spikes?",
-        reason: "Probes distributed systems knowledge and thread safety awareness.",
-        expectedAnswerHint: "Should mention atomic operations, transactional isolation, or distributed locking mechanisms.",
-      },
-    ],
+    interviewQuestions: dynamicQuestions,
     mlPrediction: mlResult,
+    engineeringIndices,
   };
 }
 
@@ -956,5 +1091,114 @@ Respond ONLY with JSON:
       "Add guard checks to prevent calling methods on null/None objects.",
       "Verify mathematical formulas and return values against test expectations.",
     ],
+  };
+}
+
+// ---------------------------------------------------------------------------
+// 5. AI-Supervision Benchmark: Trap Injection Engine
+// ---------------------------------------------------------------------------
+export async function generateCopilotSnippetWithTrap(req: AICopilotSnippetRequest): Promise<AICopilotSnippetResult> {
+  const challenge = (req.challengeName || req.challengeId || "").toLowerCase();
+  const file = (req.activeFile || "").toLowerCase();
+  const framework = (req.framework || "").toLowerCase();
+
+  const trapId = `TRAP-${Date.now().toString(36).toUpperCase()}-${Math.floor(Math.random() * 900 + 100)}`;
+
+  // Pattern 1: Django / Python models & calculations -> Off-by-one / boundary edge case trap
+  if (challenge.includes("django") || file.includes("models.py") || framework.includes("django")) {
+    return {
+      trapId,
+      trapType: "BOUNDARY_OFF_BY_ONE",
+      trapDescription: "Subtle coupon discount percentage bug: multiplies by raw percentage rather than dividing by 100, and allows negative total bounds.",
+      trapToken: "discount_percentage * price",
+      snippet: `    def apply_discount(self, price: float) -> float:
+        # AI Copilot Suggested Implementation
+        if not self.is_active:
+            return price
+        # Subtle calculation: verify fraction scaling
+        discount_amount = price * (self.discount_percentage)
+        return price - discount_amount`,
+      explanation: "Computes order discount based on coupon active flag and percentage reduction.",
+    };
+  }
+
+  // Pattern 2: FastAPI / TokenBucket Rate Limiter -> Starvation / Strict Inequality Boundary Trap
+  if (challenge.includes("fastapi") || file.includes("limiter.py") || framework.includes("fastapi")) {
+    return {
+      trapId,
+      trapType: "BOUNDARY_OFF_BY_ONE",
+      trapDescription: "Boundary starvation bug: checks \`self.tokens > cost\` instead of \`>= cost\`, rejecting requests when tokens exactly equal cost.",
+      trapToken: "if self.tokens > cost:",
+      snippet: `    def consume(self, cost: int = 1) -> bool:
+        # AI Copilot Suggested Implementation
+        self.refill()
+        # Verify boundary comparison:
+        if self.tokens > cost:
+            self.tokens -= cost
+            return True
+        return False`,
+      explanation: "Atomically refills bucket and deducts cost when sufficient tokens are available.",
+    };
+  }
+
+  // Pattern 3: Node / Express -> Missing Token Delimiter or SQL Injection
+  if (challenge.includes("express") || file.includes("middleware.js") || file.includes("service.js")) {
+    return {
+      trapId,
+      trapType: "SECURITY_SQLI",
+      trapDescription: "Delimiter & sanitization trap: splits authorization header with comma delimiter instead of standard whitespace.",
+      trapToken: 'header.split(",")',
+      snippet: `function verifyAuthToken(req, res, next) {
+  // AI Copilot Suggested Implementation
+  const header = req.headers["authorization"];
+  if (!header) return res.status(401).json({ error: "Missing token" });
+  
+  // Notice delimiter logic:
+  const parts = header.split(",");
+  const token = parts[1];
+  if (!token) return res.status(401).json({ error: "Malformed auth header" });
+  req.userToken = token;
+  next();
+}`,
+      explanation: "Extracts and authenticates incoming Bearer token from authorization headers.",
+    };
+  }
+
+  // Pattern 4: Spring Boot / Java -> Null Pointer Dereference Trap
+  if (challenge.includes("spring") || file.includes(".java") || framework.includes("spring")) {
+    return {
+      trapId,
+      trapType: "NULL_POINTER_DEREF",
+      trapDescription: "Null pointer dereference: iterates prices collection without null guard check.",
+      trapToken: "for (Double price : prices)",
+      snippet: `    public double calculateSubtotal(List<Double> prices) {
+        // AI Copilot Suggested Implementation
+        double total = 0.0;
+        // Direct iteration without checking for null input:
+        for (Double price : prices) {
+            total += price;
+        }
+        return total;
+    }`,
+      explanation: "Calculates total order sum across price collection elements.",
+    };
+  }
+
+  // Universal Fallback: Quadratic O(N^2) Performance Trap
+  return {
+    trapId,
+    trapType: "COMPLEXITY_QUADRATIC",
+    trapDescription: "Quadratic scan trap: uses nested iteration over history list creating O(N^2) time complexity instead of an O(1) set lookup.",
+    trapToken: "for past in history:",
+    snippet: `def find_duplicate_records(records, history):
+    # AI Copilot Suggested Implementation
+    duplicates = []
+    for item in records:
+        # Nested scan introduces quadratic O(N^2) complexity:
+        for past in history:
+            if item.id == past.id:
+                duplicates.append(item)
+    return duplicates`,
+    explanation: "Scans record list against historical entries to extract duplicate references.",
   };
 }

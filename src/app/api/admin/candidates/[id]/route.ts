@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { readDb, writeDb } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 // PATCH: Stop / Resume Candidate Assessment Test
 export async function PATCH(
   req: NextRequest,

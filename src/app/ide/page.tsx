@@ -29,6 +29,8 @@ import {
   Terminal as TermIcon,
   Eye,
   RefreshCw,
+  Bot,
+  Copy,
 } from "lucide-react";
 import { useTelemetryStore } from "@/store/telemetryStore";
 import { useThemeStore } from "@/store/themeStore";
@@ -128,13 +130,19 @@ export default function DevTraceIDEPage() {
   // Problem brief drawer state
   const [showProblemBrief, setShowProblemBrief] = useState(false);
 
-  // AI Socratic Mentor & Explainer state
+  // AI Socratic Mentor & Copilot Benchmark state
   const [showAiMentor, setShowAiMentor] = useState(false);
+  const [aiDrawerTab, setAiDrawerTab] = useState<"mentor" | "copilot">("mentor");
   const [hintLevel, setHintLevel] = useState<1 | 2 | 3>(1);
   const [aiHint, setAiHint] = useState<any>(null);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiExplanation, setAiExplanation] = useState<any>(null);
   const [showAiExplainer, setShowAiExplainer] = useState(false);
+  const [copilotPrompt, setCopilotPrompt] = useState("");
+  const [copilotSnippetResult, setCopilotSnippetResult] = useState<any>(null);
+  const [copilotLoading, setCopilotLoading] = useState(false);
+  const [copilotInserted, setCopilotInserted] = useState(false);
+  const injectedTrapRef = useRef<{ trapId: string; trapToken: string; trapType: string; insertedCode: string } | null>(null);
 
   const handleTermMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -596,6 +604,22 @@ export default function DevTraceIDEPage() {
     if (value === undefined || isCurrentFileReadOnly || isPaused || !isFullscreen) return;
     setFiles((prev) => ({ ...prev, [activeFile]: value }));
     setDirtyFiles((d) => new Set(d).add(activeFile));
+
+    if (injectedTrapRef.current) {
+      const hasTrap = value.includes(injectedTrapRef.current.trapToken);
+      if (!hasTrap) {
+        logEvent({
+          type: "AI_TRAP_NEUTRALIZED",
+          meta: {
+            trapId: injectedTrapRef.current.trapId,
+            trapType: injectedTrapRef.current.trapType,
+            activeFile,
+            ts: Date.now(),
+          },
+        });
+        injectedTrapRef.current = null;
+      }
+    }
   };
 
   const handleEditorMount = useCallback((editor: any) => {
@@ -879,6 +903,72 @@ export default function DevTraceIDEPage() {
     } finally {
       setAiLoading(false);
     }
+  };
+
+  const handleRequestCopilotSnippet = async () => {
+    setCopilotLoading(true);
+    setCopilotInserted(false);
+    try {
+      const res = await fetch("/api/ai/assistant", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "copilot_snippet",
+          challengeName: activeRepo?.name || "DevTrace Challenge",
+          challengeId: activeRepo?.id,
+          framework: activeRepo?.framework,
+          activeFile,
+          code: files[activeFile] || "",
+          userPrompt: copilotPrompt,
+        }),
+      });
+      const data = await res.json();
+      if (data.success && data.snippetResult) {
+        setCopilotSnippetResult(data.snippetResult);
+        logEvent({
+          type: "AI_COPILOT_REQUESTED",
+          meta: {
+            activeFile,
+            trapType: data.snippetResult.trapType,
+            prompt: copilotPrompt,
+          },
+        });
+      }
+    } catch (e) {
+      console.error("AI Copilot request error:", e);
+    } finally {
+      setCopilotLoading(false);
+    }
+  };
+
+  const handleInsertCopilotSnippet = () => {
+    if (!copilotSnippetResult || isCurrentFileReadOnly) return;
+    const snippetToInsert = copilotSnippetResult.snippet;
+    const currentContent = files[activeFile] || "";
+    const updatedContent = currentContent ? `${currentContent}\n\n${snippetToInsert}` : snippetToInsert;
+
+    injectedTrapRef.current = {
+      trapId: copilotSnippetResult.trapId,
+      trapToken: copilotSnippetResult.trapToken,
+      trapType: copilotSnippetResult.trapType,
+      insertedCode: snippetToInsert,
+    };
+
+    setFiles((prev) => ({ ...prev, [activeFile]: updatedContent }));
+    setDirtyFiles((d) => new Set(d).add(activeFile));
+    setCopilotInserted(true);
+
+    logEvent({
+      type: "AI_CODE_SUGGESTION_INSERTED",
+      meta: {
+        trapId: copilotSnippetResult.trapId,
+        trapType: copilotSnippetResult.trapType,
+        trapToken: copilotSnippetResult.trapToken,
+        snippetLength: snippetToInsert.length,
+        activeFile,
+        ts: Date.now(),
+      },
+    });
   };
 
   const handleSubmit = async () => {
@@ -1510,10 +1600,10 @@ export default function DevTraceIDEPage() {
               </aside>
             )}
 
-            {/* AI Socratic Mentor Drawer (Box Design) */}
+            {/* AI Assistant Drawer: Socratic Mentor & Copilot Supervision Benchmark */}
             {showAiMentor && (
               <aside
-                className={`w-full sm:w-[380px] lg:w-[420px] max-w-full md:max-w-[48vw] border-l flex flex-col flex-shrink-0 h-full z-20 ${
+                className={`w-full sm:w-[400px] lg:w-[440px] max-w-full md:max-w-[48vw] border-l flex flex-col flex-shrink-0 h-full z-20 ${
                   isLight ? "border-slate-200 bg-white text-slate-800" : isMidnight ? "border-[#1f293d] bg-[#0f1422] text-slate-200" : "border-[#252a36] bg-[#141822] text-slate-200"
                 }`}
               >
@@ -1523,8 +1613,8 @@ export default function DevTraceIDEPage() {
                       <Sparkles size={16} className="text-indigo-400" />
                     </div>
                     <div>
-                      <h3 className="text-sm md:text-base font-semibold">AI Socratic Mentor</h3>
-                      <p className="text-xs opacity-60">Progressive, non-spoiler hints</p>
+                      <h3 className="text-sm md:text-base font-semibold">AI Engineering Assistant</h3>
+                      <p className="text-xs opacity-60">Socratic guidance & supervision benchmark</p>
                     </div>
                   </div>
                   <button
@@ -1536,76 +1626,206 @@ export default function DevTraceIDEPage() {
                   </button>
                 </div>
 
+                {/* Sub-tab switcher: Socratic vs Copilot */}
+                <div className="p-3 border-b flex gap-1.5">
+                  <button
+                    onClick={() => setAiDrawerTab("mentor")}
+                    className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-xs font-semibold transition-all ${
+                      aiDrawerTab === "mentor"
+                        ? "bg-indigo-600 text-white shadow-sm font-bold"
+                        : isLight ? "bg-slate-100 text-slate-600 hover:text-slate-900" : "bg-white/5 text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    <Lightbulb size={13} />
+                    <span>Socratic Hints</span>
+                  </button>
+                  <button
+                    onClick={() => setAiDrawerTab("copilot")}
+                    className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-xs font-semibold transition-all ${
+                      aiDrawerTab === "copilot"
+                        ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-sm font-bold"
+                        : isLight ? "bg-slate-100 text-slate-600 hover:text-slate-900" : "bg-white/5 text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    <Bot size={13} />
+                    <span>AI Copilot Snippet</span>
+                  </button>
+                </div>
+
                 <div className="p-4 sm:p-5 flex flex-col flex-1 overflow-y-auto space-y-4">
-                  {/* Hint Level Selection Box Tabs */}
-                  <div className="space-y-1.5">
-                    <div className="text-xs font-semibold opacity-60 uppercase tracking-wider">Hint Depth</div>
-                    <div className="grid grid-cols-3 rounded-md border p-1 gap-1 text-xs font-semibold bg-black/10">
-                      <button
-                        onClick={() => handleRequestAiHint(1)}
-                        className={`py-1.5 rounded-md text-center transition-all ${
-                          hintLevel === 1 ? "bg-indigo-600 text-white shadow-sm font-bold" : "opacity-60 hover:opacity-100"
-                        }`}
-                      >
-                        1. Concept
-                      </button>
-                      <button
-                        onClick={() => handleRequestAiHint(2)}
-                        className={`py-1.5 rounded-md text-center transition-all ${
-                          hintLevel === 2 ? "bg-indigo-600 text-white shadow-sm font-bold" : "opacity-60 hover:opacity-100"
-                        }`}
-                      >
-                        2. Location
-                      </button>
-                      <button
-                        onClick={() => handleRequestAiHint(3)}
-                        className={`py-1.5 rounded-md text-center transition-all ${
-                          hintLevel === 3 ? "bg-indigo-600 text-white shadow-sm font-bold" : "opacity-60 hover:opacity-100"
-                        }`}
-                      >
-                        3. Logic Clue
-                      </button>
-                    </div>
-                  </div>
-
-                  {aiLoading ? (
-                    <div className="flex flex-col items-center justify-center py-14 gap-3 text-sm opacity-70">
-                      <Sparkles size={24} className="text-indigo-400 animate-spin" />
-                      <span>Formulating Socratic guidance...</span>
-                    </div>
-                  ) : aiHint ? (
-                    <div className="space-y-3 animate-in fade-in duration-150">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1.5 text-sm font-bold text-indigo-400">
-                          <Lightbulb size={15} />
-                          <span>{aiHint.title}</span>
+                  {aiDrawerTab === "mentor" ? (
+                    <>
+                      {/* Hint Level Selection Box Tabs */}
+                      <div className="space-y-1.5">
+                        <div className="text-xs font-semibold opacity-60 uppercase tracking-wider">Hint Depth</div>
+                        <div className="grid grid-cols-3 rounded-md border p-1 gap-1 text-xs font-semibold bg-black/10">
+                          <button
+                            onClick={() => handleRequestAiHint(1)}
+                            className={`py-1.5 rounded-md text-center transition-all ${
+                              hintLevel === 1 ? "bg-indigo-600 text-white shadow-sm font-bold" : "opacity-60 hover:opacity-100"
+                            }`}
+                          >
+                            1. Concept
+                          </button>
+                          <button
+                            onClick={() => handleRequestAiHint(2)}
+                            className={`py-1.5 rounded-md text-center transition-all ${
+                              hintLevel === 2 ? "bg-indigo-600 text-white shadow-sm font-bold" : "opacity-60 hover:opacity-100"
+                            }`}
+                          >
+                            2. Location
+                          </button>
+                          <button
+                            onClick={() => handleRequestAiHint(3)}
+                            className={`py-1.5 rounded-md text-center transition-all ${
+                              hintLevel === 3 ? "bg-indigo-600 text-white shadow-sm font-bold" : "opacity-60 hover:opacity-100"
+                            }`}
+                          >
+                            3. Logic Clue
+                          </button>
                         </div>
-                        <button
-                          onClick={() => handleRequestAiHint(hintLevel)}
-                          className="text-xs text-indigo-400 hover:underline flex items-center gap-1 font-medium"
-                        >
-                          Refresh
-                        </button>
                       </div>
 
-                      <div
-                        className={`p-4 rounded-md border text-sm leading-relaxed ${
-                          isLight ? "bg-slate-50 border-slate-200 text-slate-700" : "bg-black/20 border-white/10 text-slate-200"
-                        }`}
-                      >
-                        {aiHint.hintText}
-                      </div>
+                      {aiLoading ? (
+                        <div className="flex flex-col items-center justify-center py-14 gap-3 text-sm opacity-70">
+                          <Sparkles size={24} className="text-indigo-400 animate-spin" />
+                          <span>Formulating Socratic guidance...</span>
+                        </div>
+                      ) : aiHint ? (
+                        <div className="space-y-3 animate-in fade-in duration-150">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-1.5 text-sm font-bold text-indigo-400">
+                              <Lightbulb size={15} />
+                              <span>{aiHint.title}</span>
+                            </div>
+                            <button
+                              onClick={() => handleRequestAiHint(hintLevel)}
+                              className="text-xs text-indigo-400 hover:underline flex items-center gap-1 font-medium"
+                            >
+                              Refresh
+                            </button>
+                          </div>
 
-                      {aiHint.encouragement && (
-                        <div className="p-3 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-500 font-medium flex items-center gap-2">
-                          <Check size={14} className="flex-shrink-0" />
-                          <span>{aiHint.encouragement}</span>
+                          <div
+                            className={`p-4 rounded-md border text-sm leading-relaxed ${
+                              isLight ? "bg-slate-50 border-slate-200 text-slate-700" : "bg-black/20 border-white/10 text-slate-200"
+                            }`}
+                          >
+                            {aiHint.hintText}
+                          </div>
+
+                          {aiHint.encouragement && (
+                            <div className="p-3 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-500 font-medium flex items-center gap-2">
+                              <Check size={14} className="flex-shrink-0" />
+                              <span>{aiHint.encouragement}</span>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="text-sm opacity-60 text-center py-10">
+                          Click a hint level above to receive contextual debugging clues without spoiling the solution.
                         </div>
                       )}
-                    </div>
+                    </>
                   ) : (
-                    <div className="text-sm opacity-60 text-center py-10">
-                      Click a hint level above to receive contextual debugging clues without spoiling the solution.
+                    /* COPILOT SUPERVISION BENCHMARK VIEW */
+                    <div className="space-y-4 animate-in fade-in duration-150">
+                      <div className="p-3.5 rounded-lg bg-gradient-to-r from-violet-950/30 to-indigo-950/30 border border-violet-500/20 text-xs space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-violet-300 uppercase tracking-wider text-[10px]">
+                            AI-Supervision Benchmark
+                          </span>
+                          <span className="px-2 py-0.5 rounded text-[9px] font-mono bg-violet-500/20 text-violet-300 font-bold border border-violet-500/30">
+                            Auditing Evaluated
+                          </span>
+                        </div>
+                        <p className="text-slate-300 text-[11px] leading-relaxed">
+                          AI code assistance is fully permitted. You are evaluated on your architectural auditing vigilance: reviewing boundary conditions, asymptotic scaling, and neutralizing flaws before running test suites.
+                        </p>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-xs font-semibold opacity-70 block">
+                          Copilot Instruction Prompt
+                        </label>
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            value={copilotPrompt}
+                            onChange={(e) => setCopilotPrompt(e.target.value)}
+                            placeholder={`e.g. Implement logic for ${activeFile}`}
+                            className={`flex-1 px-3 py-2 rounded-md text-xs border outline-none ${
+                              isLight
+                                ? "bg-slate-50 border-slate-300 text-slate-900 focus:border-indigo-500"
+                                : "bg-black/30 border-white/10 text-white focus:border-indigo-500"
+                            }`}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") handleRequestCopilotSnippet();
+                            }}
+                          />
+                          <button
+                            onClick={handleRequestCopilotSnippet}
+                            disabled={copilotLoading}
+                            className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white rounded-md text-xs font-bold shadow transition-all active:scale-95 flex items-center gap-1.5 flex-shrink-0"
+                          >
+                            {copilotLoading ? (
+                              <Sparkles size={13} className="animate-spin" />
+                            ) : (
+                              <Bot size={13} />
+                            )}
+                            <span>Generate</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {copilotSnippetResult && (
+                        <div className="space-y-3 pt-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-slate-200">
+                              Suggested Snippet:
+                            </span>
+                            <span className="text-[10px] font-mono text-slate-400">
+                              Trap Vector Injected
+                            </span>
+                          </div>
+
+                          <div className={`p-3 rounded-lg border font-mono text-[11px] overflow-x-auto ${
+                            isLight ? "bg-slate-900 text-slate-100 border-slate-700" : "bg-black/60 text-slate-100 border-white/10"
+                          }`}>
+                            <pre className="whitespace-pre-wrap">{copilotSnippetResult.snippet}</pre>
+                          </div>
+
+                          <div className="flex items-center justify-between gap-2 pt-1">
+                            <button
+                              onClick={handleInsertCopilotSnippet}
+                              disabled={copilotInserted || isCurrentFileReadOnly}
+                              className={`flex-1 py-2 px-3 rounded-md text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow ${
+                                copilotInserted
+                                  ? "bg-emerald-600 text-white"
+                                  : "bg-indigo-600 hover:bg-indigo-500 text-white active:scale-95"
+                              }`}
+                            >
+                              {copilotInserted ? (
+                                <>
+                                  <Check size={14} />
+                                  <span>Inserted into {activeFile}</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Copy size={13} />
+                                  <span>Insert into {activeFile}</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
+
+                          {copilotInserted && (
+                            <p className="text-[11px] text-emerald-400 font-mono">
+                              ✓ Snippet inserted. Audit the implementation and run tests to verify behavior.
+                            </p>
+                          )}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

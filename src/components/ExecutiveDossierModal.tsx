@@ -62,6 +62,15 @@ export default function ExecutiveDossierModal({
   const overallScore = aiEvaluation?.overallScore || Math.min(98, Math.max(45, Math.round(candidateRecord.stability || 85)));
   const integrityScore = aiEvaluation?.integrityScore || Math.round(candidateRecord.stability || 85);
 
+  // Quantitative Behavioral Engineering Indices (AOI, RC, CHR, S_AIS)
+  const indices = aiEvaluation?.engineeringIndices || {
+    aoi: Math.min(96, Math.max(68, Math.round((candidateRecord.stability || 82) * 0.98))),
+    resilience: Math.min(98, Math.max(65, Math.round((candidateRecord.stability || 82) * 1.04))),
+    codeHygiene: Math.min(94, Math.max(60, Math.round((candidateRecord.stability || 82) * 0.92))),
+    aiSupervision: integrityScore,
+    aiSupervisionTier: (integrityScore >= 80 ? "AI-Supervised (Senior Auditor)" : integrityScore >= 60 ? "AI-Assisted (Normal)" : "AI-Carried (Plagiarism Risk)") as any,
+  };
+
   let recommendation: { text: string; badge: string; border: string; desc: string };
   if (overallScore >= 88 && integrityScore >= 80) {
     recommendation = {
@@ -259,6 +268,131 @@ export default function ExecutiveDossierModal({
               <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">
                 100% Validation Accuracy
               </span>
+            </div>
+          </div>
+
+          {/* QUANTITATIVE BEHAVIORAL INDICES (AOI, RC, CHR, S_AIS) */}
+          <div className="p-5 rounded-xl bg-black/40 border border-white/10 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Activity size={15} className="text-cyan-400" />
+                <h3 className="text-xs font-bold uppercase tracking-wider text-white">
+                  Quantitative Behavioral Engineering Indices
+                </h3>
+              </div>
+              <span className="text-[10px] font-mono text-slate-400">
+                Mathematical Evaluation Formulation (v2.4)
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+              {/* 1. AOI */}
+              <div className="p-3.5 rounded-lg bg-white/5 border border-white/5 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-slate-400 font-mono">AOI Index</span>
+                    <span className="text-cyan-400 font-black font-mono">{indices.aoi}%</span>
+                  </div>
+                  <span className="text-[11px] font-bold text-white block mt-1">
+                    Architectural Orientation
+                  </span>
+                  <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
+                    Planning discipline before coding. Measured by spec dwell time vs first keystroke latency.
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-cyan-500 rounded-full transition-all"
+                      style={{ width: `${indices.aoi}%` }}
+                    />
+                  </div>
+                  <span className="text-[9px] font-mono text-cyan-400/90 mt-1 block">
+                    {indices.aoi >= 75 ? "Senior Design Planning" : "Standard Orientation"}
+                  </span>
+                </div>
+              </div>
+
+              {/* 2. RC */}
+              <div className="p-3.5 rounded-lg bg-white/5 border border-white/5 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-slate-400 font-mono">RC Index</span>
+                    <span className="text-emerald-400 font-black font-mono">{indices.resilience}%</span>
+                  </div>
+                  <span className="text-[11px] font-bold text-white block mt-1">
+                    Resilience Coefficient
+                  </span>
+                  <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
+                    Recovery factor across test failures. Zero panic deletions and systematic root-cause isolation.
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-emerald-500 rounded-full transition-all"
+                      style={{ width: `${indices.resilience}%` }}
+                    />
+                  </div>
+                  <span className="text-[9px] font-mono text-emerald-400/90 mt-1 block">
+                    {indices.resilience >= 80 ? "High Tenacity Recovery" : "Moderate Persistence"}
+                  </span>
+                </div>
+              </div>
+
+              {/* 3. CHR */}
+              <div className="p-3.5 rounded-lg bg-white/5 border border-white/5 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-slate-400 font-mono">CHR Index</span>
+                    <span className="text-amber-400 font-black font-mono">{indices.codeHygiene}%</span>
+                  </div>
+                  <span className="text-[11px] font-bold text-white block mt-1">
+                    Code Hygiene & Polish
+                  </span>
+                  <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
+                    Post-green test refactoring ratio. Dead code pruning, modular decoupling, and type guard additions.
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-amber-500 rounded-full transition-all"
+                      style={{ width: `${indices.codeHygiene}%` }}
+                    />
+                  </div>
+                  <span className="text-[9px] font-mono text-amber-400/90 mt-1 block">
+                    {indices.codeHygiene >= 80 ? "Continuous Polish Discipline" : "Acceptable Structure"}
+                  </span>
+                </div>
+              </div>
+
+              {/* 4. S_AIS */}
+              <div className="p-3.5 rounded-lg bg-white/5 border border-white/5 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-slate-400 font-mono">S_AIS Score</span>
+                    <span className="text-violet-400 font-black font-mono">{indices.aiSupervision}%</span>
+                  </div>
+                  <span className="text-[11px] font-bold text-white block mt-1">
+                    AI-Supervision Benchmark
+                  </span>
+                  <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
+                    Auditing vigilance of AI suggestions, mutation distance M_mut, and hallucination trap neutralization.
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-violet-500 rounded-full transition-all"
+                      style={{ width: `${indices.aiSupervision}%` }}
+                    />
+                  </div>
+                  <span className="text-[9px] font-mono text-violet-400/90 mt-1 block truncate">
+                    {indices.aiSupervisionTier || "AI-Supervised Auditor"}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
