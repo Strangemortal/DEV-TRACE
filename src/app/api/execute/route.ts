@@ -7,6 +7,41 @@ import crypto from "crypto";
 
 const execAsync = promisify(exec);
 
+// ---------------------------------------------------------------------------
+// EXECUTION WORKER QUEUE (Concurrency & Host CPU Protection)
+// ---------------------------------------------------------------------------
+const MAX_CONCURRENT_EXECUTIONS = 4;
+let activeExecutions = 0;
+const waitingQueue: Array<() => void> = [];
+
+async function acquireExecutionSlot(): Promise<() => void> {
+  if (activeExecutions < MAX_CONCURRENT_EXECUTIONS) {
+    activeExecutions++;
+    let released = false;
+    return () => {
+      if (released) return;
+      released = true;
+      activeExecutions--;
+      const next = waitingQueue.shift();
+      if (next) next();
+    };
+  }
+
+  return new Promise((resolve) => {
+    waitingQueue.push(() => {
+      activeExecutions++;
+      let released = false;
+      resolve(() => {
+        if (released) return;
+        released = true;
+        activeExecutions--;
+        const next = waitingQueue.shift();
+        if (next) next();
+      });
+    });
+  });
+}
+
 async function writeDjangoStub(runDir: string) {
   try {
     await fs.mkdir(path.join(runDir, "django", "db"), { recursive: true });
@@ -164,6 +199,9 @@ export async function POST(req: NextRequest) {
     let command: string = "";
     let localCommand: string = "";
 
+    // Acquire concurrency slot from worker queue to protect host CPU under multi-user load
+    const releaseSlot = await acquireExecutionSlot();
+
     try {
       // 1. Write all workspace files into the sandbox directory
       if (files && typeof files === "object") {
@@ -256,6 +294,9 @@ export async function POST(req: NextRequest) {
         error: execError.stderr || execError.message || "Execution failed.",
       });
     } finally {
+      // Release worker queue concurrency slot
+      releaseSlot();
+
       // Clean up the isolated run directory
       try {
         await fs.rm(runDir, { recursive: true, force: true });

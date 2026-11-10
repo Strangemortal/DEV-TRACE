@@ -622,6 +622,8 @@ export default function DevTraceIDEPage() {
     }
   };
 
+  const keystrokeDebounceTimer = useRef<NodeJS.Timeout | null>(null);
+
   const handleEditorMount = useCallback((editor: any) => {
     editor.onDidChangeModelContent((e: any) => {
       for (const change of e.changes) {
@@ -632,8 +634,29 @@ export default function DevTraceIDEPage() {
           keystrokeBuffer.current.deleted += change.rangeLength;
         }
       }
+
+      // Flush keystroke batch to telemetry store with debouncing
+      if (keystrokeDebounceTimer.current) {
+        clearTimeout(keystrokeDebounceTimer.current);
+      }
+      keystrokeDebounceTimer.current = setTimeout(() => {
+        const added = keystrokeBuffer.current.added;
+        const deleted = keystrokeBuffer.current.deleted;
+        if (added > 0 || deleted > 0) {
+          keystrokeBuffer.current = { added: 0, deleted: 0 };
+          logEvent({
+            type: "KEYSTROKE_BATCH",
+            meta: {
+              added,
+              deleted,
+              count: added + deleted,
+              file: activeFile,
+            },
+          });
+        }
+      }, 1200);
     });
-  }, []);
+  }, [activeFile, logEvent]);
 
   const handleSave = useCallback(async () => {
     if (!activeRepo || isPaused || !isFullscreen) return;

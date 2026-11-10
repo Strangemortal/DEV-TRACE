@@ -69,18 +69,39 @@ export default function FlightRecorder({
 
   // ── 1. PRE-COMPUTE FLIGHT RECORDER SLICES (Cognitive State Machine) ──
   const slices: TimelineSlice[] = useMemo(() => {
-    const totalDurationMs = Math.max(1000, durationSeconds * 1000);
-    const sortedEvents = [...events].sort((a, b) => (a.ts || 0) - (b.ts || 0));
-    const sessionStart = sortedEvents[0]?.ts || Date.now() - totalDurationMs;
+    const parseTs = (val: any): number => {
+      if (!val) return 0;
+      if (typeof val === "number") return val;
+      const parsed = new Date(val).getTime();
+      return isNaN(parsed) ? 0 : parsed;
+    };
 
-    // We interpolate ~120 timeline frames across the session duration
+    const totalDurationMs = Math.max(10000, (durationSeconds || 180) * 1000);
+    const validEvents = (events || [])
+      .map((e) => ({
+        ...e,
+        _ts: parseTs(e.ts),
+      }))
+      .filter((e) => e._ts > 0)
+      .sort((a, b) => a._ts - b._ts);
+
+    const sessionStart = validEvents.length > 0 ? validEvents[0]._ts : Date.now() - totalDurationMs;
+    const sessionEnd = validEvents.length > 0 ? validEvents[validEvents.length - 1]._ts : Date.now();
+    const actualSpanMs = Math.max(totalDurationMs, sessionEnd - sessionStart);
+
+    // 120 timeline frames across the session duration
     const FRAME_COUNT = 120;
-    const frameIntervalMs = totalDurationMs / FRAME_COUNT;
+    const frameIntervalMs = actualSpanMs / FRAME_COUNT;
     const computedSlices: TimelineSlice[] = [];
 
     let currentCode = initialCode;
     let currentStability = 100;
     let currentFile = activeFileName;
+
+    // Track sliding window state
+    let rollingVelocity = 0;
+    let recentFailedTests = 0;
+    let recentRefactorCount = 0;
 
     for (let i = 0; i < FRAME_COUNT; i++) {
       const frameStartMs = i * frameIntervalMs;
@@ -89,77 +110,129 @@ export default function FlightRecorder({
       const absEnd = sessionStart + frameEndMs;
 
       // Filter events occurring in this window
-      const windowEvents = sortedEvents.filter(
-        (e) => (e.ts || 0) >= absStart && (e.ts || 0) < absEnd
+      const windowEvents = validEvents.filter(
+        (e) => e._ts >= absStart && e._ts < absEnd
       );
 
-      // Track deletions vs insertions
       let keystrokes = 0;
       let deletions = 0;
       let pasteAttempts = 0;
       let failedTests = 0;
-      let latestEventDesc = "Editor Active";
+      let passedTests = 0;
+      let isRefactor = false;
+      let latestEventDesc = "";
       let latestEventType = "IDLE";
       let hasAnomaly = false;
 
       for (const ev of windowEvents) {
         latestEventType = ev.type || "EVENT";
-        if (ev.type === "KEYSTROKE") {
-          keystrokes += 1;
-          latestEventDesc = `Typing: '${ev.meta?.char || "code"}'`;
+        const meta = ev.meta || {};
+
+        if (
+          ev.type === "KEYSTROKE_BATCH" ||
+          ev.type === "KEYSTROKE_RAW" ||
+          ev.type === "KEYSTROKE" ||
+          ev.type === "CODE_EDIT"
+        ) {
+          const added = meta.added || meta.count || 1;
+          const deleted = meta.deleted || 0;
+          keystrokes += added;
+          deletions += deleted;
+          if (deleted > 0 && deleted / (added + deleted) > 0.3) {
+            isRefactor = true;
+          }
+          latestEventDesc = `Typing: ${added} added, ${deleted} deleted`;
+          if (meta.codeSnapshot) currentCode = meta.codeSnapshot;
         } else if (ev.type === "PASTE_DETECTED" || ev.type === "PASTE_EVENT") {
           pasteAttempts += 1;
           hasAnomaly = true;
-          latestEventDesc = "Paste Attempt Blocked by Invigilator";
-        } else if (ev.type === "TAB_SWITCH" || ev.type === "FOCUS_LOST") {
+          latestEventDesc = `Paste Attempt Blocked by Invigilator (${meta.length || meta.diff || 100} chars)`;
+        } else if (ev.type === "TAB_SWITCH" || ev.type === "FOCUS_LOST" || ev.type === "FULLSCREEN_EXIT") {
           hasAnomaly = true;
-          latestEventDesc = "Integrity Warning: Window Focus Lost";
-        } else if (ev.type === "EXECUTION_RESULT") {
-          if (!ev.meta?.passed) {
+          latestEventDesc = "Integrity Warning: Window Focus Lost / Tab Switch";
+        } else if (
+          ev.type === "EXECUTION_RESULT" ||
+          ev.type === "TEST_RESULT" ||
+          ev.type === "TEST_RUN" ||
+          ev.type === "RUN_TESTS"
+        ) {
+          const isPassed = meta.passed === true || meta.status === "pass";
+          if (!isPassed && meta.passed !== undefined) {
             failedTests += 1;
-            latestEventDesc = "Test Execution Failed";
+            latestEventDesc = `Test Assertion Failed: ${meta.summary || meta.error || "Regression"}`;
           } else {
-            latestEventDesc = "Unit Tests Passed (Green)";
+            passedTests += 1;
+            latestEventDesc = `Unit Tests Passed (Green): ${meta.summary || "All assertions OK"}`;
           }
-        } else if (ev.type === "FILE_SWITCH") {
-          currentFile = ev.meta?.file || currentFile;
+        } else if (ev.type === "FILE_SWITCH" || ev.type === "FILE_OPEN") {
+          currentFile = meta.file || meta.fileName || currentFile;
           latestEventDesc = `Switched to file: ${currentFile}`;
+        } else if (ev.type === "AI_CODE_SUGGESTION_INSERTED") {
+          isRefactor = true;
+          latestEventDesc = `AI Copilot Snippet Injected (${meta.trapType || "Audit Vector"})`;
+        } else if (ev.type === "AI_TRAP_NEUTRALIZED") {
+          isRefactor = true;
+          latestEventDesc = `AI Trap Audited & Fixed (${meta.trapType || "Boundary Check"})`;
         }
       }
 
-      // Stability degradation based on anomalies
-      currentStability = Math.max(10, currentStability - pasteAttempts * 8 - (hasAnomaly ? 4 : 0));
+      // Update rolling stats
+      if (failedTests > 0) recentFailedTests = 3;
+      else if (recentFailedTests > 0) recentFailedTests--;
 
-      // Calculate Keystroke Velocity (chars per min)
-      const windowMinutes = frameIntervalMs / 60000;
-      const velocityCpm = Math.round(keystrokes / Math.max(0.05, windowMinutes));
-      const deletionRatio = keystrokes > 0 ? deletions / keystrokes : 0;
+      if (isRefactor || (deletions > 0 && deletions / Math.max(1, keystrokes + deletions) > 0.25)) {
+        recentRefactorCount = 3;
+      } else if (recentRefactorCount > 0) recentRefactorCount--;
 
-      // Cognitive State Machine Classification
-      let state: CognitiveState = "FLOW";
-      let stateLabel = "Flow State (Active Implementation)";
-      let color = "#10b981"; // Emerald
+      const windowMinutes = Math.max(0.01, frameIntervalMs / 60000);
+      const instantCpm = Math.round(keystrokes / windowMinutes);
+      rollingVelocity = Math.round(rollingVelocity * 0.6 + instantCpm * 0.4);
 
-      if (windowEvents.length === 0 && i > 0) {
-        state = "RESEARCH";
-        stateLabel = "Cognitive Pause / Planning / Reading Docs";
-        color = "#818cf8"; // Indigo
-      } else if (failedTests > 0 || hasAnomaly) {
+      // Stability degradation
+      currentStability = Math.max(
+        10,
+        Math.min(100, currentStability - pasteAttempts * 10 - (hasAnomaly ? 5 : 0) - failedTests * 8)
+      );
+
+      // ── COGNITIVE STATE CLASSIFICATION ENGINE ──
+      let state: CognitiveState = "RESEARCH";
+      let stateLabel = "Research & Architectural Orientation";
+      let color = "#818cf8"; // Indigo
+
+      // If test failed or anomaly detected -> FRICTION / STUCK
+      if (failedTests > 0 || recentFailedTests > 0 || hasAnomaly) {
         state = "STUCK";
-        stateLabel = "Cognitive Friction / Debugging Error";
+        stateLabel = failedTests > 0 ? "Cognitive Friction: Debugging Test Regression" : "Cognitive Friction: Integrity Anomaly";
         color = "#f43f5e"; // Rose
-      } else if (deletionRatio > 0.3 || latestEventDesc.includes("Refactor")) {
+      }
+      // If deletions and refactoring -> REFACTOR
+      else if (isRefactor || recentRefactorCount > 0 || (deletions > 0 && deletions / Math.max(1, keystrokes + deletions) > 0.25)) {
         state = "REFACTOR";
-        stateLabel = "Iterative Code Refactoring";
+        stateLabel = "Iterative Code Refactoring & Restructuring";
         color = "#f59e0b"; // Amber
-      } else if (velocityCpm >= 80) {
+      }
+      // If typing velocity active or test passed -> FLOW
+      else if (rollingVelocity >= 35 || keystrokes >= 3 || passedTests > 0) {
         state = "FLOW";
-        stateLabel = "High-Velocity Flow State";
+        stateLabel = "Flow State: Active Implementation";
         color = "#10b981"; // Emerald
-      } else {
+      }
+      // Default to RESEARCH / PLANNING
+      else {
         state = "RESEARCH";
-        stateLabel = "Deliberate Code Construction";
-        color = "#38bdf8"; // Sky Blue
+        stateLabel = i < 15 ? "Specification Review & Requirements Planning" : "Cognitive Pause / Logic Analysis";
+        color = "#818cf8"; // Indigo
+      }
+
+      if (!latestEventDesc) {
+        latestEventDesc =
+          state === "FLOW"
+            ? `Active coding (${rollingVelocity} CPM)`
+            : state === "REFACTOR"
+            ? "Refactoring & pruning code structures"
+            : state === "STUCK"
+            ? "Debugging runtime error"
+            : "Reviewing code & requirements";
       }
 
       computedSlices.push({
@@ -170,11 +243,11 @@ export default function FlightRecorder({
         color,
         activeFile: currentFile,
         codeSnapshot: currentCode,
-        velocityCpm,
+        velocityCpm: rollingVelocity,
         stabilityScore: currentStability,
         eventDescription: latestEventDesc,
         eventType: latestEventType,
-        isAnomaly: hasAnomaly,
+        isAnomaly: hasAnomaly || failedTests > 0,
       });
     }
 

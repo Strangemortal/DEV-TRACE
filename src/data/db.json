@@ -1,32 +1,18 @@
 {
   "candidates": [
     {
-      "id": "af416f11-dec0-484c-b08a-1dba29934a64",
-      "name": "bharat",
-      "userId": "bharat_15",
-      "passwordHash": "VrSLOw5i",
-      "assignedRepoId": "django-orm-store",
+      "id": "73181772-ba34-4c5c-9547-afefb4168b30",
+      "name": "aditya",
+      "userId": "aditya_19",
+      "passwordHash": "nbG2aTAc",
+      "assignedRepoId": "fastapi-async-crud",
       "active": false,
-      "createdAt": 1794254209647,
+      "createdAt": 1794333393874,
       "createdBy": "admin",
       "status": "completed",
-      "completedAt": 1794255284109,
-      "finalStability": 100,
-      "finalDuration": 2
-    },
-    {
-      "id": "2c93b14c-c642-4ead-b444-33b8437d9e9a",
-      "name": "bbk",
-      "userId": "bbk_77",
-      "passwordHash": "F4fvhQcc",
-      "assignedRepoId": "django-orm-store",
-      "active": false,
-      "createdAt": 1794255267409,
-      "createdBy": "admin",
-      "status": "completed",
-      "completedAt": 1794255395417,
-      "finalStability": 70,
-      "finalDuration": 70
+      "completedAt": 1794333937739,
+      "finalStability": 20,
+      "finalDuration": 373
     }
   ],
   "interviewers": [],
@@ -45,6 +31,16 @@
       "userId": "admin",
       "role": "admin",
       "expiresAt": 1794417455416
+    },
+    "admin_6ae8e595-0be1-4294-b046-32d4c9c27263": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1794419739360
+    },
+    "admin_860fc1fd-c26b-480a-99b4-42d831e08e90": {
+      "userId": "admin",
+      "role": "admin",
+      "expiresAt": 1794420983001
     }
   },
   "telemetry": [
@@ -283,6 +279,252 @@
           "ts": 1794331060603
         }
       ]
+    },
+    {
+      "id": "486f2d6b-52b1-460b-9308-ddc20f43736e",
+      "candidateId": "73181772-ba34-4c5c-9547-afefb4168b30",
+      "candidateName": "aditya",
+      "repoId": "fastapi-async-crud",
+      "submittedAt": 1794333937739,
+      "sessionStart": 1794333560813,
+      "duration": 373,
+      "stability": 20,
+      "events": [
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-11-10T17:59:23.680Z"
+          },
+          "ts": "2026-11-10T17:59:23.680Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true
+          },
+          "ts": "2026-11-10T17:59:26.110Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true,
+            "recovered": true,
+            "timestamp": "2026-11-10T17:59:26.126Z"
+          },
+          "ts": "2026-11-10T17:59:26.126Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "main.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-11-10T17:59:35.940Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "schemas.py",
+            "previous_file": "main.py"
+          },
+          "ts": "2026-11-10T17:59:37.106Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "test_main.py",
+            "previous_file": "schemas.py"
+          },
+          "ts": "2026-11-10T17:59:38.191Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "main.py",
+            "previous_file": "test_main.py"
+          },
+          "ts": "2026-11-10T17:59:39.630Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-11-10T17:59:55.214Z"
+          },
+          "ts": "2026-11-10T17:59:55.214Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 1,
+            "timestamp": "2026-11-10T17:59:55.225Z"
+          },
+          "ts": "2026-11-10T17:59:55.225Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 1,
+            "timestamp": "2026-11-10T17:59:56.364Z"
+          },
+          "ts": "2026-11-10T17:59:56.364Z"
+        },
+        {
+          "type": "FOCUS_LOST",
+          "meta": {
+            "timestamp": "2026-11-10T18:00:02.957Z"
+          },
+          "ts": "2026-11-10T18:00:02.957Z"
+        },
+        {
+          "type": "TAB_SWITCH",
+          "meta": {
+            "strikeCount": 2,
+            "timestamp": "2026-11-10T18:00:02.965Z"
+          },
+          "ts": "2026-11-10T18:00:02.965Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "duration_away_seconds": 5,
+            "timestamp": "2026-11-10T18:00:08.413Z"
+          },
+          "ts": "2026-11-10T18:00:08.413Z"
+        },
+        {
+          "type": "FULLSCREEN_EXIT",
+          "meta": {
+            "reason": "FULLSCREEN_ESCAPED",
+            "strikeCount": 1,
+            "gracePeriodSeconds": 15,
+            "timestamp": "2026-11-10T18:00:08.426Z"
+          },
+          "ts": "2026-11-10T18:00:08.426Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true
+          },
+          "ts": "2026-11-10T18:00:12.433Z"
+        },
+        {
+          "type": "FOCUS_GAINED",
+          "meta": {
+            "fullscreen": true,
+            "recovered": true,
+            "timestamp": "2026-11-10T18:00:12.449Z"
+          },
+          "ts": "2026-11-10T18:00:12.449Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "README.md",
+            "previous_file": "main.py"
+          },
+          "ts": "2026-11-10T18:00:23.299Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "main.py",
+            "previous_file": "README.md"
+          },
+          "ts": "2026-11-10T18:00:29.737Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "schemas.py",
+            "previous_file": "main.py"
+          },
+          "ts": "2026-11-10T18:00:57.765Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "schemas.py",
+            "previous_file": "schemas.py"
+          },
+          "ts": "2026-11-10T18:00:57.991Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "test_main.py",
+            "previous_file": "schemas.py"
+          },
+          "ts": "2026-11-10T18:01:23.926Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "main.py",
+            "previous_file": "test_main.py"
+          },
+          "ts": "2026-11-10T18:01:34.718Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "FastAPI tests failed. Check Pydantic validation and 404 status."
+          },
+          "ts": "2026-11-10T18:01:38.262Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "FastAPI tests failed. Check Pydantic validation and 404 status."
+          },
+          "ts": "2026-11-10T18:01:55.052Z"
+        },
+        {
+          "type": "FILE_OPEN",
+          "meta": {
+            "file": "test_main.py",
+            "previous_file": "main.py"
+          },
+          "ts": "2026-11-10T18:02:21.745Z"
+        },
+        {
+          "type": "AI_EXPLAIN_ERROR",
+          "meta": {
+            "length": 415
+          },
+          "ts": "2026-11-10T18:02:35.546Z"
+        },
+        {
+          "type": "EXECUTION_RESULT",
+          "meta": {
+            "passed": false,
+            "summary": "FastAPI tests failed. Check Pydantic validation and 404 status."
+          },
+          "ts": "2026-11-10T18:04:44.755Z"
+        }
+      ]
+    },
+    {
+      "id": "9a0b27ef-dd83-4c8a-927e-dd85ac352523",
+      "candidateId": "89c85b27-7d68-4b7f-8a8f-d0e9dd8477c7",
+      "candidateName": "Aarav Patel",
+      "repoId": "python-challenge",
+      "submittedAt": 1794334584552,
+      "sessionStart": 1794334404546,
+      "duration": 180,
+      "stability": 92,
+      "events": [
+        {
+          "type": "ASSESSMENT_START",
+          "ts": 1794334404546
+        },
+        {
+          "type": "ASSESSMENT_COMPLETE",
+          "ts": 1794334584546
+        }
+      ]
     }
   ],
   "liveTelemetry": {
@@ -355,6 +597,29 @@
       ],
       "status": "completed",
       "completedAt": 1794331060614
+    },
+    "89c85b27-7d68-4b7f-8a8f-d0e9dd8477c7": {
+      "candidateId": "89c85b27-7d68-4b7f-8a8f-d0e9dd8477c7",
+      "candidateName": "Aarav Patel",
+      "repoId": "python-challenge",
+      "lastActive": 1794334584552,
+      "stability": 92,
+      "duration": 180,
+      "activeFile": "main.py",
+      "eventCount": 350,
+      "tabSwitches": 0,
+      "fullscreenEscapes": 0,
+      "recentEvents": [
+        {
+          "type": "KEYSTROKE",
+          "ts": 1794334584295,
+          "meta": {
+            "char": "x"
+          }
+        }
+      ],
+      "status": "completed",
+      "completedAt": 1794334584552
     }
   },
   "customChallenges": []
